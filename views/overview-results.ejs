@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <title>Relational Matrix Platform</title>
+
+        <script>
+
+            document.documentElement.classList.add("disable-transitions");
+            document.documentElement.style.visibility = "hidden";
+
+            const localTheme = localStorage.getItem("theme");
+            console.log("GET Theme:", localTheme);
+            if (localTheme === "dark") {
+                document.documentElement.classList.remove("light-mode");
+                document.documentElement.classList.add("dark-mode");
+            }
+            else {
+                document.documentElement.classList.remove("dark-mode");
+                document.documentElement.classList.add("light-mode");
+            }
+        </script>
+
+        <!-- Including 'Roboto Mono' font from Google Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+        <!-- Link to CSS of Phosphor Icons -->
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css">
+        
+        <!-- Custom CSS for the Header & Home Page -->
+        <link href="/styles/header.css" rel="stylesheet">
+        <link href="/styles/overview-results.css" rel="stylesheet">
+        
+
+        <!-- ESSPIN's favicon -->
+        <link rel="icon" href="/images/cropped-esspin-512x512-1-32x32.png" type="image/png">
+    </head>
+    <body>
+
+        <div class="tooltip toggle-tooltip">Toggle Sidebar</div>
+        <div class="tooltip theme-tooltip"></div>
+        <div class="tooltip bookmark-tooltip">View Bookmarks</div>
+        <div class="tooltip history-tooltip">View Search History</div>
+        <div class="tooltip logout-tooltip">Logout</div>
+
+        <div class="contents">
+            
+            <!-- Including the Left Sidebar and the Navbar -->
+            <%- include("./partials/header.ejs") %>
+            
+            <div class="main-contents">
+
+                <div class="main-content-frame">
+
+                    <!-- Icon representing inequalities, through an unevenly split pie chart -->
+                    
+                    <img alt="Checkmark Logo">
+
+                    <h3>Overview of Results</h3>
+
+                    <p>
+                        This page summarizes the number and impact of findings by input source and provides an overall impact estimate with a specified confidence level.
+                        Select a source to explore its findings in more detail.
+                    </p>
+
+                    <!-- Form to submit selected source of results -->
+                    <form action="/login/select-level/select-dependent-variable/select-independent-variable/overview-results" method="POST" id="source-selection-form">
+
+                        <div class="source-choices">
+                            <button type="button" class="source-btn <%= estimatedImpact %>" data-value="Estimated Inputs">Estimated Inputs (<%= totalEstimatedFindings %>)</button>
+                            <button type="button" class="source-btn <%= literatureImpact %>" data-value="Literature Inputs">Literature Inputs (<%= totalLiteratureFindings %>) </button>
+                            <button type="button" class="source-btn <%= perceivedImpact %>" data-value="Perceived Inputs">Perceived Inputs (<%= totalPerceivedFindings %>)</button>
+                            <button type="button" class="source-btn <%= correlationsImpact %>" data-value="Correlations Table">Correlation Inputs (<%= totalCorrelationFindings %>)</button>
+                            <button type="button" class="source-btn <%= grangerImpact %>" data-value="Granger Causalities Table">Granger Causalities Inputs (<%= totalGrangerFindings %>)</button>
+                            <button type="button" class="source-btn <%= aiImpact %>" data-value="AI (ChatGPT) Research">AI Research (<%= totalAIFindings %>) </button>
+                        </div>
+
+                        <!-- Overall Impact(%) from all findings displayed in a circular progress bar 
+                            and the confidence level in which that impact is estimated -->
+                        <div class="impact-wrapper">
+                            <div class="circular-progress">
+                                <span class="progress-value">0%</span>
+                            </div>
+                            <div class="impact-text">
+                                <% if (impact === "") { %>
+                                    <p>There are 0 Findings studying the relationship of <span><%= independentVariable[0] %></span> and <span><%= dependentVariable[0] %></span>.</p>
+                                <% } else { %>
+                                    <p>The impact of <span><%= independentVariable[0] %></span> on <span><%= dependentVariable[0] %></span>
+                                    is estimated to be <span><%= impact %></span> with <span><%= confidence %></span> level confidence.</p>
+                                <% } %>
+                            </div>
+                        </div>
+                        
+                        <input type="hidden" name="percentage" id="overall-percentage" value="<%= percentage %>">
+
+                        <!-- Hidden input to store selected level; dynamically updated via JavaScript -->
+                        <input type="hidden" name="sourceOfResults" id="selected-source" value="<%= sourceOfResults %>">
+
+                        <!-- Alert pop-up in case user tries to skip the selection process -->
+                        <div class="alert-container">
+                            <div id="alert-popup">
+                                ⚠️ Please select one option to proceed 
+                            </div>
+                        </div>
+
+                        <input type="hidden" name="isMainAppFlow" value="<%= isMainAppFlow %>" id="app-flow">
+
+                        <div class="buttons-div">
+                            <!-- "Back" button that redirects users to previous page of the multi-step from -->
+                            <button type="submit" name="action" value="back" class="back-btn">Back</button>
+
+                            <!-- "Next" button that submits the user's choice, and moves to the next page -->
+                            <button type="submit" name="action" value="next" class="next-btn">Source Results</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="legend-graphs">
+                    <div class="legend"> 
+
+                        <h4>Interpretation of Results by Overall Impact</h4>
+
+                        <div class="color-case"> <div class="color-shape" id="positive-color"></div> <span class="color-label">Positive</span></div>
+                        <div class="color-case"> <div class="color-shape" id="rather-positive-color"></div> <span class="color-label">Rather Positive</span></div>
+                        <div class="color-case"> <div class="color-shape" id="negative-color"></div> <span class="color-label">Negative</span></div>
+                        <div class="color-case"> <div class="color-shape" id="rather-negative-color"></div> <span class="color-label">Rather Negative</span></div>
+                        <div class="color-case"> <div class="color-shape" id="inconclusive-color"></div> <span class="color-label">Inconclusive</span></div>
+                        <div class="color-case"> <div class="color-shape" id="possibly-inconclusive-color"></div> <span class="color-label">Possibly Inconclusive</span></div>
+                        <div class="color-case"> <div class="color-shape" id="no-effect-color"></div> <span class="color-label">No effect</span></div>
+                        <div class="color-case"> <div class="color-shape" id="possibly-no-effect-color"></div> <span class="color-label">Possibly No Effect</span></div>
+                        <div class="color-case"> <div class="color-shape" id="no-findings"></div> <span class="color-label">No findings</span></div>
+                    </div>
+
+                    <div class="impact-legend">
+                        <h4>Overall Impact Color Scale</h4>
+                        <div class="gradient-legend">
+                            <div class="linear-gradient"></div>
+                            <div class="linear-gradient-percentages">
+                                <span>100%</span>
+                                <span>75%</span>
+                                <span>50%</span>
+                                <span>25%</span>
+                                <span>0%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <footer> 
+                <img class="stars-europe" src="/images/icon-stars-europe.svg" alt="Europe Stars Logo">
+                <p class="europe-fund">Funded by the European Union</p>
+                
+                <a href="https://www.instagram.com/esspinproject/" target="_blank">
+                    <img class="social-media-logo" src="/images/icon-social-instagram.svg" alt="Instagram Logo">
+                </a>
+                <a href="https://www.linkedin.com/company/91529913/admin/" target="_blank">
+                    <img class="social-media-logo" src="/images/icon-social-linkedin.svg" alt="Linkedin Logo">
+                </a>
+                <a href="https://twitter.com/ESSPINproject" target="_blank">
+                    <img class="social-media-logo" src="/images/icon-social-twitter.svg" alt="Twitter Logo">
+                </a>
+                <a href="https://www.youtube.com/channel/UC8TnkJ-TNzzQqb0Z01ogh5g">
+                    <img class="social-media-logo" src="/images/icon-social-youtube.svg" alt="Youtube Logo">
+                </a>
+            </footer>
+        </div>
+        
+        <script src="/scripts/header.js" charset="utf-8"></script>
+        <script src="/scripts/overview-results.js" charset="utf-8"></script>
+        
+    </body>
+</html>

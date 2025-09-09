@@ -1,0 +1,530 @@
+
+/* ========== Styles for the Main Content Area of the Search History Page ========= */
+
+.main-content-frame {
+    height: calc(9*(100vh - 74px)/10 + 50px);
+}
+
+/* Styles for the user profile Icon */
+.main-content-frame > img {
+    width: 70px;
+    height: 70px;
+    padding-top: 15px;
+}
+
+/* Styles for the main content frame's heading */
+.main-content-frame > h3 {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 1.5rem;
+    margin: 0.2rem 0;
+}
+
+/* Styles for the main content frame's heading */
+.main-content-frame > p {
+    max-width: 850px;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 1rem;
+    text-align: center;
+    padding-top: 5px;
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+}
+
+/* Styles for the Main container of the search options, button, and results list */
+.search-history-div {
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+}
+
+.search-history-selection {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    position: relative;
+    flex-wrap: nowrap;
+}
+
+.input-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+.clear-input {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    text-align: center;
+    transform: translateY(-50%);
+    font-size: 0.8rem;
+    color: black;
+    cursor: pointer;
+    display: none; 
+    z-index: 2;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+}
+
+
+.light-mode .clear-input {
+    background-color: #c4aa22;
+}
+
+.dark-mode .clear-input {
+    background-color: #C7A600;
+}
+
+/* Styles for the input element */
+#search-history-input {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 0.9rem;
+    width: 24vw;
+    flex: 1;
+    padding: 1rem 10px;
+    margin-top: 5px;
+    border: 2px solid rgba(255, 215, 0, 0.5);
+    border-radius: 5px;
+    box-sizing: border-box;
+    resize: none;
+    overflow: hidden;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-x: hidden;
+    overflow-y: hidden;  
+    min-height: 2.5rem;
+    max-height: 6rem;
+}
+
+html:not(.disable-transitions) #search-history-input {
+    transition: border 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dark-mode #search-history-input {
+    background-color: #343442;
+    color: #e0e0e0;
+}
+
+#search-history-input:focus {
+    outline: none; 
+}
+
+#search-history-input.selected {
+    box-shadow: 0 0 6px rgb(230,184,0);
+}
+
+/* Styles for the search history menu */
+.search-history-menu {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 1rem;
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    width: 20vw;
+    border-top: none;
+    border-radius: 0 0 5px 5px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    z-index: 10;
+    width: 78.5%;
+    max-height: 150px;
+    overflow-y: auto;
+    animation: fadeInUp 0.2s ease-out;
+}
+
+/* (Dis-)Appearance animation of dropdown lists */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.light-mode .search-history-menu {
+    background-color: rgb(255, 251, 234);
+    border: 2px solid rgb(255, 215, 0);
+}
+
+/* Styles for the individual search history options */
+.history-menu-options {
+    padding: 10px 20px;
+    cursor: pointer;
+    white-space: normal;
+}
+
+/* Background color effect when hovering on top of each history menu option */
+.light-mode .history-menu-options:hover {
+    background-color: rgb(255, 219, 77);
+    transition: all 0.2s ease-in-out;
+}
+
+/* Dark mode colors for dropdown options */
+.dark-mode .history-menu-options {
+    background-color: #3d3d41;
+    color: #e0dbdb;
+    border-color: #A69227;
+}
+
+/* Dark mode colors when hovering on top of the dropdown options */
+.dark-mode .history-menu-options:hover {
+    background-color: #3A3A3A; /* soft dark gray */
+    color: #FFD700;
+}
+
+/* Styles for the container of the search history results */
+.history-results-list {
+    width: 55vw;
+    height: 40vh;
+    max-height: 50vh;
+    border-collapse: separate;
+    border-spacing: 0 0.75rem;
+    font-size: 0.95rem;
+    border: 2px solid rgba(255, 215, 0, 0.5); 
+    border-radius: 10px;
+    margin-top: 0.1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    overflow-y: auto;
+}
+
+.dark-mode .history-results-list {
+    background-color: #343442;
+    color: #e0e0e0;
+}
+/* Styles for the empty history results case */
+.history-results-list > h5 {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 1rem;
+    padding: 0 10vw;
+}
+
+/* ========== Styles for the list of History Result items ========== */
+
+/* Table containing the summary results */
+#history-results-items {
+    border: 2px solid rgba(255, 215, 0, 0.5);
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: white;
+}
+
+.dark-mode #history-result-items {
+    background-color: #343442;
+    color: #e0e0e0;
+}
+
+/* Styles for the Header and each Row of the History Table */
+.history-header, .history-row {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow-x: hidden;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    gap: 0.5rem;
+}
+
+/* Additional styles for the Header row */
+.history-header {
+    font-weight: 600;
+    font-size: 1rem;
+    color: #555;
+}
+
+.light-mode .history-header { color: #555; }
+
+.dark-mode .history-header { color: #e0e0e0; }
+
+/* Additional styles for each Row of the History table */
+.history-row {
+    margin: 0.4rem 0;
+    background-color: #f7f9f7;
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+}
+
+html:not(.disable-transitions) .history-row {
+    transition: background-color 0.3s ease;
+}
+
+.dark-mode .history-row {
+    background-color: #2f2f3b;
+    color: #e0e0e0;
+}
+
+/* Coloring styles for the most popular history records*/
+
+/* 1st History Record */
+.light-mode .history-row.first { background-color: #fff8dc; }
+
+.light-mode .history-row.first:hover { background-color: #fff3b0; }
+
+.dark-mode .history-row.first { background-color: #806600; }
+
+.dark-mode .history-row.first:hover { background-color: #a68a00; }
+
+/* 2nd History Record */
+.light-mode .history-row.second { background-color: #f5f5f5; }
+
+.light-mode .history-row.second:hover { background-color: #e0e0e0; }
+
+.dark-mode .history-row.second { background-color: #4a4f5a; }
+
+.dark-mode .history-row.second:hover { background-color: #5c6270; }
+
+/* 3rd History Record */
+.light-mode .history-row.third { background-color: #fce8d5; }
+
+.light-mode .history-row.third:hover { background-color: #f7d2b0; }
+
+.dark-mode .history-row.third { background-color: #5e3b1d; }
+
+.dark-mode .history-row.third:hover { background-color: #764b27; }
+
+/* Lower-ranked History Record */
+.light-mode .history-row.general { background-color: #f6f6f6; }
+
+.light-mode .history-row.general:hover { background-color: #e6e6e6; }
+
+.dark-mode .history-row.general { background-color: #2e2e2e; }
+
+.dark-mode .history-row.general:hover { background-color: #3a3a3a; }
+
+
+/* Positional styles for each data value in the history table */
+.history-data {
+    word-break: break-word;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 0.35rem;
+    font-weight: 500;
+}
+
+/* Styles for the Dependent and Independent Variable Search History */
+.history-variable-rank { flex-direction: row; flex: 0 0 auto; }
+
+.history-variable { flex: 3 1 0; min-width: 0; }
+
+.history-variable-count { flex-direction: row-reverse; flex: 1 1 0; justify-content: flex-start; min-width: 0;}
+
+
+/* Styles for the Query Search History */
+
+/* For the Header row */
+.history-header .history-query-rank {flex-direction: row; flex: 0 0 auto; }
+
+.history-header .history-level { flex: 2 1 0; justify-content: center; min-width: 0; }
+
+.history-header .history-dependent, .history-independent {flex-direction: row; flex: 3 1 0; justify-content: center; min-width: 0;}
+
+.history-header .history-query-count { flex-direction: row-reverse; flex: 1 1 0; justify-content: flex-start; min-width: 0;}
+
+/* For regular rows */
+.history-query-rank {flex-direction: row; flex: 0 0 auto; }
+
+.history-level { flex: 3 1 0; min-width: 0; }
+
+.history-dependent, .history-independent {flex-direction: row; flex: 3 1 0; justify-content: flex-start; min-width: 0;}
+
+.history-query-count { flex-direction: row-reverse; flex: 1 1 0; justify-content: flex-start; min-width: 0;}
+
+
+/* ======== Styles for the Scrollbar to the Right of the Results Flexbox ======== */
+
+/* vertical scrollbar width */
+.history-results-list::-webkit-scrollbar {
+    width: 10px;              
+}
+
+/* Styles behind the scrollable handle */
+.light-mode .history-results-list::-webkit-scrollbar-track {
+    background-color: #f0f0f0;       
+    border-radius: 6px;
+}
+
+.dark-mode .history-results-list::-webkit-scrollbar-track {
+    background-color: #47474c;
+    border-radius: 6px;
+}
+
+
+/* Styles for the scrollable handle */
+.light-mode .history-results-list::-webkit-scrollbar-thumb {
+    background-color: #f1c40f;
+    border-radius: 6px;
+    border: 2px solid #f0f0f0;
+}
+
+.dark-mode .history-results-list::-webkit-scrollbar-thumb {
+    background-color: #C7A600;
+    border-radius: 6px;
+    border: 2px solid #3d3d41;
+}
+
+/* Color effect when hovering on top of the scrollable handle */
+.light-mode .history-results-list::-webkit-scrollbar-thumb:hover {
+    background-color: #d4ac0d; 
+}
+
+.dark-mode .history-results-list::-webkit-scrollbar-thumb:hover {
+    background-color: #FFD700;
+}
+
+
+/* Styles for the container of buttons */
+
+.buttons-div {
+    display: flex;
+    gap: 1rem;
+    margin-top: 30px;
+    position: absolute;
+    top: 86%;
+    left: 46%;
+}
+
+/* Common styles applied to all buttons */
+.back-btn, .apply-filter-btn {
+    font-size: 1.2rem;
+    border: 0;
+    border-radius: 5px;
+    padding: 10px 15px;
+    margin: 10px 0 10px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.light-mode .back-btn, .light-mode .apply-filter-btn {
+    background-color:rgb(252, 229, 26);
+}
+
+/* Specific modifications for the search filter applying button */
+.apply-filter-btn {
+    margin: 0;
+    padding: 0.5rem 10px;
+}
+
+/* Shadow & Shift effect when hovering on top of the Next button. */
+.light-mode .back-btn:hover, .light-mode .apply-filter-btn:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); 
+    transform: translateY(-1px);               
+}
+
+/* Scaling effect when Next button gets clicked. */
+.back-btn:active, .apply-filter-btn:active {
+    transform: scale(0.8);
+}
+
+/* Dark theme background color change */
+.dark-mode .back-btn, .dark-mode .apply-filter-btn {
+    background-color: #d7bd2b;
+    color: #1F1F2B;
+}
+
+/* Underline effect when hovering on top of the Next button in dark mode. */
+.dark-mode .back-btn:hover, .dark-mode .apply-filter-btn:hover {
+    box-shadow: 0 4px 8px rgba(255,255,255, 0.15); 
+    transform: translateY(-1px);                     
+}
+
+/* ========= Web Responsive Design for Tablet and Mobile Phone Screen Sizes ========= */
+
+/* Mobile Phone Screen */
+@media screen and (max-width: 767px) {
+
+    .main-content-frame {
+        width: 95%;
+    }
+
+    .search-history-div {
+        width: 95%;
+    }
+
+    .search-history-selection {
+        display: flex;
+        flex-direction: row !important;
+        width: 100%;
+        margin-bottom: 1rem;
+        flex-wrap: wrap;
+    }
+
+    #search-history-input {
+        width: 100%;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        padding-right: 2rem; 
+    }
+
+    .search-history-menu {
+        top: 50%;
+        width: 99%;
+    }
+
+    .history-results-list {
+        width: 112%;
+    }
+
+    
+    #history-results {
+        width: auto;
+    }
+
+    .history-header, .history-row {
+        display: flex;
+        flex-direction: row !important;
+        font-size: 0.7rem;
+    }
+
+    .history-variable-rank, .history-query-rank {
+        display: flex;
+        flex-direction: row !important;
+        justify-content: flex-start;
+    }
+
+    .history-variable, .history-dependent, .history-independent {
+        display: flex;
+        flex-direction: row !important;
+        justify-content: center;
+    }
+
+    .history-variable-count, .history-query-count {
+        display: flex;
+        flex-direction: row-reverse !important;
+        justify-content: flex-start;
+    }
+
+    /* For the Header row */
+    .history-header .history-query-rank {flex-direction: row; flex: 0 0 auto; }
+
+    .history-header .history-level { flex: 2 1 0; min-width: 0; }
+
+    .history-header .history-dependent, .history-independent {flex-direction: row; flex: 3 1 0; justify-content: flex-start; min-width: 0;}
+
+    .history-header .history-query-count { flex-direction: row-reverse; flex: 2 1 0; justify-content: flex-start; min-width: 0;}
+
+    .buttons-div {
+        position: static;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        margin-top: 0;
+    }
+}

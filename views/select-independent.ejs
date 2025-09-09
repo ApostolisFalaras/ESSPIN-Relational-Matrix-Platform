@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <title>Relational Matrix Platform</title>
+
+        <script>
+
+            document.documentElement.classList.add("disable-transitions");
+            document.documentElement.style.visibility = "hidden";
+
+            const localTheme = localStorage.getItem("theme");
+            console.log("GET Theme:", localTheme);
+            
+            if (localTheme === "dark") {
+                document.documentElement.classList.remove("light-mode");
+                document.documentElement.classList.add("dark-mode");
+            }
+            else {
+                document.documentElement.classList.remove("dark-mode");
+                document.documentElement.classList.add("light-mode");
+            }
+        </script>
+
+        <!-- Including 'Roboto Mono' font from Google Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+
+        <!-- Link to CSS of Phosphor Icons -->
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css">
+        
+        <!-- Custom CSS for the Header & Home Page -->
+        <link href="/styles/header.css" rel="stylesheet">
+        <link href="/styles/select-variables.css" rel="stylesheet">
+
+        <!-- ESSPIN's favicon -->
+        <link rel="icon" href="/images/cropped-esspin-512x512-1-32x32.png" type="image/png">
+    </head>
+    <body>
+        
+        <div class="tooltip toggle-tooltip">Toggle Sidebar</div>
+        <div class="tooltip theme-tooltip"></div>
+        <div class="tooltip bookmark-tooltip">View Bookmarks</div>
+        <div class="tooltip history-tooltip">View Search History</div>
+        <div class="tooltip logout-tooltip">Logout</div>
+
+        <div class="contents">
+            
+            <!-- Including the Left Sidebar and the Navbar -->
+            <%- include("./partials/header.ejs") %>
+            
+            <div class="main-contents">
+
+                <div class="main-content-frame">
+
+                    <!-- Icon representing inequalities, through an unevenly split pie chart -->
+                    
+                    <img alt="Bar-chart Logo">
+
+                    <h3>Independent Variable</h3>
+                    <!-- Instructional text guiding user selection -->
+                    <p>
+                        Please select the independent variable that may influence the dependent variable.
+                        Choose one option from any of the dropdown menus below.
+                    </p>
+                    
+                    
+                    <form action="/login/select-level/select-dependent-variable/select-independent-variable" method="POST" id="select-variable-form">
+
+                        <div id="independent-dropdown-choices">
+                            
+                            <div class="dropdown">
+                                <button type="button" class="dropdown-btn pre-market-btn " aria-haspopup="listbox" aria-expanded="false">
+                                    <span class="dropdown-title" data-value="Pre-Market Drivers">Pre-Market Drivers</span> <span class="dropdown-icon">&#x25BC;</span>
+                                </button>
+                                <ul class="options" role="listbox">
+                                    <li class="option pre-market-driver" role="option" data-value="Size of Public sector - Civil servants - Generalpublicservicesexpendit">Size of Public sector</li>
+                                    <li class="option pre-market-driver" role="option" data-value="Legal framework quality/efficiency">Legal framework quality/efficiency</li>
+                                    <li class="option pre-market-driver" role="option" data-value="Administrative quality and efficiency">Administrative quality and efficiency</li>
+                                    <li class="option pre-market-driver" role="option" data-value="Social trust and social capital">Social trust and social capital</li>
+                                    <li class="option pre-market-driver" role="option" data-value="Access to education">Access to education</li>
+                                    <li class="option pre-market-driver" role="option" data-value="Access to health services">Access to health services</li>
+                                    <li class="option pre-market-driver" role="option" data-value="Access to digital services">Access to digital services</li>
+                                    <li class="option pre-market-driver" role="option" data-value="Adequate transportation infrastructure - Road traffic deaths">Adequate transportation infrastructure</li>
+                                    <li class="option pre-market-driver" role="option" data-value="Presence of social (hard) infrastructure">Presence of social (hard) infrastructure</li>
+                                    <li class="option pre-market-driver" role="option" data-value="Credible property rights">Credible property rights</li>
+                                    <li class="option pre-market-driver" role="option" data-value="Credible human and civic rights">Credible human and civic rights</li>
+                                    <li class="option pre-market-driver" role="option" data-value="Environmental quality">Environmental quality</li>
+                                    <li class="option pre-market-driver" role="option" data-value="Ethnic and geographical origins">Ethnic and geographical origins</li>
+                                    <li class="option pre-market-driver has-dropdown" role="option" data-value="Other Pre Market Driver">Other Pre Market Driver <span class="dropdown-icon">&#x25BC;</span></li>
+                                </ul>
+
+                                <ul class="options other-options" role="listbox">
+                                    <li class="option pre-market-driver" role="option" data-value="health status">Health status</li>
+                                    <li class="option pre-market-driver" role="option" data-value="material deprivation">Material deprivation</li>
+                                    <li class="option pre-market-driver" role="option" data-value="Vulnerability to climate change">Vulnerability to climate change</li>
+                                    <li class="option pre-market-driver" role="option" data-value="Accessed EU after 2004">Accessed EU after 2004</li>
+                                    <li class="option pre-market-driver" role="option" data-value="Inflows of tertiary students">Inflows of tertiary students</li>
+                                    <li class="option pre-market-driver" role="option" data-value="Outflows of tertiary students">Outflows of tertiary students</li>
+                                    <li class="option pre-market-driver" role="option" data-value="Housing cost">Housing cost</li>
+                                    <li class="option pre-market-driver" role="option" data-value="regional vulnerability">Regional vulnerability</li>
+                                    <li class="option pre-market-driver" role="option" data-value="social inequalities, globalization and economic restructuring, welfare regimes, and housing systems.">Social inequalities, globalization and economic restructuring, welfare regimes, and housing systems</li>
+                                    <li class="option pre-market-driver" role="option" data-value="family type, educational level, housing conditions">Family type, educational level, housing conditions</li>
+                                    <li class="option pre-market-driver" role="option" data-value="parents educational level">Parents educational level</li>
+                                    <li class="option pre-market-driver" role="option" data-value="Political self-placement">Political self-placement</li>
+                                    <li class="option pre-market-driver" role="option" data-value="Social self-placement">Social self-placement</li>
+                                    <li class="option pre-market-driver" role="option" data-value="Population size">Population size</li>
+                                    <li class="option pre-market-driver" role="option" data-value="Rigid class structure that does not allow social mobility">Rigid class structure that does not allow social mobility</li>
+                                    <li class="option pre-market-driver" role="option" data-value="Illegal activities, trafficking and weak enforcement of law">Illegal activities, trafficking and weak enforcement of law</li>
+                                    <li class="option pre-market-driver" role="option" data-value="Cultural characteristics and especially the lack of solidarity">Cultural characteristics and especially the lack of solidarity</li>
+                                </ul>
+                            </div>
+
+                            <div class="dropdown">
+                                <button type="button" class="dropdown-btn in-market-btn" aria-haspopup="listbox" aria-expanded="false">
+                                    <span class="dropdown-title" data-value="In-Market Drivers">In-Market Drivers</span> <span class="dropdown-icon">&#x25BC;</span>
+                                </button>
+                                <ul class="options" role="listbox">
+                                    <li class="option in-market-driver" role="option" data-value="Level of development - Human Development Index - Social Progress Index">Level of development</li>
+                                    <li class="option in-market-driver" role="option" data-value="Economic growth">Economic growth</li>
+                                    <li class="option in-market-driver" role="option" data-value="Economic attractiveness of place">Economic attractiveness of place</li>
+                                    <li class="option in-market-driver" role="option" data-value="Demographic dynamics">Demographic dynamics</li>
+                                    <li class="option in-market-driver" role="option" data-value="Labor market imbalances">Labor market imbalances</li>
+                                    <li class="option in-market-driver" role="option" data-value="Oligopolistic market structure - The presence of Super-star firms">Oligopolistic market structure - The presence of Super-star firms</li>
+                                    <li class="option in-market-driver" role="option" data-value="Specialization in knowledge intensive sectors - Digitalization and AI">Specialization in knowledge intensive sectors - Digitalization and AI</li>
+                                    <li class="option in-market-driver" role="option" data-value="Min wage level">Min wage level</li>
+                                    <li class="option in-market-driver" role="option" data-value="Collective bargaining">Collective bargaining</li>
+                                    <li class="option in-market-driver" role="option" data-value="EU integration: Expand commodity trade with the EU">EU integration: Expand commodity trade with the EU</li>
+                                    <li class="option in-market-driver" role="option" data-value="EU integration: Expand trade in services with the EU">EU integration: Expand trade in services with the EU</li>
+                                    <li class="option in-market-driver" role="option" data-value="EU integration: Labor mobility in the EU">EU integration: Labor mobility in the EU</li>
+                                    <li class="option in-market-driver" role="option" data-value="EU integration: Capital mobility (FDI) in the EU">EU integration: Capital mobility (FDI) in the EU</li>
+                                    <li class="option in-market-driver" role="option" data-value="Globalization: trade competition">Globalization: trade competition</li>
+                                    <li class="option in-market-driver" role="option" data-value="Globalization: the location patterns of FDI">Globalization: the location patterns of FDI</li>
+                                    <li class="option in-market-driver" role="option" data-value="Globalization: global value chains">Globalization: global value chains</li>
+                                    <li class="option in-market-driver" role="option" data-value="Agglomeration economies">Agglomeration economies</li>
+                                    <li class="option in-market-driver" role="option" data-value="Innovation - R&D">Innovation - R&D</li>
+                                    <li class="option in-market-driver" role="option" data-value="Wages and employee compensation">Wages and employee compensation</li>
+                                    <li class="option in-market-driver" role="option" data-value="Renewable energy">Renewable energy</li>
+                                    <li class="option in-market-driver" role="option" data-value="Financialization of the economy">Financialization of the economy</li>
+                                    <li class="option in-market-driver" role="option" data-value="Housing cost">Housing cost</li>
+                                    <li class="option in-market-driver has-dropdown" role="option" data-value="Other In Market Drivers">Other In Market Drivers <span class="dropdown-icon">&#x25BC;</span></li>
+                                </ul>
+
+                                <ul class="options other-options" role="listbox">
+                                    <li class="option in-market-driver" role="option" data-value="Unemployment">Unemployment</li>
+                                    <li class="option in-market-driver" role="option" data-value="difference between citations of internationally co-authored publications of corresponding authors and citations of internationally co-authored publications of non-corresponding authors">difference between citations of internationally co-authored publications of corresponding authors and citations of internationally co-authored publications of non-corresponding authors</li>
+                                    <li class="option in-market-driver" role="option" data-value="Capital Stock">Capital Stock</li>
+                                    <li class="option in-market-driver" role="option" data-value="Total trade">Total trade</li>
+                                    <li class="option in-market-driver" role="option" data-value="Trade with other domestic regions">Trade with other domestic regions</li>
+                                    <li class="option in-market-driver" role="option" data-value="Trade with foreign regions">Trade with foreign regions</li>
+                                    <li class="option in-market-driver" role="option" data-value="occupational position">Occupational position</li>
+                                    <li class="option in-market-driver" role="option" data-value="type of work organization">Type of work organization</li>
+                                    <li class="option in-market-driver" role="option" data-value="Initial unemployment level">Initial unemployment level</li>
+                                    <li class="option in-market-driver" role="option" data-value="Globalization: trade cost index">Globalization: trade cost index</li>
+                                    <li class="option in-market-driver" role="option" data-value="change in the number of publications pc">Change in the number of publications pc</li>
+                                    <li class="option in-market-driver" role="option" data-value="change in the number of patent applications pc">Change in the number of patent applications pc</li>
+                                    <li class="option in-market-driver" role="option" data-value="employment growth">Employment growth</li>
+                                    <li class="option in-market-driver" role="option" data-value="Total Factor Productivity">Total Factor Productivity</li>
+                                    <li class="option in-market-driver" role="option" data-value="Firms performance">Firms performance</li>
+                                    <li class="option in-market-driver" role="option" data-value="patents">Patents</li>
+                                    <li class="option in-market-driver" role="option" data-value="trade integration; EU trade / total trade">Trade integration; EU trade / total trade</li>
+                                    <li class="option in-market-driver" role="option" data-value="specialization; Krugman's index">Specialization; Krugman's index</li>
+                                    <li class="option in-market-driver" role="option" data-value="productivity; GDP / hours worked">Productivity; GDP / hours worked</li>
+                                    <li class="option in-market-driver" role="option" data-value="number of incoming students">Number of incoming students</li>
+                                    <li class="option in-market-driver" role="option" data-value="number of outgoing students">Number of outgoing students</li>
+                                    <li class="option in-market-driver" role="option" data-value="trade openness">Trade openness</li>
+                                    <li class="option in-market-driver" role="option" data-value="trade similarity">Trade similarity</li>
+                                    <li class="option in-market-driver" role="option" data-value="Trade liberalisation">Trade liberalisation</li>
+                                    <li class="option in-market-driver" role="option" data-value="trade">Trade</li>
+                                    <li class="option in-market-driver" role="option" data-value="foreign trade">Foreign trade</li>
+                                    <li class="option in-market-driver" role="option" data-value="Risk that the growth spell will end">Risk that the growth spell will end</li>
+                                    <li class="option in-market-driver" role="option" data-value="e-commerce development">E-commerce development</li>
+                                    <li class="option in-market-driver" role="option" data-value="skills">Skills</li>
+                                    <li class="option in-market-driver" role="option" data-value="Public and Private capital, Labor">Public and Private capital, Labor</li>
+                                    <li class="option in-market-driver" role="option" data-value="sectoral structure of the economy">Sectoral structure of the economy</li>
+                                </ul>
+                            </div>
+
+                            <div class="dropdown">
+                                <button type="button" class="dropdown-btn post-market-btn" aria-haspopup="listbox" aria-expanded="false">
+                                    <span class="dropdown-title" data-value="Post-Market Drivers">Post-Market Drivers</span> <span class="dropdown-icon">&#x25BC;</span>
+                                </button>
+                                <ul class="options" role="listbox">
+                                    <li class="option post-market-driver" role="option" data-value="Public Investment (PI)">Public Investment (PI)</li>
+                                    <li class="option post-market-driver" role="option" data-value="Social welfare benefits">Social welfare benefits</li>
+                                    <li class="option post-market-driver" role="option" data-value="Progressive taxation">Progressive taxation</li>
+                                    <li class="option post-market-driver" role="option" data-value="Tax shelters">Tax shelters</li>
+                                    <li class="option post-market-driver" role="option" data-value="Profit taxation of business">Profit taxation of business</li>
+                                    <li class="option post-market-driver" role="option" data-value="Income taxation of households">Income taxation of households</li>
+                                    <li class="option post-market-driver" role="option" data-value="Taxation of trade (Tariffs)">Taxation of trade (Tariffs)</li>
+                                    <li class="option post-market-driver" role="option" data-value="Social Housing policy">Social Housing policy</li>
+                                    <li class="option post-market-driver" role="option" data-value="Social and solidarity economy">Social and solidarity economy</li>
+                                    <li class="option post-market-driver" role="option" data-value="Cohesion Policy (CP)">Cohesion Policy (CP)</li>
+                                    <li class="option post-market-driver" role="option" data-value="Common Agricultural Policy (CAP)">Common Agricultural Policy (CAP)</li>
+                                    <li class="option post-market-driver" role="option" data-value="Next Generation EU (RRF)">Next Generation EU (RRF)</li>
+                                    <li class="option post-market-driver" role="option" data-value="Policies for human capital">Policies for human capital</li>
+                                    <li class="option post-market-driver" role="option" data-value="Policies for Investment">Policies for Investment</li>
+                                    <li class="option post-market-driver" role="option" data-value="Policies for Infrastructure">Policies for Infrastructure</li>
+                                    <li class="option post-market-driver" role="option" data-value="Policies for Environment">Policies for Environment</li>
+                                    <li class="option post-market-driver" role="option" data-value="Policies for Green Transition">Policies for Green Transition</li>
+                                    <li class="option post-market-driver" role="option" data-value="Policies for Smart Transition / Industry 4.0 / R&D">Policies for Smart Transition / Industry 4.0 / R&D</li>
+                                    <li class="option post-market-driver" role="option" data-value="Local Government empowerment">Local Government empowerment</li>
+                                    <li class="option post-market-driver has-dropdown" role="option" data-value="Other Post Market Drivers">Other Post Market Drivers <span class="dropdown-icon">&#x25BC;</span></li>
+                                </ul>
+
+                                <ul class="options other-options" role="listbox">
+                                    <li class="option post-market-driver" role="option" data-value="Support policies to workers during COVID">Support policies to workers during COVID</li>
+                                    <li class="option post-market-driver" role="option" data-value="GFCF">GFCF</li>
+                                    <li class="option post-market-driver" role="option" data-value="European Quality of Government Index">European Quality of Government Index</li>
+                                    <li class="option post-market-driver" role="option" data-value="austerity policies">Austerity policies</li>
+                                    <li class="option post-market-driver" role="option" data-value="Support place-based approaches in local and regional development strategies">Support place-based approaches in local and regional development strategies</li>
+                                    <li class="option post-market-driver" role="option" data-value="Provide stronger investment incentives to weaker regions">Provide stronger investment incentives to weaker regions</li>
+                                    <li class="option post-market-driver" role="option" data-value="Political empowerment of citizens, participatory democracy">Political empowerment of citizens, participatory democracy</li>
+                                    <li class="option post-market-driver" role="option" data-value="Provide business support mechanisms to SMEs in weaker regions in order to improve quality and access to national and international markets">Provide business support mechanisms to SMEs in weaker regions in order to improve quality and access to national and international markets</li>
+                                    <li class="option post-market-driver" role="option" data-value="Insufficient public redistribution policies">Insufficient public redistribution policies</li>
+                                    <li class="option post-market-driver" role="option" data-value="Solidarity: Differences in solidarity and civic engagement between people in different areas">Solidarity: Differences in solidarity and civic engagement between people in different areas</li>
+                                    <li class="option post-market-driver" role="option" data-value="Investment subsidies to small business">Investment subsidies to small business</li>
+                                    <li class="option post-market-driver" role="option" data-value="Reduce taxes for low income groups">Reduce taxes for low income groups</li>
+                                    <li class="option post-market-driver" role="option" data-value="Increase employment opportunities for weaker and vulnerable social groups">Increase employment opportunities for weaker and vulnerable social groups</li>
+                                    <li class="option post-market-driver" role="option" data-value="Provide free daycare services to working mothers">Provide free daycare services to working mothers</li>
+                                </ul>
+                            </div>
+
+                            <div class="dropdown">
+                                <button type="button" class="dropdown-btn inequalities-btn" aria-haspopup="listbox" aria-expanded="false">
+                                    <span class="dropdown-title" data-value="Inequalities">Inequalities</span> <span class="dropdown-icon">&#x25BC;</span>
+                                </button>
+                                <ul class="options" role="listbox">
+                                    <li class="option inequality" role="option" data-value="Access to education">Access to education</li>
+                                    <li class="option inequality" role="option" data-value="Access to health services">Access to health services</li>
+                                    <li class="option inequality" role="option" data-value="Access to digital services">Access to digital services</li>
+                                    <li class="option inequality" role="option" data-value="Access to affordable housing">Access to affordable housing</li>
+                                    <li class="option inequality" role="option" data-value="Environmental quality">Environmental quality</li>
+                                    <li class="option inequality" role="option" data-value="Neighborhood conditions">Neighborhood conditions</li>
+                                    <li class="option inequality" role="option" data-value="Democratic voice / quality">Democratic voice / quality</li>
+                                    <li class="option inequality" role="option" data-value="Unequal Income distribution (individuals or social groups)">Unequal Income distribution (individuals or social groups)</li>
+                                    <li class="option inequality" role="option" data-value="Unequal well-being distribution (individuals or social groups)">Unequal well-being distribution (individuals or social groups)</li>
+                                    <li class="option inequality" role="option" data-value="Unequal development (regions or countries)">Unequal development (regions or countries)</li>
+                                    <li class="option inequality" role="option" data-value="Unequal well-being (regions or countries)">Unequal well-being (regions or countries)</li>
+                                    <li class="option inequality" role="option" data-value="Perceived income inequalities">Perceived income inequalities</li>
+                                    <li class="option inequality" role="option" data-value="Discrimination with respect to Gender">Discrimination with respect to gender</li>
+                                    <li class="option inequality" role="option" data-value="Discrimination with respect to race - Discrimination minorities">Discrimination with respect to race</li>
+                                    <li class="option inequality" role="option" data-value="Discrimination with respect to origin">Discrimination with respect to origin</li>
+                                    <li class="option inequality has-dropdown" role="option" data-value="Other Inequality">Other Inequality <span class="dropdown-icon">&#x25BC;</span></li>
+                                </ul>
+
+                                <ul class="options other-options" role="listbox">
+                                    <li class="option inequality" role="option" data-value="Wealth inequality among individuals at the national level">Wealth inequality among individuals at the national level</li>
+                                    <li class="option inequality" role="option" data-value="Wage inequality between firms within and across EU regions">Wage inequality between firms within and across EU regions</li>
+                                    <li class="option inequality" role="option" data-value="Productivity inequality between firms within and across EU regions">Productivity inequality between firms within and across EU regions</li>
+                                    <li class="option inequality" role="option" data-value="composite index of perceived deprivation">Composite index of perceived deprivation</li>
+                                    <li class="option inequality" role="option" data-value="Land use">Land use</li>
+                                    <li class="option inequality" role="option" data-value="Poverty">Poverty</li>
+                                    <li class="option inequality" role="option" data-value="Socio economic risk">Socio-economic risk</li>
+                                    <li class="option inequality" role="option" data-value="socioeconomic segregation">Socio-economic segregation</li>
+                                    <li class="option inequality" role="option" data-value="economic vulnerability (income level, economic stress and joblessness)">Economic vulnerability (income level, economic stress and joblessness)</li>
+                                    <li class="option inequality" role="option" data-value="utility of consumption">Utility of consumption</li>
+                                    <li class="option inequality" role="option" data-value="capital-skill complementary">Capital-skill complementary</li>
+                                    <li class="option inequality" role="option" data-value="wage rigidities">Wage rigidities</li>
+                                    <li class="option inequality" role="option" data-value="trade openness">Trade openness</li>
+                                    <li class="option inequality" role="option" data-value="students socioeconomic status (deprivation index)">Students socioeconomic status (deprivation index)</li>
+                                </ul>
+                            </div>
+
+                            <div class="dropdown">
+                                <button type="button" class="dropdown-btn external-shocks-btn" aria-haspopup="listbox" aria-expanded="false">
+                                    <span class="dropdown-title" data-value="External Shocks">External Shocks</span> <span class="dropdown-icon">&#x25BC;</span>
+                                </button>
+                                <ul class="options" role="listbox">
+                                    <li class="option external-shock" role="option" data-value="Climate change">Climate change</li>
+                                    <li class="option external-shock" role="option" data-value="Immigration due to shocks">Immigration due to shocks</li>
+                                    <li class="option external-shock" role="option" data-value="Natural disasters">Natural disasters</li>
+                                    <li class="option external-shock" role="option" data-value="Covid-19">Covid-19</li> 
+                                    <li class="option external-shock" role="option" data-value="War in the ENP area">War in the ENP area</li>
+                                    <li class="option external-shock" role="option" data-value="Energy crisis">Energy crisis</li>
+                                    <li class="option external-shock has-dropdown" role="option" data-value="Other External Shock">Other External Shock <span class="dropdown-icon">&#x25BC;</span></li>
+                                </ul>
+
+                                <ul class="options other-options" role="listbox">
+                                    <li class="option external-shock" role="option" data-value="Change of school principal">Change of school principal</li>
+                                    <li class="option external-shock" role="option" data-value="Economic activities closure during lockdown">Economic activities closure during lockdown</li>
+                                    <li class="option external-shock" role="option" data-value="Administrative consolidation of healthcare jurisdictions">Administrative consolidation of healthcare jurisdictions</li>
+                                    <li class="option external-shock" role="option" data-value="TFP shock">TFP shock</li>
+                                </ul>
+                            </div>
+
+                            <div class="dropdown">
+                                <button type="button" class="dropdown-btn others-btn" aria-haspopup="listbox" aria-expanded="false">
+                                    <span class="dropdown-title" data-value="Other Variables">Other Variables</span> <span class="dropdown-icon">&#x25BC;</span>
+                                </button>
+                                <ul class="options" role="listbox">
+                                    <li class="option other-variable" role="option" data-value="Discontent">Discontent</li>
+                                    <li class="option other-variable" role="option" data-value="Democracy">Democracy</li>
+                                    <li class="option other-variable" role="option" data-value="Social cohesion">Social cohesion</li>
+                                    <li class="option other-variable" role="option" data-value="Anti-systemic vote">Anti-systemic vote</li>
+                                    <li class="option other-variable has-dropdown" role="option" data-value="Other Variable">Other Variable <span class="dropdown-icon">&#x25BC;</span></li> 
+                                </ul>
+
+                                <ul class="options other-options" role="listbox">
+                                    <li class="option other-variable" role="option" data-value="Italian Firmss' Value Added">Italian Firms' Value Added</li>
+                                    <li class="option other-variable" role="option" data-value="Green FDI">Green FDI</li>
+                                    <li class="option other-variable" role="option" data-value="Digital FDI">Digital FDI</li>
+                                    <li class="option other-variable" role="option" data-value="FDI">FDI</li>
+                                    <li class="option other-variable" role="option" data-value="Twin transition - Firms' response intensity">Twin transition - Firms' response intensity</li>
+                                    <li class="option other-variable" role="option" data-value="Employment to Employment (EE) transition, Employment to Unemployment (EU) transition, and Unemployment to Employment (UE) transition">Employment to Employment (EE) transition, Employment to Unemployment (EU) transition, and Unemployment to Employment (UE) transition</li>
+                                    <li class="option other-variable" role="option" data-value="Mortality rate">Mortality rate</li>
+                                    <li class="option other-variable" role="option" data-value="Excess mortality">Excess mortality</li>
+                                    <li class="option other-variable" role="option" data-value="impact of war on teaching activity">Impact of war on teaching activity</li>
+                                    <li class="option other-variable" role="option" data-value="impact of war on research activity">Impact of war on research activity</li>
+                                    <li class="option other-variable" role="option" data-value="lifestyle">Lifestyle</li>
+                                    <li class="option other-variable" role="option" data-value="gender">Gender</li>
+                                    <li class="option other-variable" role="option" data-value="age">Age</li>
+                                    <li class="option other-variable" role="option" data-value="degree of urbanisation">Degree of urbanisation</li>
+                                    <li class="option other-variable" role="option" data-value="self-rated health">Self-rated health</li>
+                                    <li class="option other-variable" role="option" data-value="Economic and social conditions">Economic and social conditions</li>
+                                    <li class="option other-variable" role="option" data-value="S3 intensity in the twin transition">S3 intensity in the twin transition</li>
+                                    <li class="option other-variable" role="option" data-value="production diversification">Production diversification</li>
+                                    <li class="option other-variable" role="option" data-value="Firm size - Capability inequality">Firm size - Capability inequality</li>
+                                    <li class="option other-variable" role="option" data-value="Firm GVC integration - Capability inequality">Firm GVC integration - Capability inequality</li>
+                                    <li class="option other-variable" role="option" data-value="relative position of the scientific institution (financial situation, prestige, number of applicants, research and teaching quality, position in the national and international rankings)">Relative position of the scientific institution (financial situation, prestige, number of applicants, research and teaching quality, position in the national and international rankings)</li>
+                                    <li class="option other-variable" role="option" data-value="social welfare">Social welfare</li>
+                                    <li class="option other-variable" role="option" data-value="human development">Human development</li>
+                                    <li class="option other-variable" role="option" data-value="Sustainability practices">Sustainability practices</li>
+                                    <li class="option other-variable" role="option" data-value="Regional VA">Regional VA</li>
+                                    <li class="option other-variable" role="option" data-value="Development trap risk">Development trap risk</li>
+                                    <li class="option other-variable" role="option" data-value="employment">Employment</li>
+                                    <li class="option other-variable" role="option" data-value="convergence">Convergence</li>
+                                    <li class="option other-variable" role="option" data-value="welfare">Welfare</li>
+                                    <li class="option other-variable" role="option" data-value="Birth rate">Birth rate</li>
+                                    <li class="option other-variable" role="option" data-value="Aging">Aging</li>
+                                    <li class="option other-variable" role="option" data-value="Preferences for redistribution (PCA index)">Preferences for redistribution (PCA index)</li>
+                                    <li class="option other-variable" role="option" data-value="Prefer equality of opportunity over equality of outcome policies">Prefer equality of opportunity over equality of outcome policies</li>
+                                    <li class="option other-variable" role="option" data-value="Support for specific equality of opportunity policies (PCA index)">Support for specific equality of opportunity policies (PCA index)</li>
+                                    <li class="option other-variable" role="option" data-value="Support for specific EU-level policies (PCA index)">Support for specific EU-level policies (PCA index)</li>
+                                    <li class="option other-variable" role="option" data-value="Support for provide quality public education to everyone">Support for provide quality public education to everyone</li>
+                                    <li class="option other-variable" role="option" data-value="Support for provide job training and support to find employment opportunities">Support for provide job training and support to find employment opportunities</li>
+                                    <li class="option other-variable" role="option" data-value="Support for provide access to quality healthcare for everyone">Support for provide access to quality healthcare for everyone</li>
+                                    <li class="option other-variable" role="option" data-value="Support for affirmative action / enforce anti-discrimination laws (prohibit discrimination based on race, gender, sexual orientation, and other characteristics)">Support for affirmative action / enforce anti-discrimination laws (prohibit discrimination based on race, gender, sexual orientation, and other characteristics)</li>
+                                    <li class="option other-variable" role="option" data-value="Support for provide affordable housing">Support for provide affordable housing</li>
+                                    <li class="option other-variable" role="option" data-value="Support for prevention of youth crime">Support for prevention of youth crime</li>
+                                    <li class="option other-variable" role="option" data-value="Support for Environmentalism and climate protection">Support for Environmentalism and climate protection</li>
+                                    <li class="option other-variable" role="option" data-value='Agreement with "A common unemployment insurance scheme should be established, funded by the member states of the European Union."'>Agreement with "A common unemployment insurance scheme should be established, funded by the member states of the European Union."</li>
+                                    <li class="option other-variable" role="option" data-value='Agreement with "There should be stronger efforts to ensure equal employment opportunities in the labor market irrespective of gender in the European Union."'>Agreement with "There should be stronger efforts to ensure equal employment opportunities in the labor market irrespective of gender in the European Union."</li>
+                                    <li class="option other-variable" role="option" data-value='Agreement with "There should be minimum standards for public education binding to all European Union member states."'>Agreement with "There should be minimum standards for public education binding to all European Union member states."</li>
+                                    <li class="option other-variable" role="option" data-value='Agreement with "There should be minimum standards for universal health care binding to all European Union member states."'>Agreement with "There should be minimum standards for universal health care binding to all European Union member states."</li>
+                                    <li class="option other-variable" role="option" data-value='Agreement with "The European Union should invest more in rural regions to improve public infrastructure and employment chances."'>Agreement with "The European Union should invest more in rural regions to improve public infrastructure and employment chances."</li>
+                                    <li class="option other-variable" role="option" data-value='Agreement with "The EU should allocate more funds to collaborative research and innovation programs, such as the Horizon 2020."'>Agreement with "The EU should allocate more funds to collaborative research and innovation programs, such as the Horizon 2020."</li>
+                                    <li class="option other-variable" role="option" data-value="Expectations about income inequality in 20 years">Expectations about income inequality in 20 years</li>
+                                    <li class="option other-variable" role="option" data-value="Perceived unfairness of income inequality">Perceived unfairness of income inequality</li>
+                                    <li class="option other-variable" role="option" data-value="Expectations about income inequality in 20 years (country-level)">Expectations about income inequality in 20 years (country-level)</li>
+                                    <li class="option other-variable" role="option" data-value="Perceived unfairness of income inequality (country-level)">Perceived unfairness of income inequality (country-level)</li>
+                                    <li class="option other-variable" role="option" data-value="Conflicts">Conflicts</li>
+                                    <li class="option other-variable" role="option" data-value="Life satisfaction">Life satisfaction</li>
+                                </ul>
+                            </div>
+
+                        </div>
+                    
+
+                        <!-- Hidden input to store selected level; dynamically updated via JavaScript -->
+                        <input type="hidden" name="independentVariable" id="selected-variable" value="<%= independentVariable %>">
+                        <input type="hidden" name="otherIndependentVariable" id="selected-other-variable" value="<%= otherIndependentVariable %>">
+                        <input type="hidden" name="independentCategory" id="selected-category" value="<%= independentCategory %>">
+
+                        <!-- Alert pop-up in case user tries to skip the selection process -->
+                        <div class="alert-container">
+                            <div id="alert-popup" class="">
+                                ⚠️ Please select one option to proceed 
+                            </div>
+                        </div>
+
+                        <!-- Hidden Input elements that transfer the theme & sidebar state
+                            to the user's session in the server. -->
+                        <input type="hidden" name="isMainAppFlow" value="<%= isMainAppFlow %>" id="app-flow">
+                        
+                        <div class="buttons-div-independent">
+                            <!-- "Back" button that redirects users to previous page of the multi-step from -->
+                            <button type="submit" name="action" value="back" class="back-btn">Back</button>
+
+                            <!-- "Cancel Search" button that cancels the current search options -->
+                            <button type="submit" name="action" value="cancel-search" class="cancel-btn">Cancel Search</button>
+
+                            <!-- "Next" button that submits the user's choice, and moves to the next page -->
+                            <button type="submit" name="action" value="next" class="next-btn independent-next-btn">Query Results</button>
+                        </div>
+                    </form>
+                </div>
+
+                <footer> 
+                    <img class="stars-europe" src="/images/icon-stars-europe.svg" alt="Europe Stars Logo">
+                    <p class="europe-fund">Funded by the European Union</p>
+                    
+                    <a href="https://www.instagram.com/esspinproject/" target="_blank">
+                        <img class="social-media-logo" src="/images/icon-social-instagram.svg" alt="Instagram Logo">
+                    </a>
+                    <a href="https://www.linkedin.com/company/91529913/admin/" target="_blank">
+                        <img class="social-media-logo" src="/images/icon-social-linkedin.svg" alt="Linkedin Logo">
+                    </a>
+                    <a href="https://twitter.com/ESSPINproject" target="_blank">
+                        <img class="social-media-logo" src="/images/icon-social-twitter.svg" alt="Twitter Logo">
+                    </a>
+                    <a href="https://www.youtube.com/channel/UC8TnkJ-TNzzQqb0Z01ogh5g">
+                        <img class="social-media-logo" src="/images/icon-social-youtube.svg" alt="Youtube Logo">
+                    </a>
+                </footer>
+            </div>
+        </div>
+
+        <script src="/scripts/header.js" charset="utf-8"></script>
+        <script src="/scripts/select-variables.js" charset="utf-8"></script>
+        
+    </body>
+</html>

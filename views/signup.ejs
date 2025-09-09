@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <title>Relational Matrix Platform</title>
+
+        <script>
+            document.documentElement.classList.add("disable-transitions");
+            document.documentElement.style.visibility = "hidden";
+
+            const localTheme = localStorage.getItem("theme");
+            console.log("GET Theme:", localTheme);
+            
+            if (localTheme === "dark") {
+                document.documentElement.classList.remove("light-mode");
+                document.documentElement.classList.add("dark-mode");
+            }
+            else {
+                document.documentElement.classList.remove("dark-mode");
+                document.documentElement.classList.add("light-mode");
+            }
+        </script>
+
+        <!-- Including 'Roboto Mono' font from Google Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+        <!-- Link to CSS of Phosphor Icons -->
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css">
+        
+        <!-- Custom CSS for the Header & Home Page -->
+        <link href="/styles/header.css" rel="stylesheet">
+        <link href="/styles/signup-login.css" rel="stylesheet">
+
+        <!-- ESSPIN's favicon -->
+        <link rel="icon" href="/images/cropped-esspin-512x512-1-32x32.png" type="image/png">
+    </head>
+    <body>
+        
+        <div class="tooltip toggle-tooltip">Toggle Sidebar</div>
+        <div class="tooltip theme-tooltip"></div>
+        <div class="tooltip bookmark-tooltip">View Bookmarks</div>
+        <div class="tooltip history-tooltip">View Search History</div>
+        <div class="tooltip logout-tooltip">Logout</div>
+
+        <div class="contents">
+            
+            <!-- Including the Left Sidebar and the Navbar -->
+            <%- include("./partials/header.ejs") %>
+            
+            <div class="main-contents">
+
+                <div class="main-content-frame">   
+
+                    <!-- User profile icon displayed above the form, based on the page's theme -->
+                    <img alt="User Login Icon">
+                    
+
+                    <!-- Title and description/purpose of the form -->
+                    <h3>Visitor Registration Page</h3>
+                    <p>Create an account to bookmark and revisit your results across sessions.
+                       We only ask for basic details to help associate your saved selections with your activity.
+                       Your information will remain private and secure.</p>
+
+                    <!-- User information form to collect visitor data for attendance tracking -->        
+                    <form action="/signup" method="POST" class="login-form">
+                    
+                        <!-- Grid layout for form fields (two columns) -->
+                        <div class="field-grid">
+                            <!-- First name input field -->
+                            <div class="info-field left-field">
+                                <label for="firstName" class="form-label">First Name</label>
+                                <input type="text" class="form-input" name="firstName" placeholder="e.g., John" required>
+                            </div>
+                            <!-- Last name input field -->
+                            <div class="info-field right-field">
+                                <label for="lastName" class="form-label">Last Name</label>
+                                <input type="text" class="form-input" name="lastName" placeholder="e.g., Doe" required>
+                            </div>
+                            <!-- Affiliation input field -->
+                            <div class="info-field left-field">
+                                <label for="affiliation" class="form-label">Affiliation</label>
+                                <input type="text" class="form-input" name="affiliation" placeholder="e.g., University of Example" required>
+                            </div>
+                            <!-- Email input field -->
+                            <div class="info-field right-field">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="text" class="form-input" name="email" placeholder="e.g., johndoe@mail.com" required>
+                            </div>
+                        </div>
+
+                        <!-- Hidden Input elements that transfer the theme & sidebar state
+                            to the user's session in the server. -->
+                        <input type="hidden" name="isMainAppFlow" value="<%= isMainAppFlow %>" id="app-flow">
+
+                        <!-- "Next" button that submits the user's input information, and moves to the next page -->
+                        <div class="buttons-div">
+                            <!-- "Back" button that redirects users to previous page of the multi-step from -->
+                            <button type="submit" name="action" value="back" class="back-btn" formnovalidate>Back</button>
+
+                            <!-- "Login" button that submits the user's choice, and moves to the next page -->
+                            <button type="submit" name="action" value="next" class="login-btn">Login</button>
+                        </div>
+                    </form>
+                </div>
+
+                <footer> 
+                    <img class="stars-europe" src="/images/icon-stars-europe.svg" alt="Europe Stars Logo">
+                    <p class="europe-fund">Funded by the European Union</p>
+                    
+                    <a href="https://www.instagram.com/esspinproject/" target="_blank">
+                        <img class="social-media-logo" src="/images/icon-social-instagram.svg" alt="Instagram Logo">
+                    </a>
+                    <a href="https://www.linkedin.com/company/91529913/admin/" target="_blank">
+                        <img class="social-media-logo" src="/images/icon-social-linkedin.svg" alt="Linkedin Logo">
+                    </a>
+                    <a href="https://twitter.com/ESSPINproject" target="_blank">
+                        <img class="social-media-logo" src="/images/icon-social-twitter.svg" alt="Twitter Logo">
+                    </a>
+                    <a href="https://www.youtube.com/channel/UC8TnkJ-TNzzQqb0Z01ogh5g">
+                        <img class="social-media-logo" src="/images/icon-social-youtube.svg" alt="Youtube Logo">
+                    </a>
+                </footer>
+            </div>
+        </div>
+
+        <script src="/scripts/header.js" charset="utf-8"></script>
+        <script src="/scripts/signup.js" charset="utf-8"></script>
+        
+    </body>
+</html>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <title>Relational Matrix Platform</title>
+
+        <script>
+
+            document.documentElement.classList.add("disable-transitions");
+            document.documentElement.style.visibility = "hidden";
+
+            const localTheme = localStorage.getItem("theme");
+            console.log("GET Theme:", localTheme);
+            
+            if (localTheme === "dark") {
+                document.documentElement.classList.remove("light-mode");
+                document.documentElement.classList.add("dark-mode");
+            }
+            else {
+                document.documentElement.classList.remove("dark-mode");
+                document.documentElement.classList.add("light-mode");
+            }
+        </script>
+
+        <!-- Including 'Roboto Mono' font from Google Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+
+        <!-- Including 'Inter' font from Google Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+        <!-- Link to CSS of Phosphor Icons -->
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css">
+        
+        <!-- Custom CSS for the Header & Home Page -->
+        <link href="/styles/header.css" rel="stylesheet">
+        <link href="/styles/search-history.css" rel="stylesheet">
+
+        <!-- ESSPIN's favicon -->
+        <link rel="icon" href="/images/cropped-esspin-512x512-1-32x32.png" type="image/png">
+    </head>
+    <body>
+
+        <div class="tooltip toggle-tooltip">Toggle Sidebar</div>
+        <div class="tooltip theme-tooltip"></div>
+        <div class="tooltip bookmark-tooltip">View Bookmarks</div>
+        <div class="tooltip history-tooltip">View Search History</div>
+        <div class="tooltip logout-tooltip">Logout</div>
+
+        <div class="contents">
+            
+            <!-- Including the Left Sidebar and the Navbar -->
+            <%- include("./partials/header.ejs") %>
+            
+            <div class="main-contents">
+
+                <div class="main-content-frame">
+
+                    <!-- Icon representing inequalities, through an unevenly split pie chart -->
+                    
+                    <img alt="Folder Star Logo">
+
+                    <h3>Search History</h3>
+
+                    <p>
+                        This page summarizes platform-wide search activity, showing the most frequently selected queries, as well as dependent, and independent variables.
+                        Select a option to explore the corresponding history results.
+                    </p>
+
+                    <div class="search-history-div">
+                        <div class="search-history-selection">
+
+                            <div class="input-wrapper">
+                                <textarea placeholder="Select 1 option" id="search-history-input" aria-expanded="false" rows="1" wrap="soft"></textarea>
+                                <span class="clear-input">&#10005;</span>
+                            </div>
+
+                            <ul class="search-history-menu">
+                                <li class="history-menu-options" role="option" data-value="Dependent Variables History">Dependent Variables History</li>
+                                <li class="history-menu-options" role="option" data-value="Independent Variables History">Independent Variables History</li>
+                                <li class="history-menu-options" role="option" data-value="Query History">Query History</li>
+                            </ul>
+
+                            <button class="apply-filter-btn">Search</button>
+                        </div>
+
+                        <div class="history-results-list">
+                            <h5>No history results yet.</h5>
+                        </div>
+                    </div>
+
+                    <input type="hidden" name="dependentHistory" value="<%= JSON.stringify(dependentHistory) %>" id="dependent-history">
+                    <input type="hidden" name="independentHistory" value="<%= JSON.stringify(independentHistory) %>" id="independent-history">
+                    <input type="hidden" name="queryHistory" value="<%= JSON.stringify(queryHistory) %>" id="query-history">                    
+
+                    <input type="hidden" name="isMainAppFlow" value="<%= isMainAppFlow %>" id="app-flow">
+                    
+                    <form action="/exit-search-history" method="POST">
+                        <div class="buttons-div">
+
+                            <button type="submit" class="back-btn">Back</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <footer> 
+                <img class="stars-europe" src="/images/icon-stars-europe.svg" alt="Europe Stars Logo">
+                <p class="europe-fund">Funded by the European Union</p>
+                
+                <a href="https://www.instagram.com/esspinproject/" target="_blank">
+                    <img class="social-media-logo" src="/images/icon-social-instagram.svg" alt="Instagram Logo">
+                </a>
+                <a href="https://www.linkedin.com/company/91529913/admin/" target="_blank">
+                    <img class="social-media-logo" src="/images/icon-social-linkedin.svg" alt="Linkedin Logo">
+                </a>
+                <a href="https://twitter.com/ESSPINproject" target="_blank">
+                    <img class="social-media-logo" src="/images/icon-social-twitter.svg" alt="Twitter Logo">
+                </a>
+                <a href="https://www.youtube.com/channel/UC8TnkJ-TNzzQqb0Z01ogh5g">
+                    <img class="social-media-logo" src="/images/icon-social-youtube.svg" alt="Youtube Logo">
+                </a>
+            </footer>
+        </div>
+        
+        <script src="/scripts/header.js" charset="utf-8"></script>
+        <script src="/scripts/search-history.js" charset="utf-8"></script>
+        
+    </body>
+</html>

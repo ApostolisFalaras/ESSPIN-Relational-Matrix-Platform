@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <title>Relational Matrix Platform</title>
+
+        <script>
+            document.documentElement.classList.add("disable-transitions");
+            document.documentElement.style.visibility = "hidden";
+
+            const localTheme = localStorage.getItem("theme");
+            console.log("GET Theme:", localTheme);
+            if (localTheme === "dark") {
+                document.documentElement.classList.remove("light-mode");
+                document.documentElement.classList.add("dark-mode");
+            }
+            else {
+                document.documentElement.classList.remove("dark-mode");
+                document.documentElement.classList.add("light-mode");
+            }
+        </script>
+
+
+        <!-- Including 'Roboto Mono' font from Google Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+        <!-- Link to CSS of Phosphor Icons -->
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css">
+        
+        <!-- Custom CSS for the Header & Home Page -->
+        <link href="/styles/header.css" rel="stylesheet">
+        <link href="/styles/select-level.css" rel="stylesheet">
+
+        <!-- ESSPIN's favicon -->
+        <link rel="icon" href="/images/cropped-esspin-512x512-1-32x32.png" type="image/png">
+    </head>
+    <body>
+        
+        <div class="tooltip toggle-tooltip">Toggle Sidebar</div>
+        <div class="tooltip theme-tooltip"></div>
+        <div class="tooltip bookmark-tooltip">View Bookmarks</div>
+        <div class="tooltip history-tooltip">View Search History</div>
+        <div class="tooltip logout-tooltip">Logout</div>
+
+        <div class="contents">
+            
+            <!-- Including the Left Sidebar and the Navbar -->
+            <%- include("./partials/header.ejs") %>
+            
+            
+            <div class="main-contents">
+
+                <div class="main-content-frame">
+                    
+                    <!-- Icon representing global perspective (earth logo) -->
+                    <img alt="Earth Logo">
+
+                    <!-- Selection title -->
+                    <h3>Level of Analysis</h3>
+
+                    <!-- Instruction text guiding users on how to select the level of inequality -->
+                    <p>
+                        Please select the level of analysis at which the impact will be assessed.
+                        Choose one of the options below to continue.
+                    </p>
+                    
+                    <!-- Form to submit selected inequality level -->
+                    <form action="/login/select-level" method="POST" id="ineq-level-form">
+
+                        <!-- Two buttons for "National" and "Regional" level inequalities.
+                            The user can only select one of them, before moving on. -->
+                        <div class="level-choices">
+                            <button type="button" class="level-btn" data-value="National (compare countries)">National (compare coutries)</button>
+                            <button type="button" class="level-btn" data-value="Regional (compare regions or areas)">Regional (compare regions or areas)</button>
+                            <button type="button" class="level-btn" data-value="Survey (compare individuals or social groups)">Survey (compare individuals or social groups)</button>
+                            <button type="button" class="level-btn" data-value="Case Study (in depth analysis)">Case Study (in depth analysis)</button>
+                            <button type="button" class="level-btn" data-value="Other">Other</button>
+                            <button type="button" class="level-btn" data-value="All Levels">All Levels</button>
+                        </div>
+                    
+                        <!-- Hidden input to store selected level; dynamically updated via JavaScript -->
+                        <input type="hidden" name="levelOfAnalysis" id="selected-level" value="<%= levelOfAnalysis %>">
+                        <input type="hidden" name="otherLevelOfAnalysis" id="selected-other-level" value="<%= otherLevelOfAnalysis %>">
+
+                        <!-- Alert pop-up in case user tries to skip the selection process -->
+                        <div class="alert-container">
+                            <div id="alert-popup">
+                                ⚠️ Please select one option to proceed 
+                            </div>
+                        </div>
+
+                        <input type="hidden" name="isMainAppFlow" value="<%= isMainAppFlow %>" id="app-flow">
+                        
+                        <div class="buttons-div">
+                            <!-- "Back" button that redirects users to previous page of the multi-step from -->
+                            <button type="submit" name="action" value="back" class="back-btn">Back</button>
+
+                            <!-- "Cancel Search" button that cancels the current search options -->
+                            <button type="submit" name="action" value="cancel-search" class="cancel-btn">Cancel Search</button>
+                        
+                            <!-- "Next" button that submits the user's choice, and moves to the next page -->
+                            <button type="submit" name="action" value="next" class="next-btn">Next</button>
+                        </div>
+                    </form>         
+                </div>
+
+                <footer> 
+                    <img class="stars-europe" src="/images/icon-stars-europe.svg" alt="Europe Stars Logo">
+                    <p class="europe-fund">Funded by the European Union</p>
+                    
+                    <a href="https://www.instagram.com/esspinproject/" target="_blank">
+                        <img class="social-media-logo" src="/images/icon-social-instagram.svg" alt="Instagram Logo">
+                    </a>
+                    <a href="https://www.linkedin.com/company/91529913/admin/" target="_blank">
+                        <img class="social-media-logo" src="/images/icon-social-linkedin.svg" alt="Linkedin Logo">
+                    </a>
+                    <a href="https://twitter.com/ESSPINproject" target="_blank">
+                        <img class="social-media-logo" src="/images/icon-social-twitter.svg" alt="Twitter Logo">
+                    </a>
+                    <a href="https://www.youtube.com/channel/UC8TnkJ-TNzzQqb0Z01ogh5g">
+                        <img class="social-media-logo" src="/images/icon-social-youtube.svg" alt="Youtube Logo">
+                    </a>
+                </footer>
+            </div>
+        </div>
+
+        
+        <script src="/scripts/header.js" charset="utf-8"></script>
+        <script src="/scripts/select-level.js" charset="utf-8"></script>
+        
+    </body>
+</html>

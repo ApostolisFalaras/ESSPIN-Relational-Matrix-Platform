@@ -1,0 +1,75 @@
+
+/* ========== Main Container Frame for the current webpage's contents ========== */
+
+.main-content-frame {
+    width: 72vw;
+}
+
+.main-content-frame > h3 {
+    margin-bottom: 0;
+}
+
+.notes-div {
+    position: absolute;
+    top: 80px;
+    right: 12px;
+    z-index: 1;
+    cursor: pointer;
+}
+
+.notes-div img {
+    width: 40px;
+    height: 40px;
+}
+
+/* ========== Modifications in the Result Cards ========== */
+
+.results-flex {
+    padding-right: 0;
+}
+
+.result-card {
+    width: 25%;
+}
+
+.buttons-div {
+    display: flex;
+    gap: 1rem;
+    margin-top: 30px;
+    position: absolute;
+    top: 82%;
+    left: 46%;
+}
+
+/* ========= Web Responsive Design for Tablet and Mobile Phone Screen Sizes ========= */
+
+/* Mobile Phone Screen */
+@media screen and (max-width: 767px) {
+
+    .main-content-frame {
+        width: 95%;
+    }
+
+    .main-content-frame > h3 {
+        margin: 0.5rem 0;
+    }
+    .results-flex {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+    }
+
+    .result-card {
+        max-width: 80%;
+        width: 100%;
+    }
+
+    .buttons-div {
+        position: static;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+}

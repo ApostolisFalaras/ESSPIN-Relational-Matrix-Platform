@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <title>Relational Matrix Platform</title>
+
+        <script>
+
+            document.documentElement.classList.add("disable-transitions");
+            document.documentElement.style.visibility = "hidden";
+
+            const localTheme = localStorage.getItem("theme");
+            console.log("GET Theme:", localTheme);
+            if (localTheme === "dark") {
+                document.documentElement.classList.remove("light-mode");
+                document.documentElement.classList.add("dark-mode");
+            }
+            else {
+                document.documentElement.classList.remove("dark-mode");
+                document.documentElement.classList.add("light-mode");
+            }
+        </script>
+        
+        <!-- Including 'Roboto Mono' font from Google Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+
+        <!-- Custom CSS for the Header & Home Page -->
+        <link href="/styles/header.css" rel="stylesheet">
+        <link href="/styles/home-page.css" rel="stylesheet">
+
+        <!-- ESSPIN's favicon -->
+        <link rel="icon" href="/images/cropped-esspin-512x512-1-32x32.png" type="image/png">
+
+        
+    </head>
+    <body>
+
+        <div class="tooltip toggle-tooltip">Toggle Sidebar</div>
+        <div class="tooltip theme-tooltip"></div>
+        <div class="tooltip bookmark-tooltip">View Bookmarks</div>
+        <div class="tooltip history-tooltip">View Search History</div>
+        <div class="tooltip logout-tooltip">Logout</div>
+        
+        <div class="contents">
+            
+            <!-- Including the Left Sidebar and the Navbar -->
+            <%- include("./partials/header.ejs") %>
+            
+
+            <div class="main-contents">
+
+               
+                <div class="main-content-frame">
+                    <!--<img src="/images/ESSPIN.svg" alt="ESSPIN Logo">-->
+
+
+                    <h1>ESSPIN - Relational Matrix Platform</h1>
+                    <p>
+                        The Platform provides estimates of the impact of key drivers of inequality on
+                        various types of inequality at different social and spatial scales.
+                    </p>
+                    
+                    <p class="signup-prompt">
+                        Not signed up yet? <a href="/signup" class="signup-link">Create an Account</a>
+                    </p>
+                    
+                    <!-- Login button redirecting users to the login page -->
+                    <form action="/" method="POST">
+
+                        <!-- Hidden Input elements that transfer the theme & sidebar state
+                            to the user's session in the server. -->
+                        <input type="hidden" name="isMainAppFlow" value="<%= isMainAppFlow %>" id="app-flow">
+                        
+                        <button class="enter-btn">Enter</button>
+                    </form>
+                    
+                </div>
+
+                <footer> 
+                    <img class="stars-europe" src="/images/icon-stars-europe.svg" alt="Europe Stars Logo">
+                    <p class="europe-fund">Funded by the European Union</p>
+                    
+                    <a href="https://www.instagram.com/esspinproject/" target="_blank">
+                        <img class="social-media-logo" src="/images/icon-social-instagram.svg" alt="Instagram Logo">
+                    </a>
+                    <a href="https://www.linkedin.com/company/91529913/admin/" target="_blank">
+                        <img class="social-media-logo" src="/images/icon-social-linkedin.svg" alt="Linkedin Logo">
+                    </a>
+                    <a href="https://twitter.com/ESSPINproject" target="_blank">
+                        <img class="social-media-logo" src="/images/icon-social-twitter.svg" alt="Twitter Logo">
+                    </a>
+                    <a href="https://www.youtube.com/channel/UC8TnkJ-TNzzQqb0Z01ogh5g">
+                        <img class="social-media-logo" src="/images/icon-social-youtube.svg" alt="Youtube Logo">
+                    </a>
+                </footer>
+            </div>
+            
+        </div>
+
+        <script src="/scripts/header.js" charset="utf-8"></script>
+        <script src="/scripts/home-page.js" charset="utf-8"></script>
+        
+    </body>
+</html>

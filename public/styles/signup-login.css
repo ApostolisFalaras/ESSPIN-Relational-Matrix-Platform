@@ -1,0 +1,222 @@
+
+/* ========= Main Container Frame for the current webpage's contents ========= */
+
+/* Styles for the user profile Icon */
+.main-content-frame {
+    position: relative;
+}
+
+.main-content-frame > img {
+    width: 70px;
+    height: 70px;
+    padding-top: 30px;
+}
+
+/* Styles for the main content frame's heading */
+.main-content-frame > h3 {
+    font-family: "Roboto Mono", monospace;
+    font-size: 1.5rem;
+    padding-top: 10px;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+/* Styles for the main content frame's description paragraph */
+.main-content-frame > p {
+    max-width: 800px;
+    font-family: "Roboto Mono", monospace;
+    font-size: 1rem;
+    text-align: center;
+    padding-top: 5px;
+    padding-bottom: 20px;
+}
+
+/* ========= Container for the Login Info Form ========= */
+
+/* Styles for the Login Info Form */
+.login-form {
+    max-width: 500px;
+    width: 100%;
+    min-width: 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Styles for Grid container for form fields - two-column layout */
+.field-grid {
+    width: 100%;
+    height: 200px;
+    min-width: 0;
+    flex: 1;
+    display: grid;
+    grid-template-rows: repeat(2, 1fr);
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    row-gap: 0;
+    margin-bottom: 120px;
+}
+
+/* Styles for the Info fields, containing the form label and form input */
+.info-field {
+    height: 50px;
+    width: 100%;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Label styling for each input */
+.form-label {
+    font-family: 'Roboto Mono', monospace;
+    font-weight: bold;
+}
+
+/* Styles for the Form's Input elements */
+.form-input {
+    font-family: 'Roboto Mono', monospace;
+    width: 100%;
+    flex: 1;
+    padding: 10px 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+/* Styles for the Placeholder value of each input element */
+.form-input::placeholder {
+    font-family: 'Roboto Mono', monospace;
+}
+
+/* Styles for the outline of a selected input element */
+.form-input:focus {
+    outline-color: rgb(255, 149, 0);
+}
+
+/* Dark mode colors for the login input fields */
+.dark-mode .form-input {
+    background-color: #2E2E3A;     
+    color: #EAEAEA;                
+    border: 1.5px solid #C7A600; 
+}
+
+/* Dark theme for placeholders inside the input elements */
+.dark-mode .form-input::placeholder {
+    font-family: 'Roboto Mono', monospace;
+    color: #EAEAEA;
+}    
+
+/* ========== Signup & Login Buttons inside the Main Content Frame ========== */
+
+.buttons-div {
+    display: flex;
+    gap: 1rem;
+    margin-top: 30px;
+    position: absolute;
+    top: 76%;
+}
+
+/* Styles for the "Next" button */
+.login-btn, .signup-btn, .back-btn {
+    font-size: 1.2rem;
+    border: 0;
+    border-radius: 5px;
+    padding: 10px 15px;
+    margin-bottom: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+
+/* Scaling effect when Next button gets clicked. */
+.login-btn:active, .signup-btn:active, .back-btn:active {
+    transform: scale(0.8);
+}
+
+.light-mode .login-btn, .light-mode .signup-btn, .light-mode .back-btn {
+    background-color: rgb(252, 229, 26);
+}
+
+/* Underline effect when hovering on top of the Next button. */
+.light-mode .login-btn:hover, .light-mode .signup-btn:hover, .light-mode .back-btn:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); 
+    transform: translateY(-1px);
+    transition: all 0.2s ease-in-out;        
+}
+
+.dark-mode .login-btn, .dark-mode .signup-btn, .dark-mode .back-btn {
+    background-color: #F4C542;
+    color: #1F1F2B;
+}
+
+/* Underline effect when hovering on top of the Next button in dark mode. */
+.dark-mode .login-btn:hover, .dark-mode .signup-btn:hover, .dark-mode .back-btn:hover {
+    box-shadow: 0 4px 8px rgba(255,255,255, 0.15); 
+    transform: translateY(-1px);        
+}            
+
+
+/* ========= Web Responsive Design for Tablet and Mobile Phone Screen Sizes ========= */
+
+/* Mobile Phone Screen */
+@media screen and (max-width: 767px) {
+
+    .main-content-frame {
+        width: 95%;
+    }
+    
+    .main-content-frame > img {
+        padding-top: 1rem;
+    }
+
+    .main-content-frame > h3 {
+        margin: 1rem 0;
+    }
+
+    .main-content-frame > p {
+        margin: 0;
+    }
+
+    .field-grid {
+        display: flex;
+        flex-direction: column;
+        overflow: visible;
+        margin-bottom: 2rem;
+        gap: 2.5rem;
+    }
+
+    .info-field {
+        width: 100%;
+    }
+
+    .login-btn {
+        margin-top: 1rem;
+    }
+
+    .buttons-div {
+        position: static;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        margin-top: 0;
+    }
+
+    .login-btn {
+        order: 0;
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+    }
+
+
+    .back-btn {
+        order: 1;
+        margin-top: 0;
+        margin-bottom: 1rem;
+    }
+    
+}

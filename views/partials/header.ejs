@@ -1,0 +1,108 @@
+
+<!-- Left Sidebar containing the ESSPIN title, the Navigation Steps List,  -->
+<!-- and a bottom container with the europe fund declaration and social media links -->
+<div class="sidebar">
+    <h1><img src="/images/ESSPIN.svg"></h1>
+    <h2>
+        <span>E</span>CONOMIC, <span>S</span>OCIAL AND <span>S</span>PATIAL <span>I</span>NEQUALITIES
+        IN <span>E</span>UROPE IN THE <span>E</span>RA OF <span>G</span>LOBAL <span>M</span>EGA-TRENDS
+    </h2>
+
+    <!-- Stepper structure containing the Navigation Steps (Webpages' Order) of the Web app, -->
+    <!-- The step corresponding to the current webpage is specially highlighted. -->
+    <% if (isMainAppFlow) { %>
+        <div class="stepper">
+            <div>
+                <div class="step" id="step-1" data-step="1">Introductory Page</div>
+                <div class="step" id="step-2" data-step="2">Login Page</div>
+                <div class="step" id="step-3" data-step="3">Select Level of Analysis</div>
+                <div class="step" id="step-4" data-step="4">Select Dependent Variable</div>
+                <div class="step" id="step-5" data-step="5">Select Independent Variable</div>
+                <div class="step" id="step-6" data-step="6">Overview of Results</div>
+                <div class="step" id="step-7" data-step="7">Overview of Source Results</div>
+                <div class="step" id="step-8" data-step="8">Detailed Results</div>
+            </div>
+        </div>
+    <% } else { %>
+        <div class="stepper signup-stepper">
+            <div>
+                <div class="step" id="step-a" data-step="a">User Registration</div>
+                <div class="step" id="step-b" data-step="b">User Bookmarks</div>
+                <div class="step" id="step-c" data-step="c">Search History</div>
+            </div>
+        </div>
+    <% } %>
+
+
+    <!-- ESSPIN EU declaration and logo -->
+    <div class="sidebar-bottom">
+        <img class="stars-europe" src="/images/icon-stars-europe.svg" alt="Europe Stars Logo">
+        <p class="europe-fund">Funded by the European Union</p>
+    </div>
+    
+    <!-- List containing the Social Media Icons that are active links 
+        to the corresponding accounts of the ESSPIN Project -->
+    <div class="social-media-list">
+        <a href="https://www.instagram.com/esspinproject/" target="_blank">
+            <img class="social-media-logo" src="/images/icon-social-instagram.svg" alt="Instagram Logo">
+        </a>
+        <a href="https://www.linkedin.com/company/91529913/admin/" target="_blank">
+            <img class="social-media-logo" src="/images/icon-social-linkedin.svg" alt="Linkedin Logo">
+        </a>
+        <a href="https://twitter.com/ESSPINproject" target="_blank">
+            <img class="social-media-logo" src="/images/icon-social-twitter.svg" alt="Twitter Logo">
+        </a>
+        <a href="https://www.youtube.com/channel/UC8TnkJ-TNzzQqb0Z01ogh5g">
+            <img class="social-media-logo" src="/images/icon-social-youtube.svg" alt="Youtube Logo">
+        </a>
+    </div>
+</div>
+
+<!-- Top-right Navigation Bar -->
+<div class="nav-bar">
+
+    <div class="navbar-button">
+        <button class="toggle-btn">
+            <img alt="Sidebar Toggle Button">
+        </button>
+        
+    </div>
+    
+    <div class="navbar-button">
+        <button class="toggle-theme-btn">
+            <img alt="Light/Dark Theme Toggle Button">
+        </button>
+
+        <div class="tooltip theme-tooltip"></div>
+    </div>
+
+    <div class="esspin-title">ESSPIN</div>
+
+    <form class="bookmark-form" action="/bookmarked-result-cards" method="POST">
+        <div class="navbar-button">
+            <button type="submit" class="bookmark-btn">
+                <img alt="Bookmarks Button">
+            </button>
+        </div>
+    </form>
+
+    <form class="search-history-form" action="/search-history" method="POST">
+
+        <div class="navbar-button">
+            <button type="submit" class="search-history-btn">
+                <img alt="Search History Button">
+            </button>
+        </div>
+    </form>
+
+    <form class="logout-form" action="/logout" method="POST">
+
+        <div class="navbar-button">
+            <button type="submit" class="logout-btn">
+                <img alt="Search History Button">
+            </button>
+        </div>
+    </form>
+    
+    
+</div>

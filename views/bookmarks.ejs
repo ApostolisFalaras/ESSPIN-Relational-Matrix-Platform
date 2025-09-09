@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <title>Relational Matrix Platform</title>
+
+        <script>
+            document.documentElement.classList.add("disable-transitions");
+            document.documentElement.style.visibility = "hidden";
+
+            const localTheme = localStorage.getItem("theme");
+            console.log("GET Theme:", localTheme);
+            
+            if (localTheme === "dark") {
+                document.documentElement.classList.remove("light-mode");
+                document.documentElement.classList.add("dark-mode");
+            }
+            else {
+                document.documentElement.classList.remove("dark-mode");
+                document.documentElement.classList.add("light-mode");
+            }
+        </script>
+
+        <!-- Including 'Roboto Mono' font from Google Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+
+        <!-- Including 'Inter' font from Google Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+        <!-- Link to CSS of Phosphor Icons -->
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css">
+        
+        <!-- Custom CSS for the Header & Home Page -->
+        <link href="/styles/header.css" rel="stylesheet">
+        <link href="/styles/detailed-results.css" rel="stylesheet">
+        <link href="/styles/bookmarks.css" rel="stylesheet">
+
+        <!-- ESSPIN's favicon -->
+        <link rel="icon" href="/images/cropped-esspin-512x512-1-32x32.png" type="image/png">
+    </head>
+    <body>
+
+        <div class="tooltip toggle-tooltip">Toggle Sidebar</div>
+        <div class="tooltip theme-tooltip"></div>
+        <div class="tooltip bookmark-tooltip">View Bookmarks</div>
+        <div class="tooltip history-tooltip">View Search History</div>
+        <div class="tooltip logout-tooltip">Logout</div>
+
+        <div class="contents">
+            
+            <!-- Including the Left Sidebar and the Navbar -->
+            <%- include("./partials/header.ejs") %>
+            
+            <div class="main-contents">
+
+                <div class="main-content-frame">
+
+                    <!-- Icon representing inequalities, through an unevenly split pie chart -->
+                    
+                    <img alt="Checkmark Logo">
+
+                    <h3>Bookmarks</h3>
+                    
+                    <p>
+                        These are the results you’ve bookmarked during your session or a previous visit.
+                        Use them to revisit specific findings that match your interests.
+                    </p>
+
+
+                    <div class="results-flex">
+
+                        <iframe name="hidden-frame" style="display:none;"></iframe>
+
+                        <% if (locals.bookmarkResults) { %>
+
+                            <% bookmarkResults.forEach((res,index) => { %>
+                                <% if (res.table === "Estimated Inputs") { %>
+
+                                    <!-- Results Card for an Estimated Inputs Finding -->
+                                    <div class="result-card <%= res.effect_for_color %>">
+                                        
+                                        <!-- Results Card Header -->
+                                        <form action="/bookmark-result-card" method="POST" target="hidden-frame"> 
+                                            <input type="hidden" name="resultCardId" value="<%= res.id %>" id="result-card-id">
+                                            <input type="hidden" name="resultCardTable" value="<%= res.table %>" id="result-card-table">
+
+                                            <div class="bookmark-wrapper selected">
+                                                <div class="bookmark selected <%= res.effect_for_color %>"></div>
+                                            </div>
+                                        </form>
+                                        
+                                        <h3 class="<%= res.effect_for_color %>"><%= index+1 %>. <%= res.table %></h3>
+                                        
+                                        <dl>
+                                            <!-- Variables Subsection in the Results Card -->
+                                            <dt>Dependent Variable:</dt>
+                                            <dd><%=res.selection_dependent%></dd>
+                                            <% if (res.selection_dependent.startsWith("Other")) { %>
+                                                <dt>Other Dependent Variable</dt>
+                                                <dd><%=res.other_dependent%></dd>
+                                            <% } %>
+
+                                            <dt>Independent Variable:</dt>
+                                            <dd><%=res.selection_independent%></dd>
+                                            <% if (res.selection_independent.startsWith("Other")) { %>
+                                                <dt>Other Independent Variable</dt>
+                                                <dd><%=res.other_independent%></dd>
+                                            <% } %>
+
+                                            <!-- Variables Relationship Subsection in the Results Card -->
+                                            <dt>Type</dt>
+                                            <dd>Causal</dd>
+                                            
+                                            <dt>Effect Direction</dt>
+                                            <dd><%=res.effect_direction%></dd>
+
+                                            <% if (res.variable_condition) { %>
+                                                <dt>Conditional Variable</dt>
+                                                <dd><%=res.variable_condition%></dd>
+
+                                                <% if (res.variable_condition.startsWith("Other")) { %>
+                                                    <dt>Other Conditional Variable</dt>
+                                                    <dd><%=res.other_condition%></dd>
+                                                <% } %>
+                                                <dt>Conditional Effect</dt>
+                                                <dd><%=res.type_of_condition_effect%></dd>
+                                            <% } %>
+
+                                            <!-- Additional Details about the current Finding -->
+                                            <dt>Years</dt>
+                                            <dd><%=res.start_year%> - <%=res.end_year%></dd>
+                                            <dt>Countries</dt>
+                                            <dd>Europe</dd>
+                                        </dl>
+
+                                        <div class="notes-text-frame">
+                                            <textarea placeholder="Write your note..."></textarea>
+
+                                            <div>
+                                                <form action="/delete-note" method="POST" target="hidden-frame">
+
+                                                    <input type="hidden" name="resultCardId" value="<%= res.id %>">
+                                                    <input type="hidden" name="resultsCardTable" value="<%= res.table %>">
+
+                                                    <button type="submit" class="delete-note">Delete</button>
+                                                </form>
+
+                                                <button type="button" class="cancel-note">Cancel</button>
+
+                                                <form action="/save-note" method="POST" target="hidden-frame">
+
+                                                    <input type="hidden" name="resultCardId" value="<%= res.id %>">
+                                                    <input type="hidden" name="resultsCardTable" value="<%= res.table %>">
+                                                    <input type="hidden" name="noteText" value="<%= res.note %>">
+
+                                                    <button type="submit" class="save-note">Save</button>
+                                                </form>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                <% } else if (res.table === "Literature Inputs") { %>
+
+                                    <!-- Results card for a Literature Inputs Finding -->
+                                    <div class="result-card <%= res.effect_for_color %>">
+
+                                        <!-- Results Card Header -->
+                                        <form action="/bookmark-result-card" method="POST" target="hidden-frame"> 
+                                            <input type="hidden" name="resultCardId" value="<%= res.id %>" id="result-card-id">
+                                            <input type="hidden" name="resultCardTable" value="<%= res.table %>" id="result-card-table">
+
+                                            <div class="bookmark-wrapper selected">
+                                                <div class="bookmark selected <%= res.effect_for_color %>"></div>
+                                            </div>
+                                        </form>
+
+                                        <h3 class="<%= res.effect_for_color %>"><%= index+1 %>. <%= res.table %></h3>
+
+                                        <dl>
+                                            <!-- Variables Subsection in the Results Card -->
+                                            <dt>Dependent Variable:</dt>
+                                            <dd><%=res.selection_dependent%></dd>
+                                            <% if (res.selection_dependent.startsWith("Other")) { %>
+                                                <dt>Other Dependent Variable</dt>
+                                                <dd><%=res.other_dependent%></dd>
+                                            <% } %>
+
+                                            <dt>Independent Variable:</dt>
+                                            <dd><%=res.selection_independent%></dd>
+                                            <% if (res.selection_independent.startsWith("Other")) { %>
+                                                <dt>Other Independent Variable</dt>
+                                                <dd><%=res.other_independent%></dd>
+                                            <% } %>
+
+                                            <!-- Variables Relationship Subsection in the Results Card -->
+                                            <dt>Type</dt>
+                                            <dd>Causal</dd>
+                                            
+                                            <dt>Effect Direction</dt>
+                                            <dd><%=res.effect_direction%></dd>
+
+                                            <% if (res.variable_condition) { %>
+                                                <dt>Conditional Variable</dt>
+                                                <dd><%=res.variable_condition%></dd>
+
+                                                <% if (res.variable_condition.startsWith("Other")) { %>
+                                                    <dt>Other Conditional Variable</dt>
+                                                    <dd><%=res.other_condition%></dd>
+                                                <% } %>
+                                                <dt>Conditional Effect</dt>
+                                                <dd><%=res.type_of_condition_effect%></dd>
+                                            <% } %>
+
+                                            <!-- Additional Details about the current Finding -->
+                                            <dt>Years</dt>
+                                            <% if (res.year_spans && res.year_spans.length > 0) { %>
+                                                <dd><% res.year_spans.forEach((year_span) => { %>
+                                                        (<%=year_span.start_year%> - <%=year_span.end_year%>) 
+                                                    <% }); %>
+                                                </dd>
+                                            <% } else { %>
+                                                <dd><%=res.start_year%> - <%=res.end_year%></dd>
+                                            <% } %>
+                                            
+                                            <dt>Countries</dt>
+                                            <dd><%= res.level_of_analysis_other %></dd>
+
+                                            <dt>Source</dt>
+                                            <dd><%= (res.reference !== "") ? res.reference : "-" %></dd>
+                                        </dl>
+
+                                        <div class="notes-text-frame">
+                                            <textarea placeholder="Write your note..."></textarea>
+
+                                            <div>
+                                                <form action="/delete-note" method="POST" target="hidden-frame">
+
+                                                    <input type="hidden" name="resultCardId" value="<%= res.id %>">
+                                                    <input type="hidden" name="resultsCardTable" value="<%= res.table %>">
+
+                                                    <button type="submit" class="delete-note">Delete</button>
+                                                </form>
+
+                                                <button type="button" class="cancel-note">Cancel</button>
+
+                                                <form action="/save-note" method="POST" target="hidden-frame">
+
+                                                    <input type="hidden" name="resultCardId" value="<%= res.id %>">
+                                                    <input type="hidden" name="resultsCardTable" value="<%= res.table %>">
+                                                    <input type="hidden" name="noteText" value="<%= res.note %>">
+
+                                                    <button type="submit" class="save-note">Save</button>
+                                                </form>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                <% } else if (res.table === "Perceived Inputs") { %>
+
+                                    <!-- Results card for a Perceived Inputs Finding -->
+                                    <div class="result-card <%= res.effect_for_color %>">
+                                        
+                                        <!-- Results Card Header -->
+                                        <form action="/bookmark-result-card" method="POST" target="hidden-frame"> 
+                                            <input type="hidden" name="resultCardId" value="<%= res.id %>" id="result-card-id">
+                                            <input type="hidden" name="resultCardTable" value="<%= res.table %>" id="result-card-table">
+
+                                            <div class="bookmark-wrapper selected">
+                                                <div class="bookmark selected <%= res.effect_for_color %>"></div>
+                                            </div>
+                                        </form>
+
+                                        <h3 class="<%= res.effect_for_color %>"><%= index+1 %>. <%= res.table %></h3>
+
+                                        <dl>
+                                            <!-- Variables Subsection in the Results Card -->
+                                            <dt>Dependent Variable:</dt>
+                                            <dd><%=res.selection_dependent%></dd>
+                                            <% if (res.selection_dependent.startsWith("Other")) { %>
+                                                <dt>Other Dependent Variable</dt>
+                                                <dd><%=res.other_dependent%></dd>
+                                            <% } %>
+
+                                            <dt>Independent Variable:</dt>
+                                            <dd><%=res.selection_independent%></dd>
+                                            <% if (res.selection_independent.startsWith("Other")) { %>
+                                                <dt>Other Independent Variable</dt>
+                                                <dd><%=res.other_independent%></dd>
+                                            <% } %>
+
+                                            <!-- Variables Relationship Subsection in the Results Card -->
+                                            <dt>Type</dt>
+                                            <dd>Causal</dd>
+                                            
+                                            <dt>Effect Direction</dt>
+                                            <dd><%=res.effect_direction%></dd>
+
+                                            <% if (res.variable_condition) { %>
+                                                <dt>Conditional Variable</dt>
+                                                <dd><%=res.variable_condition%></dd>
+
+                                                <% if (res.variable_condition.startsWith("Other")) { %>
+                                                    <dt>Other Conditional Variable</dt>
+                                                    <dd><%=res.other_condition%></dd>
+                                                <% } %>
+                                                <dt>Conditional Effect</dt>
+                                                <dd><%=res.type_of_condition_effect%></dd>
+                                            <% } %>
+
+                                            <!-- Additional Details about the current Finding -->
+                                            <dt>Years</dt>
+                                            <dd><%=res.start_year%> - <%=res.end_year%></dd>
+                                            <dt>Countries</dt>
+                                            <dd>Europe</dd>
+                                        </dl>
+
+                                        <div class="notes-text-frame">
+                                            <textarea placeholder="Write your note..."></textarea>
+
+                                            <div>
+                                                <form action="/delete-note" method="POST" target="hidden-frame">
+
+                                                    <input type="hidden" name="resultCardId" value="<%= res.id %>">
+                                                    <input type="hidden" name="resultsCardTable" value="<%= res.table %>">
+
+                                                    <button type="submit" class="delete-note">Delete</button>
+                                                </form>
+
+                                                <button type="button" class="cancel-note">Cancel</button>
+
+                                                <form action="/save-note" method="POST" target="hidden-frame">
+
+                                                    <input type="hidden" name="resultCardId" value="<%= res.id %>">
+                                                    <input type="hidden" name="resultsCardTable" value="<%= res.table %>">
+                                                    <input type="hidden" name="noteText" value="<%= res.note %>">
+
+                                                    <button type="submit" class="save-note">Save</button>
+                                                </form>
+                                                
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                <% } else if (res.table === "Correlations Table") { %>
+
+                                    <!-- Results card for an Correlation Inputs Finding -->
+                                    <div class="result-card <%= res.effect_for_color %>">
+
+                                        <!-- Results Card Header -->
+                                        <form action="/bookmark-result-card" method="POST" target="hidden-frame"> 
+                                            <input type="hidden" name="resultCardId" value="<%= res.id %>" id="result-card-id">
+                                            <input type="hidden" name="resultCardTable" value="<%= res.table %>" id="result-card-table">
+
+                                            <div class="bookmark-wrapper selected">
+                                                <div class="bookmark selected <%= res.effect_for_color %>"></div>
+                                            </div>
+                                        </form>
+
+                                        <h3 class="<%= res.effect_for_color %>"><%= index+1 %>. <%= res.table %></h3>
+
+                                        <dl>
+                                            <!-- Variables Subsection in the Results Card -->
+                                            <dt>Dependent Variable:</dt>
+                                            <dd><%=res.dependent_variable%></dd>
+
+                                            <dt>Independent Variable:</dt>
+                                            <dd><%=res.independent_variable%></dd>
+
+                                            <!-- Variables Relationship Subsection in the Results Card -->
+                                            <dt>Correlation in 2000</dt>
+                                            <dd><%= parseFloat(res.correlation_2000).toFixed(3) %></dd>
+                                            <dt>Correlation in 2023</dt>
+                                            <dd><%= parseFloat(res.correlation_2023).toFixed(3) %></dd>
+
+                                            <!-- Additional Details about the current Finding -->
+                                            <dt>Years</dt>
+                                            <dd>2000 - 2023</dd>
+                                            <dt>Countries</dt>
+                                            <dd>Europe</dd>
+                                        </dl>
+
+                                        <div class="notes-text-frame">
+                                            <textarea placeholder="Write your note..."></textarea>
+
+                                            <div>
+                                                <form action="/delete-note" method="POST" target="hidden-frame">
+
+                                                    <input type="hidden" name="resultCardId" value="<%= res.id %>">
+                                                    <input type="hidden" name="resultsCardTable" value="<%= res.table %>">
+
+                                                    <button type="submit" class="delete-note">Delete</button>
+                                                </form>
+
+                                                <button type="button" class="cancel-note">Cancel</button>
+
+                                                <form action="/save-note" method="POST" target="hidden-frame">
+
+                                                    <input type="hidden" name="resultCardId" value="<%= res.id %>">
+                                                    <input type="hidden" name="resultsCardTable" value="<%= res.table %>">
+                                                    <input type="hidden" name="noteText" value="<%= res.note %>">
+
+                                                    <button type="submit" class="save-note">Save</button>
+                                                </form>
+                                                
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                <% } else { %>
+
+                                    <!-- Results card for a Granger Causalities Inputs Finding -->
+                                    <div class="result-card <%= res.effect_for_color %>">
+
+                                        <!-- Results Card Header -->
+                                        <form action="/bookmark-result-card" method="POST" target="hidden-frame"> 
+                                            <input type="hidden" name="resultCardId" value="<%= res.id %>" id="result-card-id">
+                                            <input type="hidden" name="resultCardTable" value="<%= res.table %>" id="result-card-table">
+
+                                            <div class="bookmark-wrapper selected">
+                                                <div class="bookmark selected <%= res.effect_for_color %>"></div>
+                                            </div>
+                                        </form>
+
+                                        <h3 class="<%= res.effect_for_color %>"><%= index+1 %>. <%= res.table %></h3>
+
+                                        <dl>
+                                            <!-- Variables Subsection in the Results Card -->
+                                            <dt>Dependent Variable:</dt>
+                                            <dd><%=res.dependent_variable%></dd>
+
+                                            <dt>Independent Variable:</dt>
+                                            <dd><%=res.independent_variable%></dd>
+
+                                            <!-- Variables Relationship Subsection in the Results Card -->
+                                            <dt>Causality</dt>
+                                            <dd><%=res.causality%></dd>
+                                            <dt>Significance Level</dt>
+                                            <dd><%=res["significance_level(%)"] %>%</dd>
+
+                                            <!-- Additional Details about the current Finding -->
+                                            <dt>Years</dt>
+                                            <dd>2000 - 2023</dd>
+                                            <dt>Countries</dt>
+                                            <dd>Europe</dd>
+                                        </dl>
+
+                                        <div class="notes-text-frame">
+                                            <textarea placeholder="Write your note..."></textarea>
+                                            
+                                            <div>
+                                                <form action="/delete-note" method="POST" target="hidden-frame">
+
+                                                    <input type="hidden" name="resultCardId" value="<%= res.id %>">
+                                                    <input type="hidden" name="resultsCardTable" value="<%= res.table %>">
+
+                                                    <button type="submit" class="delete-note">Delete</button>
+                                                </form>
+
+                                                <button type="button" class="cancel-note">Cancel</button>
+
+                                                <form action="/save-note" method="POST" target="hidden-frame">
+
+                                                    <input type="hidden" name="resultCardId" value="<%= res.id %>">
+                                                    <input type="hidden" name="resultsCardTable" value="<%= res.table %>">
+                                                    <input type="hidden" name="noteText" value="<%= res.note %>">
+
+                                                    <button type="submit" class="save-note">Save</button>
+                                                </form>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                <% } %>
+                            <% }); %>
+                        <% } %>
+                    </div>
+                    <input type="hidden" name="isMainAppFlow" value="<%= isMainAppFlow %>" id="app-flow">
+                    
+                    <form action="/exit-boomarks" method="POST">
+                        <div class="buttons-div">
+
+                            <button type="submit" class="back-btn">Back</button>
+                        </div>
+                    </form>
+                    
+                </div>
+            </div>
+
+            <footer> 
+                <img class="stars-europe" src="/images/icon-stars-europe.svg" alt="Europe Stars Logo">
+                <p class="europe-fund">Funded by the European Union</p>
+                
+                <a href="https://www.instagram.com/esspinproject/" target="_blank">
+                    <img class="social-media-logo" src="/images/icon-social-instagram.svg" alt="Instagram Logo">
+                </a>
+                <a href="https://www.linkedin.com/company/91529913/admin/" target="_blank">
+                    <img class="social-media-logo" src="/images/icon-social-linkedin.svg" alt="Linkedin Logo">
+                </a>
+                <a href="https://twitter.com/ESSPINproject" target="_blank">
+                    <img class="social-media-logo" src="/images/icon-social-twitter.svg" alt="Twitter Logo">
+                </a>
+                <a href="https://www.youtube.com/channel/UC8TnkJ-TNzzQqb0Z01ogh5g">
+                    <img class="social-media-logo" src="/images/icon-social-youtube.svg" alt="Youtube Logo">
+                </a>
+            </footer>
+        </div>
+        
+        <script src="/scripts/header.js" charset="utf-8"></script>
+        <script src="/scripts/bookmarks.js" charset="utf-8"></script>
+        
+    </body>
+</html>

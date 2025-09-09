@@ -1,0 +1,147 @@
+
+/* ========= Main Container Frame for the current webpage's contents ========= */
+
+
+/* Styles for the ESSPIN image inside the main content frame */
+.main-content-frame > img {
+    width: 200px;
+    padding-top: 100px;
+}
+
+/* Styles for the heading of the main content frame */
+.main-content-frame > h1 {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 2rem;
+    margin-bottom: 30px;
+    padding-top: 100px;
+}
+
+/* Styles for the paragraph-description of the main content frame */
+.main-content-frame > p {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 1.2rem;
+    text-align: center;
+    flex: 1;
+}
+
+.signup-prompt {
+    font-size: 0.9rem;
+    text-align: center;
+    margin-top: 1rem;
+}
+
+/* Light mode colors for Sign-up prompt */
+.light-mode .signup-prompt {
+    color: #aaa;
+}
+
+/* Dark mode colors for Sign-up prompt */
+.dark-mode .signup-prompt {
+    color: #888888;
+}
+
+.signup-link {
+    text-decoration: underline;
+    font-weight: 500;
+}
+
+html:not(.disable-transitions) .signup-link {
+    transition: color 0.3s ease;
+}
+
+/* Light mode colors for Sign-up Link */
+.light-mode .signup-link {
+    color: #fce51a;
+}
+
+.light-mode .signup-link:hover {
+    color: #fff700;
+}
+
+/* Dark mode colors for Sign-up Link */
+.dark-mode .signup-link {
+    color: #d7bd2b;
+}
+
+.dark-mode .signup-link:hover {
+    color: #ffe26b;
+}
+
+/* ========== Enter Button inside the Main Content Frame ========== */
+
+/* Styles for the enter-in-the-application button */
+.enter-btn {
+    font-size: 1.2rem;
+    font-family: 'Roboto Mono', monospace;
+    border: 0;
+    border-radius: 5px;
+    padding: 10px 15px;
+    margin-bottom: 150px;
+    cursor: pointer;
+}
+
+/* Underline effect when hovering on top of the Enter button */
+.enter-btn:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); 
+    transform: translateY(-1px);
+    transition: all 0.2s ease-in-out;
+}
+
+/* Scaling effect when clicking the Enter button */
+.enter-btn:active {
+    transform: scale(0.9);
+}
+
+/* Light mode colors for Enter button */
+.light-mode .enter-btn {
+    background-color: rgb(252, 229, 26);
+}
+
+/* Dark mode colors for Enter button */
+.dark-mode .enter-btn {
+    background-color: #d7bd2b;
+}
+
+
+/* ========== Web Responsive Styles for Tablet and Mobile Phone Screen ========== */
+
+/* Mobile Phone Screen */
+@media screen and (max-width: 767px) {
+
+    .main-content-frame > h1 {
+        display: flex !important;
+        flex-direction: row !important;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .main-content-frame > h3 {
+        text-align: center;
+        padding-top: 50px;
+    }
+
+    .enter-btn {
+        margin: 25px 0 50px 0;
+    }
+}
+
+
+/* ========== Tablet Screen ========== */
+
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+    body {
+        font-size: 0.95rem;
+    }
+
+    .sidebar {
+        width: 220px;
+    }
+
+    .main-content-frame {
+        padding: 1.5rem;
+        margin: 1rem auto;
+        max-width: 800px;
+        border-radius: 12px;
+    }
+}
+

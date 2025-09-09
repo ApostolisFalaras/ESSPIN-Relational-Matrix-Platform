@@ -1,0 +1,810 @@
+/* ========= Main Container Frame for the current webpage's contents ========= */
+
+.main-content-frame {
+    height: calc(9*(100vh - 74px)/10 + 80px);
+    position: relative;
+}
+
+/* Styles for the user profile Icon */
+.main-content-frame > img {
+    width: 70px;
+    height: 70px;
+    padding-top: 10px;
+}
+
+/* Styles for the main content frame's heading */
+.main-content-frame > h3 {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 1.5rem;
+    margin: 0;
+}
+
+/* Styles for the main content frame's description paragraph */
+.main-content-frame > p {
+    max-width: 800px;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 1rem;
+    text-align: center;
+    margin: 5px 0;
+}
+
+/* ======== (3rd results page) Styles for Detailed Results Page inside the Main Content Frame ========= */ 
+
+.main-content-frame {
+    width: 65vw;
+}
+
+/* Styles for the main container of the individual results section */
+.results-flex {
+    width: 90%;
+    height: 100%;
+    max-height: 420px;
+    overflow-y: auto;
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-left: 2rem;
+    margin-right: 0.5rem;
+    padding-top: 10px;
+    padding-left: 4rem;
+    border-radius: 5px;
+    margin-right: 1.5rem;
+}
+
+.light-mode .results-flex {
+    border: 3px solid rgb(255,229,119);
+}
+
+.dark-mode .results-flex {
+    border: 3px solid #c7a600;
+}
+
+.bookmark-wrapper {
+    position: absolute;
+    top: 0;
+    right: 1rem;
+    width: 30px;
+    height: 30px;
+    z-index: 1;
+}
+
+html:not(.disable-transitions) .bookmark-wrapper {
+    transition: filter 0.3s ease;
+}
+
+/* Styles for the bookmark symbol in each result card */
+.bookmark {
+    position: absolute;
+    width: 30px;
+    height: 35px;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 80%, 0% 100%);
+    transform-origin: top;
+    will-change: transform;
+    background-color: #fafafa;
+    z-index: 0;
+    cursor: pointer;
+}
+
+.html:not(.disable-transitions) .bookmark {
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+/* Styles for selected Bookmark Wrapper & Bookmark */
+.light-mode .bookmark-wrapper.selected {
+    filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.35));
+}
+
+.light-mode .bookmark.selected {
+    transform: scaleY(1.6); 
+    filter: drop-shadow(10px 10px 16px rgba(0, 0, 0, 0.7));
+    z-index: 1;
+}
+
+.dark-mode .bookmark-wrapper.selected {
+    filter: drop-shadow(0 5px 10px rgba(255, 255, 255, 0.3)); /* white-ish shadow */
+}
+
+.dark-mode .bookmark.selected {
+    transform: scaleY(1.6);
+    filter: drop-shadow(10px 10px 16px rgba(255, 255, 255, 0.3));
+    z-index: 1;
+}
+
+/* Results for each individual card of every result finding */
+.result-card {
+    position: relative;
+    width: 40%;
+    max-width: calc(50% - 4.5rem);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    background-color: #fafafa; /* fallback background */
+    padding: 1.25rem 1rem 1rem 1.5rem; 
+    margin-top: 0;
+    font-family: 'Inter', sans-serif;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    overflow: visible;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+html:not(.disable-transitions) .result-card {
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Styles for header inside each Result Card */
+.result-card h3 {
+    position: relative;
+    width: 80%;
+    font-size: 1.5rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 0 8px 0;
+    padding-bottom: 4px;
+}
+
+.result-card dl {
+    margin: 0;
+    padding: 0;
+}
+
+/* Styles for Data Headers and their corresponding Data Values */
+.result-card dt {
+    font-weight: 600;
+    margin-top: 12px;
+}
+
+.result-card dd {
+    margin: 4px 0 0 0;
+    padding: 0;
+}
+
+/* Coloring Styles for different Effect Directions for both Light & Dark themes */
+
+/* Positive (Increases) */
+.light-mode .result-card.positive {border: 2px solid #5aa15a; border-left: 1rem solid #5aa15e; background-color: #aad6b8;}
+
+.bookmark.positive {background-color: #5aa15e;}
+
+.dark-mode .result-card.positive {background-color: #164430; color: #e0e0e0; border: 2px solid #5aa15a; border-left: 1rem solid #5aa15e;}
+
+.result-card h3.positive {border-bottom: 3px solid #5aa15e;}
+
+/* Rather Positive (Increases under a Conditionality */
+.light-mode .result-card.rather-positive {border: 2px solid #94c894; border-left: 1rem solid #94c894; background-color: #eef9f4;}
+
+.bookmark.rather-positive {background-color: #94c894;}
+
+.dark-mode .result-card.rather-positive {background-color: #5d837a; color: #e0e0e0; border: 2px solid #94c894; border-left: 1rem solid #94c894;}
+
+.result-card h3.rather-positive {border-bottom: 3px solid #94c894;}
+
+/* Negative (Decreases) */
+.light-mode .result-card.negative {border: 2px solid #e76a6a; border-left: 1rem solid #e76a6a; background-color: #dc9f9f;}
+
+.bookmark.negative {background-color: #e76a6a;}
+
+.dark-mode .result-card.negative {background-color: #421e1e; color: #e0e0e0; border: 2px solid #e76a6a; border-left: 1rem solid #e76a6a;}
+
+.result-card h3.negative {border-bottom: 3px solid #e76a6a;}
+
+/* Rather Negative (Decreases under a Conditionality) */
+.light-mode .result-card.rather-negative {border: 2px solid #ef9a9a; border-left: 1rem solid #ef9a9a; background-color: #fce7e7;}
+
+.bookmark.rather-negative {background-color: #ef9a9a;}
+
+.dark-mode .result-card.rather-negative {background-color: #a06262; color: #e0e0e0; border: 2px solid #ef9a9a; border-left: 1rem solid #ef9a9a;}
+
+.result-card h3.rather-negative {border-bottom: 3px solid #ef9a9a;}
+
+/* Inconclusive */
+.light-mode .result-card.inconclusive {border: 2px solid #ffeb66; border-left: 1rem solid #ffeb66; background-color: #fbf7d7;}
+
+.bookmark.inconclusive {background-color: #ffeb66;}
+
+.dark-mode .result-card.inconclusive {background-color: #544916; color: #e0e0e0; border: 2px solid #ffeb66; border-left: 1rem solid #ffeb66;}
+
+.result-card h3.inconclusive {border-bottom: 3px solid #ffeb66;}
+
+/* No-effect */
+.light-mode .result-card.no-effect {border: 2px solid #aeaeae; border-left: 1rem solid #aeaeae; background-color: #efefef;}
+
+.bookmark.no-effect {background-color: #aeaeae;}
+
+.dark-mode .result-card.no-effect {background-color: #2b2b2b; color: #e0e0e0; border: 2px solid #aeaeae; border-left: 1rem solid #aeaeae;}
+
+.result-card h3.no-effect {border-bottom: 3px solid #aeaeae;}
+
+
+/* Styling the "First-Increases, then Decreases" and "First-Decreases, then Increases" cases */
+
+/* Styling the left border of the result cards as the ::before pseudo-elements */
+.result-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1rem;
+    height: 100%;
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
+    z-index: 2;
+}
+
+.result-card.first-positive::before {
+    background: linear-gradient(to bottom, 
+    #5aa15e 0%,
+    #5aa15e 64%,
+    #88b588 70%,
+    #d98d8d 78%,  
+    #e76a6a 86%,
+    #e76a6a 100%);
+}
+
+.result-card.first-negative::before {
+    background: linear-gradient(to bottom,
+    #e76a6a 0%,
+    #e76a6a 64%,
+    #d98d8d 70%,  
+    #88b588 78%,  
+    #5aa15e 86%,
+    #5aa15e 100%);
+}
+
+
+/* Styling the background colors of the results card as the ::after pseudo-elements */
+.result-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 1rem;
+    width: calc(100% - 1rem);
+    height: 100%;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    z-index: -1;
+}
+
+.result-card.first-positive {
+    background: linear-gradient(to bottom,#eef6ef 0%,#eef6ef 60%,#f3f5f1 70%,
+                                        #f7f2ef 80%,#fbeeee 90%,#fbeeee 100%);
+}
+
+.result-card.first-negative {
+    background: linear-gradient(to bottom,#fbeeee 0%,#fbeeee 60%,#f7f2ef 70%,
+                                        #f3f5f1 80%, #eef6ef 90%,#eef6ef 100%);
+}
+
+
+/* Styling the bottom border of the result cards Heading as the ::before pseudo-elements */
+.result-card h3::before {
+    content: '';
+    position: absolute;
+    top: 32.8px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    z-index: 2;
+}
+
+.result-card h3.first-positive::before {
+    background: linear-gradient(to right,
+    #5aa15e 0%,
+    #5aa15e 64%,
+    #88b588 70%,  
+    #d98d8d 78%,  
+    #e76a6a 86%,
+    #e76a6a 100%);
+}
+
+.result-card h3.first-negative::before {
+    background: linear-gradient(to right,
+    #e76a6a 0%,
+    #e76a6a 64%,
+    #d98d8d 70%,  
+    #88b588 78%,  
+    #5aa15e 86%,
+    #5aa15e 100%);
+}
+
+/* Styling the Bookmark Background Colors as the ::before pseudo-element */
+
+.bookmark.first-positive {
+    background: linear-gradient(to bottom,
+    #5aa15e 0%,
+    #5aa15e 64%,
+    #88b588 70%,  
+    #d98d8d 78%,  
+    #e76a6a 86%,
+    #e76a6a 100%);
+}
+
+.bookmark.first-negative {
+    background: linear-gradient(to bottom,
+    #e76a6a 0%,
+    #e76a6a 64%,
+    #d98d8d 70%,  
+    #88b588 78%,  
+    #5aa15e 86%,
+    #5aa15e 100%);
+}
+
+/* ======== Styles for the Notes Divs below the Selected Bookmarks ========= */
+.notes-div {
+    position: absolute;
+    top: 80px;
+    right: 12px;
+    z-index: 1;
+    cursor: pointer;
+}
+
+.notes-div img {
+    width: 40px;
+    height: 40px;
+}
+
+.notes-text-frame {
+    width: 250px;
+    height: 200px;
+    background-color: white;
+    border: 4px solid rgb(255,229,119);
+    border-radius: 5px;
+    position: absolute;
+    top: 115px;
+    right: 15px;
+    z-index: 10;
+    display: none;
+}
+
+.notes-text-frame textarea {
+    width: 246px;
+    height: 165px;
+    border: none;
+    outline: none;
+    border-bottom: 3px solid rgb(255,229,119);
+}
+
+.notes-text-frame div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+.save-note, .cancel-note, .delete-note {
+    background-color: #4FAF9A;
+    color: #eee;
+    border: none;
+    border-radius: 5px;
+    font-size: 0.9rem;
+}
+
+.cancel-note {
+    background-color: #4FAF9A;
+    color: #eee;
+    border: none;
+    border-radius: 5px;
+    font-size: 0.9rem;
+}
+
+.save-note, .cancel-note, .delete-note {
+    background-color: #4FAF9A;
+    color: #eee;
+    border: none;
+    border-radius: 5px;
+    font-size: 0.9rem;
+}
+
+html:not(.disable-transitions) .save-note, 
+html:not(.disable-transitions) .cancel-note, 
+html:not(.disable-transitions) .delete-note {
+    transition: background-color 0.3s ease;
+}
+
+.light-mode .save-note {background-color:#4faf9a;}
+
+.light-mode .save-note:hover {background-color: #449e8B;}
+
+.dark-mode .save-note {background-color: #3a8575;}
+
+.dark-mode .save-note:hover {background-color: #4faf9a;}
+
+.light-mode .cancel-note {background-color: #ffd666;}
+
+.light-mode .cancel-note:hover {background-color: #f2c94c;}
+
+.dark-mode .cancel-note {background-color: #a67c00;}
+
+.dark-mode .cancel-note:hover {background-color: #ddae3a;}
+
+.light-mode .delete-note {background-color: #ff7b72;}
+
+.light-mode .delete-note:hover {background-color: #e86a60;}
+
+.dark-mode .delete-note {background-color: #cc5c54;}
+
+.dark-mode .delete-note:hover {background-color: #ff7b72;}
+
+
+/* ======== Styles for the Scrollbar to the Right of the Results Flexbox ======== */
+
+/* vertical scrollbar width */
+.results-flex::-webkit-scrollbar {
+    width: 10px;              
+}
+
+/* Styles behind the scrollable handle */
+.light-mode .results-flex::-webkit-scrollbar-track {
+    background-color: #f0f0f0;       
+    border-radius: 6px;
+}
+
+.dark-mode .results-flex::-webkit-scrollbar-track {
+    background-color: #47474c;
+    border-radius: 6px;
+}
+
+/* Styles for the scrollable handle */
+.light-mode .results-flex::-webkit-scrollbar-thumb {
+    background-color: #f1c40f;
+    border-radius: 6px;
+    border: 2px solid #f0f0f0;
+}
+
+.dark-mode .results-flex::-webkit-scrollbar-thumb {
+    background-color: #C7A600;
+    border-radius: 6px;
+    border: 2px solid #3d3d41;
+}
+
+/* Color effect when hovering on top of the scrollable handle */
+.light-mode .results-flex::-webkit-scrollbar-thumb:hover {
+    background-color: #d4ac0d; 
+}
+
+.dark-mode .results-flex::-webkit-scrollbar-thumb:hover {
+    background-color: #FFD700;
+}
+
+
+
+/* ========= Styles for the "End Search" & "New Search" button ========= */
+
+.buttons-div {
+    display: flex;
+    gap: 1rem;
+    margin-top: 35px;
+    position: absolute;
+    top: 82%;
+    left: 34%;
+}
+
+.end-search-btn, .new-search-btn, .back-btn {
+    font-size: 1.2rem;
+    border: 0;
+    border-radius: 5px;
+    padding: 10px 15px;
+    margin: 30px 0 10px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.light-mode .end-search-btn, .light-mode .new-search-btn, .light-mode .back-btn {
+    background-color:rgb(252, 229, 26);
+}
+
+/* Shadow & Shift effect when hovering on top of the Next button. */
+.light-mode .end-search-btn:hover, .light-mode .new-search-btn:hover, .light-mode .back-btn:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); 
+    transform: translateY(-1px);               
+}
+
+/* Scaling effect when Next button gets clicked. */
+.end-search-btn:active, .new-search-btn:active, .back-btn:active {
+    transform: scale(0.8);
+}
+
+/* Dark theme background color change */
+.dark-mode .end-search-btn, .dark-mode .new-search-btn, .dark-mode .back-btn {
+    background-color: #d7bd2b;
+    color: #1F1F2B;
+}
+
+/* Underline effect when hovering on top of the Next button in dark mode. */
+.dark-mode .end-search-btn:hover, .dark-mode .new-search-btn:hover, .dark-mode .back-btn:hover {
+    box-shadow: 0 4px 8px rgba(255,255,255, 0.15); 
+    transform: translateY(-1px);                     
+}
+
+
+/* ========== (1st & 3rd Results Page) Legend Container for the Interpretation of Colors ========== */
+
+/* Styles for the Legend Graph */
+.legend {
+    width: 10vw;
+    /*height: calc(9*(100vh - 234px)/10);*/
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 2rem 0;
+}
+
+html:not(.disable-transitions) .legend {
+    transition: all 0.3s ease;
+}
+
+.light-mode .legend {
+    background-color: white;
+    border: 2px solid rgb(255,229,119);
+}
+
+.dark-mode .legend {
+    background-color: #2E2E3A;
+    color: #EAEAEA;
+    border: 2px solid #c7a600;
+}
+
+.legend > h4 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-family: 'Inter', sans-serif;
+    margin: 2px;
+    padding-bottom: 1.5rem;
+}
+
+.color-case {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* Styles for the Colored Square */ 
+.color-shape {
+    width: calc(2rem - 3px);
+    height: calc(2rem - 3px);
+    border-radius: 5px;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+/* Styles for the Label corresponding to the colored square */
+.color-label {
+    width: 6vw;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.8rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+/* Assigning the various colors to the Squares of the Legend */
+
+/* Assigning the various colors to the Squares of the Legend */
+
+/* Positive */
+.light-mode .positive-color {background-color: #aad6b8; border: 3px solid #5aa15e;}
+
+.dark-mode .positive-color {background-color: #164430; border: 3px solid #5aa15e;}
+
+/* Rather Positive */
+.light-mode .rather-positive-color {background-color: #eef9f4; border: 3px solid #94c894;}
+
+.dark-mode .rather-positive-color {background-color: #5d837a; border: 3px solid #94c894;}
+
+/* Negative */
+.light-mode .negative-color {background-color: #dc9f9f; border: 3px solid #e76a6a;}
+
+.dark-mode .negative-color {background-color: #421e1e; border: 3px solid #e76a6a;}
+
+/* Rather Negative */
+.light-mode .rather-negative-color {background-color: #fce7e7; border: 3px solid #ef9a9a;}
+
+.dark-mode .rather-negative-color {background-color: #a06262; border: 3px solid #ef9a9a;}
+
+/* Inconclusive */
+.light-mode .inconclusive-color {background-color: #fbf7d7; border: 3px solid #ffeb66;}
+
+.dark-mode .inconclusive-color {background-color: #544916; border: 3px solid #ffeb66;}
+
+/* No Effect */
+.light-mode .no-effect-color {background-color: #efefef; border: 3px solid #cfcfcf;}
+
+.dark-mode .no-effect-color {background-color: #2b2b2b; border: 3px solid #cfcfcf;}
+
+
+.first-positive-color::before, .first-negative-color::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 70%;
+    height: 100%;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.first-positive-color::after, .first-negative-color::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 30%;
+    height: 100%;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.light-mode .first-positive-color::before {background-color: #bfe2cc; border: 3px solid #5aa15e; border-right: none;}
+
+.dark-mode .first-positive-color::before {background-color: #164430; border: 3px solid #5aa15e; border-right: none;}
+
+.light-mode .first-positive-color::after {background-color: #ebc0c0; border: 3px solid #e76a6a; border-left: none;}
+
+.dark-mode .first-positive-color::after {background-color: #421e1e; border: 3px solid #e76a6a; border-left: none;}
+
+.light-mode .first-negative-color::before {background-color: #ebc0c0; border: 3px solid #e76a6a; border-right: none;}
+
+.dark-mode .first-negative-color::before {background-color: #421e1e; border: 3px solid #e76a6a; border-right: none;}
+
+.light-mode .first-negative-color::after {background-color: #bfe2cc; border: 3px solid #5aa15e; border-left: none;}
+
+.dark-mode .first-negative-color::after {background-color: #164430; border: 3px solid #5aa15e; border-left: none;}
+
+
+/* ========= Legend Modifications ========= */
+
+.legend h4 {
+    margin-bottom: 0 !important;
+}
+
+.color-case span {
+    font-size: 0.75rem !important;
+}
+
+/* ========= PDF and Excel Export Buttons ========= */
+
+.export-buttons {
+    position: absolute;
+    top: 1%;
+    left: 90%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    z-index: 10;
+}
+
+.export-buttons a {
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.8rem;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.2rem;
+}
+
+html:not(.disable-transitions) .export-buttons a {
+    transition: background-color 0.3s ease;
+}
+
+.light-mode .export-pdf {background-color: #e74c3c; color: #eee;}
+
+.light-mode .export-pdf:hover {background-color: #c0392b;}
+
+.dark-mode .export-pdf {background-color: #a93226; color: #EAEAEA;}
+
+.dark-mode .export-pdf:hover {background-color: #e14d4d;}
+
+.light-mode .export-excel {background-color: #27ae60; color: #eee;}
+
+.light-mode .export-excel:hover {background-color: #1e8449;}
+
+.dark-mode .export-excel {background-color: #1e7e34; color: #EAEAEA;}
+
+.dark-mode .export-excel:hover {background-color: #27b864;}
+
+
+/* ========= Web Responsive Design for Tablet and Mobile Phone Screen Sizes ========= */
+
+/* Mobile Phone Screen */
+@media screen and (max-width: 767px) {
+
+    .main-content-frame {
+        width: 95%;
+    }
+
+    .results-flex {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        flex-wrap: nowrap;
+        margin-top: 4.2rem;
+        margin-left: 1rem;
+        padding-left: 1rem;
+    }
+
+    .result-card {
+        max-width: 80%;
+        width: 100%;
+    }
+    
+    .buttons-div {
+        position: static;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        margin-top: 0;
+    }
+
+    
+
+    .new-search-btn {
+        order: 0;
+        margin-top: 2rem;
+    }
+
+    .end-search-btn {
+        order: 1;
+        margin-top: 0;
+    }
+
+    .back-btn {
+        order: 2;
+        margin-top: 0;
+    }
+    
+    .legend {
+        width: 95%;
+        display: grid;
+        grid-template-rows: repeat(5, 1fr);
+        grid-template-columns: repeat(2, minmax(100px, 250px));
+        margin-bottom: 1rem;
+    }
+
+    .legend > h4 {
+        grid-column: span 2;
+        margin: 0;
+    }
+
+    .color-case {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+    }
+
+    .export-buttons {
+        position: absolute;
+        top: 24%;
+        left: 28%;
+        display: flex;
+        flex-direction: row !important;
+    }
+
+    .export-buttons a {
+        width: 50px;
+    }
+
+    .notes-text-frame div {
+        display: flex;
+        flex-direction: row !important;
+        margin-top: 0.25rem;
+    }
+}

@@ -1,0 +1,767 @@
+/* ========= Main Container Frame for the current webpage's contents ========= */
+
+.main-content-frame {
+    height: calc(9*(100vh - 74px)/10 + 50px);
+    position: relative;
+}
+
+/* Styles for the user profile Icon */
+.main-content-frame > img {
+    width: 70px;
+    height: 70px;
+    padding-top: 5px;
+}
+
+/* Styles for the main content frame's heading */
+.main-content-frame > h3 {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 1.5rem;
+    margin: 0;
+}
+
+/* Styles for the main content frame's description paragraph */
+.main-content-frame > p {
+    max-width: 800px;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 1rem;
+    text-align: center;
+    margin: 0;
+}
+
+
+/* ==================== (2nd results page) Styles for the Selection of the Source of Results =================== */
+
+/* Full-width form to contain level buttons and submit */
+#source-selection-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+/* Styles for Container for level selection buttons (National/Regional) */
+.source-choices {
+    width: 75%;
+    display: grid;
+    grid-template-rows: repeat(2, 1fr);
+    grid-template-columns: repeat(3, minmax(100px, 250px));
+    justify-content: center;
+    align-items: center;
+    row-gap: 1rem;
+    margin-top: 10px;
+    padding-left: 3rem;
+}
+
+/* Styles for Level Selection Button */
+.source-btn {
+    width: 80%;
+    height: 100%;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 1em;
+    border-radius: 5px;
+    padding: 10px 10px;
+    cursor: pointer;
+    margin-top: 0;
+}
+
+html:not(.disable-transitions) .source-btn {
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.light-mode .source-btn {
+    background-color:#ffffff;
+    border: 3px solid #ffd700;
+}
+
+/* Background effect when hovering on top of the button */
+.light-mode .source-btn:hover {
+    background-color: rgb(255, 243, 176);
+}
+
+html:not(.disable-transitions) .source-btn:hover {
+    transition: all 0.3s ease-in-out;
+}
+
+/* Style applied when one of the buttons is selected (via JS) */
+.light-mode .source-btn.selected {
+    background-color: #ffdb4d;
+    box-shadow: 0 0 4px #e6b800;
+}
+
+/* Dark theme color for the Level Selection buttons */
+.dark-mode .source-btn {
+    background-color: #3d3d41;
+    color: #e0dbdb;
+    border: 3px solid #c4aa22;
+}
+
+/* Dark theme color when hovering on top of buttons */
+.dark-mode .source-btn:hover {
+    background-color: #3A3A3A;
+    box-shadow: 0 0 5px #FFD700;
+}
+
+/* Dark theme color when a button is selected */
+.dark-mode .source-btn.selected {
+    background-color: #3A3000; 
+    color: #FFD700;            
+    border: 2px solid #C7A600; 
+    box-shadow: 0 0 4px 1px rgba(199, 166, 0, 0.3); 
+}
+
+/* Coloring Styles for different Effect Directions for both Light & Dark themes */
+
+/* Positive */
+.light-mode .source-btn.positive {background-color: #aad6b8; border: 4px solid #5aa15e;}
+
+.light-mode .source-btn.positive:hover {background-color: #9fcaa9;}
+
+.light-mode .source-btn.positive.selected {background-color: #93d4a0; box-shadow: 0 0 6px 2px #6fb87a;}
+
+.dark-mode .source-btn.positive {background-color: #265f45; color: #d3d3d3; border: 4px solid #5aa15e}
+
+.dark-mode .source-btn.positive:hover {background-color: #2f7255; box-shadow: none;}
+
+.dark-mode .source-btn.positive.selected {background-color: #1f3c25; box-shadow: 0 0 6px 2px #7bb67f;}
+
+/* Rather Positive */
+.light-mode .source-btn.rather-positive {background-color: #eef9f4; border: 4px solid #94c894;}
+
+.light-mode .source-btn.rather-positive:hover {background-color: #def2e7;}
+
+.light-mode .source-btn.rather-positive.selected {background-color: #b3e3d4; box-shadow: 0 0 6px 2px #8bcfb7;}
+
+.dark-mode .source-btn.rather-positive {background-color: #2b5a4e; color: #d3d3d3; border: 4px solid #94c894;}
+
+.dark-mode .source-btn.rather-positive:hover {background-color: #356f63; box-shadow: none;}
+
+.dark-mode .source-btn.rather-positive.selected {background-color: #204038; box-shadow: 0 0 6px 2px #aed3ae;}
+
+/* Negative */
+.light-mode .source-btn.negative {background-color: #dc9f9f; border: 4px solid #e76a6a;}
+
+.light-mode .source-btn.negative:hover {background-color: #ce8f8f;}
+
+.light-mode .source-btn.negative.selected {background-color: #eaa0a0; box-shadow: 0 0 6px 2px #cc6b6b;}
+
+.dark-mode .source-btn.negative {background-color: #6a2a2a; color: #d3d3d3; border: 4px solid #e76a6a;}
+
+.dark-mode .source-btn.negative:hover {background-color: #803636; box-shadow: none;}
+
+.dark-mode .source-btn.negative.selected {background-color: #482b2b; box-shadow: 0 0 6px 2px #d58f8f;}
+
+/* Rather Negative */
+.light-mode .source-btn.rather-negative {background-color: #fce7e7; border: 4px solid #ef9a9a;}
+
+.light-mode .source-btn.rather-negative:hover {background-color: #f4d7d7;}
+
+.light-mode .source-btn.rather-negative.selected {background-color: #f8e0e0; box-shadow: 0 0 6px 2px #ddabab;}
+
+.dark-mode .source-btn.rather-negative {background-color: #783939; color: #d3d3d3; border: 4px solid #ef9a9a;}
+
+.dark-mode .source-btn.rather-negative:hover {background-color: #8e4646; box-shadow: none;}
+
+.dark-mode .source-btn.rather-negative.selected {background-color: #4a3535; box-shadow: 0 0 6px 2px #e7abab;}
+
+/* Inconclusive */
+.light-mode .source-btn.inconclusive {background-color: #f3de91; border: 4px solid #ffeb66;}
+
+.light-mode .source-btn.inconclusive:hover {background-color: #e8d383;}
+
+.light-mode .source-btn.inconclusive.selected {background-color: #fff3a8; box-shadow: 0 0 6px 2px #ffe066;}
+
+.dark-mode .source-btn.inconclusive {background-color: #7b6a2f; color: #d3d3d3; border: 4px solid #ffeb66;}
+
+.dark-mode .source-btn.inconclusive:hover {background-color: #917d3d; box-shadow: none;}
+
+.dark-mode .source-btn.inconclusive.selected {background-color: #4f472e; box-shadow: 0 0 6px 2px #f2d660;}
+
+/* Possibly Inconclusive */
+.light-mode .source-btn.possibly-inconclusive {background-color: #fbf7d7; border: 4px solid #fdf8c4;}
+
+.light-mode .source-btn.possibly-inconclusive:hover {background-color: #f3edc4;}
+
+.light-mode .source-btn.possibly-inconclusive.selected {background-color: #f3eac0; box-shadow: 0 0 6px 2px #e2d79e;}
+
+.dark-mode .source-btn.possibly-inconclusive {background-color: #837742; color: #d3d3d3; border: 4px solid #fdf8c4;}
+
+.dark-mode .source-btn.possibly-inconclusive:hover {background-color: #988b51; box-shadow: none;}
+
+.dark-mode .source-btn.possibly-inconclusive.selected {background-color: #4e4633; box-shadow: 0 0 6px 2px #f3e49c;}
+
+/* No Effect */
+.light-mode .source-btn.no-effect {background-color: #cdcdcd; border: 4px solid #b0b0b0;}
+
+.light-mode .source-btn.no-effect:hover {background-color: #bebebe;}
+
+.light-mode .source-btn.no-effect.selected {background-color: #dcdcdc; box-shadow: 0 0 6px 2px #bbbbbb;}
+
+.dark-mode .source-btn.no-effect {background-color: #5a5a5a; color: #d3d3d3; border: 4px solid #b0b0b0;}
+
+.dark-mode .source-btn.no-effect:hover {background-color: #6c6c6c; box-shadow: none;}
+
+.dark-mode .source-btn.no-effect.selected {background-color: #303030; box-shadow: 0 0 6px 2px #bbbbbb;}
+
+/* Possibly No Effect */
+.light-mode .source-btn.possibly-no-effect {background-color: #efefef; border: 4px solid #f2f2f2;}
+
+.light-mode .source-btn.possibly-no-effect:hover {background-color: #dfdfdf;}
+
+.light-mode .source-btn.possibly-no-effect.selected {background-color: #d9dde1; box-shadow: 0 0 6px 2px #b7bcc0;}
+
+.dark-mode .source-btn.possibly-no-effect {background-color: #6f7477; color: #d3d3d3; border: 4px solid #f2f2f2;}
+
+.dark-mode .source-btn.possibly-no-effect:hover {background-color: #849094; box-shadow: none;}
+
+.dark-mode .source-btn.possibly-no-effect.selected {background-color: #3a3a3a; box-shadow: 0 0 6px 2px #c9c9c9;}
+
+
+/* ========== Overall Impact from all Findings ========= */
+
+/* Impact wrapper styles */
+.impact-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 2px;
+    gap: 0.75rem;
+    font-family: 'Inter', monospace;
+    background-color: white;
+}
+
+.html:not(.describe-transitions) .impact-wrapper {
+    transition: all 0.3s ease;
+}
+
+.dark-mode .impact-wrapper {
+    background-color: #2e2e3a;
+    color: #d3d3d3;
+}
+
+/* Circular progress bar */
+.circular-progress {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+html:not(.disable-transitions) .circular-progress {
+    transition: all 0.3s ease;
+}
+
+.light-mode .circular-prgress {
+    background: conic-gradient(#e76a6a 0deg, #5aa15e);
+}
+
+.dark-mode .circular-progress {
+    background: conic-gradient(#b25d5d 0deg,  #4b8e4e 360deg);
+}
+
+/* The ::before element represents the white space between the percentage and the circular progress bar */
+.circular-progress::before {
+    content: '';
+    position: absolute;
+    width: 70px;
+    height: 70px;
+    background-color: white;
+    border-radius: 50%;
+    z-index: 1;
+    padding: 5px;
+}
+
+html:not(.disable-transitions) .circular-progress::before {
+    transition: all 0.3s ease;
+}
+
+.dark-mode .circular-progress::before {
+    background: #2e2e3a;
+    color: #d3d3d3;
+}
+
+/* Styles for the Percentage Progress Value */
+.progress-value {
+    position: relative;
+    z-index: 2;
+    font-size: 1.4rem;
+    font-weight: bold;
+    background-color: white;
+}
+
+html:not(.disable-transitions) .progress-value {
+    transition: all 0.3s ease;
+}
+
+.dark-mode .progress-value {
+    background-color: #2e2e3a;
+    color: #d3d3d3;
+}
+
+/* Styles for the small conclusive paragraph */
+.impact-text {
+    width: 98%;
+    font-family: 'Inter', sans-serif;
+    text-align: center;
+    flex-wrap: wrap;
+    font-size: 1rem;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+
+html:not(.disable-transitions) .impact-text {
+    transition: all 0.3s ease;
+}
+
+.dark-mode .impact-text {
+    color: #d3d3d3;
+}
+
+.impact-text span {
+    font-weight: bold;
+}
+
+
+/* ========= Styles for the "Source Results" button ========= */
+
+.buttons-div {
+    display: flex;
+    gap: 1rem;
+    margin-top: 30px;
+    position: absolute;
+    top: 87%;
+    left: 37%;
+}
+
+.next-btn, .back-btn {
+    font-size: 1.2rem;
+    border: 0;
+    border-radius: 5px;
+    padding: 10px 15px;
+    margin: 0 0 1rem 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.light-mode .next-btn, .light-mode .back-btn {
+    background-color:rgb(252, 229, 26);
+}
+
+/* Shadow & Shift effect when hovering on top of the Next button. */
+.light-mode .next-btn:hover, .light-mode .back-btn:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); 
+    transform: translateY(-1px);               
+}
+
+/* Scaling effect when Next button gets clicked. */
+.next-btn:active, .back-btn:active {
+    transform: scale(0.8);
+}
+
+/* Dark theme background color change */
+.dark-mode .next-btn, .dark-mode .back-btn {
+    background-color: #F4C542;
+    color: #1F1F2B;
+}
+
+/* Underline effect when hovering on top of the Next button in dark mode. */
+.dark-mode .next-btn:hover, .dark-mode .back-btn:hover {
+    box-shadow: 0 4px 8px rgba(255,255,255, 0.15); 
+    transform: translateY(-1px);                     
+}
+
+
+/* ========== (1st & 3rd Results Page) Legend Container for the Interpretation of Colors ========== */
+
+/* Styles for the Legend Graph */
+.legend {
+    width: 10vw;
+    height: calc(9*(100vh - 274px)/10 + 10px);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.light-mode .legend {
+    background-color: white;
+    border: 2px solid rgb(255,229,119);
+}
+
+.dark-mode .legend {
+    background-color: #2E2E3A;
+    color: #EAEAEA;
+    border: 2px solid #c7a600;
+}
+
+.legend > h4 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-family: 'Inter', sans-serif;
+    margin: 2px;
+    font-size: 0.8rem;
+}
+
+.color-case {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* Styles for the Colored Square */ 
+.color-shape {
+    width: calc(2rem - 3px);
+    height: calc(2rem - 3px);
+    border-radius: 5px;
+    position: relative;
+}
+
+/* Styles for the Label corresponding to the colored square */
+.color-label {
+    width: 6vw;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.8rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+/* Assigning the various colors to the Squares of the Legend */
+
+/* Positive */
+.light-mode #positive-color {background-color: #aad6b8; border: 3px solid #5aa15e;}
+
+.dark-mode #positive-color {background: #265f45; border: 3px solid #5aa15e;}
+
+/* Rather Positive */
+.light-mode #rather-positive-color {background-color: #eef9f4; border: 3px solid #94c894;}
+
+.dark-mode #rather-positive-color {background-color: #2b5a4e; border: 3px solid #94c894;}
+
+/* Negative */
+.light-mode #negative-color {background-color: #dc9f9f; border: 3px solid #e76a6a;}
+
+.dark-mode #negative-color {background-color: #6a2a2a; border: 3px solid #e76a6a;}
+
+/* Rather Negative */
+.light-mode #rather-negative-color {background-color: #fce7e7; border: 3px solid #ef9a9a;}
+
+.dark-mode #rather-negative-color {background-color: #783939; border: 3px solid #ef9a9a;}
+
+/* Inconclusive */
+.light-mode #inconclusive-color {background-color: #f3de91; border: 3px solid #ffeb66;}
+
+.dark-mode #inconclusive-color {background-color: #7b6a2f; border: 3px solid #ffeb66;}
+
+/* Possibly Inconclusive */
+.light-mode #possibly-inconclusive-color {background-color: #fbf7d7; border: 3px solid #fdf8c4;}
+
+.dark-mode #possibly-inconclusive-color {background-color: #837742; border: 3px solid #fdf8c4;}
+
+/* No Effect */
+.light-mode #no-effect-color {background-color: #cdcdcd; border: 3px solid #b0b0b0;}
+
+.dark-mode #no-effect-color {background-color: #5a5a5a; border: 3px solid #b0b0b0;}
+
+/* Possibly No Effect */
+.light-mode #possibly-no-effect-color {background-color: #efefef; border: 3px solid #f2f2f2;}
+
+.dark-mode #possibly-no-effect-color {background-color: #6f7477; border: 3px solid #a0a0a0;}
+
+/* No findings */
+.light-mode #no-findings {background-color: white; border: 3px solid #ffd700;}
+
+.dark-mode #no-findings {background-color: #3d3d41; border: 3px solid #c4aa22;}
+
+/* ========== Styles for the Linear Gradient Legend that corresponds to the Conic Gradient ========= */
+
+/* Styles for the container of both legends */
+.legend-graphs {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    height: calc(9*(100vh - 74px)/10 + 50px);
+}
+
+/* Styles for the container of the linear gradient */
+.impact-legend {
+    height: 200px;
+    width: 10vw;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 0.1rem;
+    font-size: 0.8rem;
+}
+
+.light-mode .impact-legend {
+    background-color: white;
+    border: 2px solid rgb(255,229,119);
+}
+
+.dark-mode .impact-legend {
+    background-color: #2E2E3A;
+    color: #EAEAEA;
+    border: 2px solid #c7a600;
+}
+
+.impact-legend > h4 {
+    margin-top: 0.5rem;
+    margin-bottom: 0;
+    font-family: 'Inter', sans-serif;
+    text-align: center;
+}
+
+/* Container for the linear gradient and the percentages container */
+.gradient-legend {
+    height: 100%;
+    width: 10vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Linear Vertical Gradient Legend */
+.linear-gradient {
+    height: 80%;
+    width: 10px;
+    border-radius: 5px;
+}
+
+.light-mode .linear-gradient {
+    background: linear-gradient(to top, #e76a6a 0%, #f2d660 50%, #5aa15e 100%);
+}
+
+.dark-mode .linear-gradient {
+    background: linear-gradient(to top, #b25d5d 0%, #c8b850 50%, #4b8e4e 100%);
+}
+
+/* Container for the Percentages of the Linear Gradient */
+.linear-gradient-percentages {
+    height: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    font-size: 0.65rem;
+    font-family: 'Inter', monospace;
+}
+
+
+
+/* ========== Alert Popup if Users try to skip the Current Selection ========= */
+
+/* Styles for the alert popup Container */
+.alert-container {
+    display: flex;
+    justify-content: center;
+    visibility: hidden;
+    margin-bottom: 0;
+}
+
+/* Styles for the alert popup Message */
+#alert-popup {
+    position: absolute;
+    top: 80%;
+    left: 25%;
+    width: 25vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background-color: #fff9db; /* soft yellow */
+    border: 2px solid #ffc107; /* warning yellow */
+    border-radius: 10px;
+    padding: 0.75rem 1.5rem;
+    font-weight: 500;
+    color: #333;
+    font-size: 1rem;
+    box-shadow: 0 4px 8px rgba(255, 193, 8, 0.6);
+    margin: 1rem auto;
+    max-width: 400px;
+    text-align: center;
+    z-index: 1000;
+}
+
+html:not(.disable-transitions) #alert-popup {
+    animation: fadeInPop 0.3s ease-in-out;
+}
+
+@keyframes fadeInPop {
+  0% {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+  100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.light-mode #alert-popup {
+    border: 2px solid #fff700;
+    color: black;
+}
+
+.dark-mode #alert-popup {
+    background-color: #3d3d41;
+    color: #e0dbdb;
+    border: 2px solid #c4aa22;
+}
+
+
+/* ========= Web Responsive Design for Tablet and Mobile Phone Screen Sizes ========= */
+
+/* Mobile Phone Screen */
+@media screen and (max-width: 767px) {
+
+    .main-content-frame {
+        width: 95%;
+    }
+    
+    .main-content-frame > p {
+        margin: 1rem 0;
+    }
+
+    .source-choices {
+        width: 90%;
+        display: grid;
+        grid-template-rows: repeat(3, 1fr);
+        grid-template-columns: repeat(2, minmax(100px, 250px));
+        gap: 1rem;
+        padding-left: 0;
+    }
+
+    .source-btn {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        padding: 0.8rem;
+    }
+
+    .impact-wrapper {
+        width: 100%;
+    }
+
+    .text-wrapper {
+        width: 100%;
+        display: flex;
+    }
+
+
+    .impact-text > p {
+        display: flex;
+        flex-direction: row !important;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        margin-top: 0.5rem;
+    }
+
+    .impact-text  span {
+        padding: 0.2rem 0.4rem;
+    }
+
+    .buttons-div {
+        position: static;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        margin-top: 0;
+    }
+
+    .next-btn {
+        order: 0;
+        margin-top: 0;
+    }
+
+    .back-btn {
+        order: 1;
+    }
+
+    .legend {
+        width: 95%;
+        display: grid;
+        grid-template-rows: repeat(5, 1fr);
+        grid-template-columns: repeat(2, minmax(100px, 250px));
+        
+    }
+
+    .legend > h4 {
+        grid-column: span 2;
+        margin: 0;
+    }
+
+    .color-case {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+    }
+
+    .impact-legend {
+        width: 95%;
+        height: 150px;
+        justify-content: center;
+    }
+
+    .gradient-legend {
+        width: 100%;
+        height: 50%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .linear-gradient {
+        height: 10px;
+        width: 80%;
+    }
+
+    .light-mode .linear-gradient {
+        background: linear-gradient(to right, #e76a6a 0%, #f2d660 50%, #5aa15e 100%);
+    }
+
+    .dark-mode .linear-gradient {
+        background: linear-gradient(to right, #b25d5d 0%, #c8b850 50%, #4b8e4e 100%);
+    }
+
+    .linear-gradient-percentages {
+        width: 80%;
+        height: 30%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-start;
+        font-size: 0.5rem;
+        font-family: 'Inter', monospace;
+    }
+
+    .linear-gradient-percentages > span {
+        display: inline-flex;
+    }
+
+    #alert-popup {
+        flex-direction: row !important;
+        position: absolute !important;
+        left: 12%;
+        width: 60%;
+    }
+}
