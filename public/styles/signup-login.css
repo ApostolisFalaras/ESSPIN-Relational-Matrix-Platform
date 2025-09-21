@@ -33,6 +33,50 @@
 
 /* ========= Container for the Login Info Form ========= */
 
+/* Styles for the failed login message */
+.failed-login-div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    width: 420px;
+    height: 200px;
+    top: 40%;
+    left: 27%;
+    z-index: 10;
+    background-color: white;
+    border-width: 4px;
+    border-style: solid;
+    border-radius: 15px;
+    font-family: "Roboto Mono", monospace;
+    text-align: center;
+}
+
+.light-mode .failed-login-div {
+    background-color: white;
+    border-color: rgb(255,229,119);
+    box-shadow: 0px 0px 50px rgb(255,229,119);
+}
+
+.dark-mode .failed-login-div {
+    background-color: #2E2E3A;
+    color: #eaeaea;
+    border-color: #c7a600;
+    box-shadow: 0px 0px 50px #c7a600;
+}
+
+.failed-login-div > h4 {
+    font-size: 1.3rem;
+    margin-top: 2rem;
+    margin-bottom: 0;
+}
+
+.failed-login-div > p {
+    margin-top: 2rem;
+}
+
+
 /* Styles for the Login Info Form */
 .login-form {
     max-width: 500px;
@@ -120,7 +164,7 @@
 }
 
 /* Styles for the "Next" button */
-.login-btn, .signup-btn, .back-btn {
+.login-btn, .signup-btn, .back-btn, .close-btn {
     font-size: 1.2rem;
     border: 0;
     border-radius: 5px;
@@ -134,28 +178,28 @@
 
 
 /* Scaling effect when Next button gets clicked. */
-.login-btn:active, .signup-btn:active, .back-btn:active {
+.login-btn:active, .signup-btn:active, .back-btn:active, .close-btn:active {
     transform: scale(0.8);
 }
 
-.light-mode .login-btn, .light-mode .signup-btn, .light-mode .back-btn {
+.light-mode .login-btn, .light-mode .signup-btn, .light-mode .back-btn, .light-mode .close-btn {
     background-color: rgb(252, 229, 26);
 }
 
 /* Underline effect when hovering on top of the Next button. */
-.light-mode .login-btn:hover, .light-mode .signup-btn:hover, .light-mode .back-btn:hover {
+.light-mode .login-btn:hover, .light-mode .signup-btn:hover, .light-mode .back-btn:hover, .light-mode .close-btn:hover {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); 
     transform: translateY(-1px);
     transition: all 0.2s ease-in-out;        
 }
 
-.dark-mode .login-btn, .dark-mode .signup-btn, .dark-mode .back-btn {
+.dark-mode .login-btn, .dark-mode .signup-btn, .dark-mode .back-btn, .dark-mode .close-btn {
     background-color: #F4C542;
     color: #1F1F2B;
 }
 
 /* Underline effect when hovering on top of the Next button in dark mode. */
-.dark-mode .login-btn:hover, .dark-mode .signup-btn:hover, .dark-mode .back-btn:hover {
+.dark-mode .login-btn:hover, .dark-mode .signup-btn:hover, .dark-mode .back-btn:hover, .dark-mode .close-btn:hover {
     box-shadow: 0 4px 8px rgba(255,255,255, 0.15); 
     transform: translateY(-1px);        
 }            
@@ -180,6 +224,12 @@
 
     .main-content-frame > p {
         margin: 0;
+    }
+
+    .failed-login-div {
+        position: absolute;
+        width: 90%;
+        left: 3%;
     }
 
     .field-grid {

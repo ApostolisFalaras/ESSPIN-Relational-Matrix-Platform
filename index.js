@@ -88,11 +88,9 @@ const __dirname = path.dirname(__filename);
 
 app.use(express.static(path.join(__dirname, "public")));
 
-
 // The requests' URL-encoded data are parsed, and the request is effectively given a body
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
-
 
 // Basic Healthcheck
 app.get("/healthz", (_req, res) => res.status(200).send("ok"));
@@ -289,7 +287,10 @@ app.post("/login", async (req, res) => {
             }
             else {
                 console.log("User doesn't exist");
-                res.redirect(`/signup`);
+                res.render(`signup.ejs`, {
+                    loginFailed: true,
+                    isMainAppFlow: false,
+                });
             }
 
         } catch (err) {
@@ -740,6 +741,12 @@ async function queryInputSource(source, dataFields, userSession) {
                 }
 
                 if (correlationResults.length > 0) {
+                    correlationResults = correlationResults.map(row => {
+                        if (row.correlation_2000 == 10) row.correlation_2000 = "-";
+                        if (row.correlation_2023 == 10) row.correlation_2023 = "-";
+                        return row;
+                    });
+
                     results.push(correlationResults);
                 }
             }
@@ -860,15 +867,22 @@ function calculateFindings(source, findings, userSession) {
     else if (index === 3) {
         for (let i=0; i < findings.length; i++) {
             
-            if (findings[i][0].correlation_2000 > 0) userSession.positiveFindings[index] += 1;
-            else if (findings[i][0].correlation_2000 < 0) userSession.negativeFindings[index] += 1;
-            else userSession.noEffectFindings[index] += 1;
+            if (findings[i][0].correlation_2000 != "-") {
+                if (findings[i][0].correlation_2000 > 0) userSession.positiveFindings[index] += 1;
+                else if (findings[i][0].correlation_2000 < 0) userSession.negativeFindings[index] += 1;
+                else userSession.noEffectFindings[index] += 1;
 
-            if (findings[i][0].correlation_2023 > 0) userSession.positiveFindings[index] += 1;
-            else if (findings[i][0].correlation_2023 < 0) userSession.negativeFindings[index] += 1;
-            else userSession.noEffectFindings[index] += 1;
+                totalSourceFindings += 1;
+            }
+
+            if (findings[i][0].correlation_2023 != "-") {
+                if (findings[i][0].correlation_2023 > 0) userSession.positiveFindings[index] += 1;
+                else if (findings[i][0].correlation_2023 < 0) userSession.negativeFindings[index] += 1;
+                else userSession.noEffectFindings[index] += 1;
+
+                totalSourceFindings += 1;
+            }
             
-            totalSourceFindings += 2;
         }
     }
     else if (index === 4) {
@@ -1286,32 +1300,63 @@ function aggregateEffectDirections(source, results, userSession) {
 
             res[0].table = "Correlations Table";
 
-            if (res[0].correlation_2000 > 0 && res[0].correlation_2023 > 0) {
-                res[0].effect_for_color = "positive";
-                userSession.totalEffects.positive += 2;
+            if (res[0].correlation_2000 != "-" && res[0].correlation_2023 != "-") {
+                if (res[0].correlation_2000 > 0 && res[0].correlation_2023 > 0) {
+                    res[0].effect_for_color = "positive";
+                    userSession.totalEffects.positive += 2;
+                }
+                else if (res[0].correlation_2000 < 0 && res[0].correlation_2023 < 0) {
+                    res[0].effect_for_color = "negative";
+                    userSession.totalEffects.negative += 2;
+                }
+                else if ((res[0].correlation_2000 > 0 && res[0].correlation_2023 < 0) || (res[0].correlation_2000 < 0 && res[0].correlation_2023 > 0)) {
+                    res[0].effect_for_color = "inconclusive";
+                    userSession.totalEffects.positive += 1;
+                    userSession.totalEffects.negative += 1;
+                }
+                else if ((res[0].correlation_2000 > 0 && res[0].correlation_2023 == 0) || (res[0].correlation_2000 == 0 && res[0].correlation_2023 > 0)) {
+                    res[0].effect_for_color = "rather-positive";
+                    userSession.totalEffects.positive += 1;
+                    userSession.totalEffects.noEffect += 1;
+                }
+                else if ((res[0].correlation_2000 < 0 && res[0].correlation_2023 == 0) || (res[0].correlation_2000 == 0 && res[0].correlation_2023 < 0)) {
+                    res[0].effect_for_color = "rather-negative";
+                    userSession.totalEffects.negative += 1;
+                    userSession.totalEffects.noEffect += 1;
+                }
+                else {
+                    res[0].effect_for_color = "no-effect";
+                    userSession.totalEffects.noEffect += 2;
+                }
             }
-            else if (res[0].correlation_2000 < 0 && res[0].correlation_2023 < 0) {
-                res[0].effect_for_color = "negative";
-                userSession.totalEffects.negative += 2;
+            // Only for "Democratic voice / quality" as dependent or independent
+            else if (res[0].correlation_2000 != "-") {
+                if (res[0].correlation_2000 > 0) {
+                    res[0].effect_for_color = "positive";
+                    userSession.totalEffects.positive += 1;
+                }
+                else if (res[0].correlation_2000 < 0) {
+                    res[0].effect_for_color = "negative";
+                    userSession.totalEffects.negative += 1;
+                }
+                else {
+                    res[0].effect_for_color = "no-effect";
+                    userSession.totalEffects.noEffect += 1;
+                }
             }
-            else if ((res[0].correlation_2000 > 0 && res[0].correlation_2023 < 0) || (res[0].correlation_2000 < 0 && res[0].correlation_2023 > 0)) {
-                res[0].effect_for_color = "inconclusive";
-                userSession.totalEffects.positive += 1;
-                userSession.totalEffects.negative += 1;
-            }
-            else if ((res[0].correlation_2000 > 0 && res[0].correlation_2023 == 0) || (res[0].correlation_2000 == 0 && res[0].correlation_2023 > 0)) {
-                res[0].effect_for_color = "rather-positive";
-                userSession.totalEffects.positive += 1;
-                userSession.totalEffects.noEffect += 1;
-            }
-            else if ((res[0].correlation_2000 < 0 && res[0].correlation_2023 == 0) || (res[0].correlation_2000 == 0 && res[0].correlation_2023 < 0)) {
-                res[0].effect_for_color = "rather-negative";
-                userSession.totalEffects.negative += 1;
-                userSession.totalEffects.noEffect += 1;
-            }
-            else {
-                res[0].effect_for_color = "no-effect";
-                userSession.totalEffects.noEffect += 2;
+            else if (res[0].correlation_2023 != "-") {
+                if (res[0].correlation_2023 > 0) {
+                    res[0].effect_for_color = "positive";
+                    userSession.totalEffects.positive += 1;
+                }
+                else if (res[0].correlation_2023 < 0) {
+                    res[0].effect_for_color = "negative";
+                    userSession.totalEffects.negative += 1;
+                }
+                else {
+                    res[0].effect_for_color = "no-effect";
+                    userSession.totalEffects.noEffect += 1;
+                }
             }
         });
     }
@@ -1526,11 +1571,11 @@ app.get("/login/select-level/select-dependent-variable/select-independent-variab
                     let indIndex = req.session.user.independentVariable.indexOf(res[0].independent_variable);
 
                     if (depIndex > 0) {
-                        res[0].dependent_variable = req.session.user.dependentVariable[0] + " (approximated by" + res[0].dependent_variable + ")";
+                        res[0].dependent_variable = req.session.user.dependentVariable[0] + " (approximated by " + res[0].dependent_variable + ")";
                     }
 
                     if (indIndex > 0) {
-                        res[0].independent_variable = req.session.user.independentVariable[0] + " (approximated by" + res[0].independent_variable + ")";
+                        res[0].independent_variable = req.session.user.independentVariable[0] + " (approximated by " + res[0].independent_variable + ")";
                     }
 
                     results.push(res[0]);

@@ -408,9 +408,21 @@
 
                                             <!-- Variables Relationship Subsection in the Results Card -->
                                             <dt>Correlation in 2000</dt>
-                                            <dd><%= parseFloat(res.correlation_2000).toFixed(3) %></dd>
+                                            <dd>
+                                                <% if (res.correlation_2000 != "-") { %> 
+                                                    <%= parseFloat(res.correlation_2000).toFixed(3) %>
+                                                <% } else { %>
+                                                    <%= res.correlation_2000 %>
+                                                <% } %>
+                                            </dd>
                                             <dt>Correlation in 2023</dt>
-                                            <dd><%= parseFloat(res.correlation_2023).toFixed(3) %></dd>
+                                            <dd>
+                                                <% if (res.correlation_2023 != "-") { %> 
+                                                    <%= parseFloat(res.correlation_2023).toFixed(3) %>
+                                                <% } else { %>
+                                                    <%= res.correlation_2023 %>
+                                                <% } %>
+                                            </dd>
 
                                             <!-- Additional Details about the current Finding -->
                                             <dt>Years</dt>

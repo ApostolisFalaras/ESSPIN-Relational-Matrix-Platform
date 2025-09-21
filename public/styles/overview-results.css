@@ -703,10 +703,11 @@ html:not(.disable-transitions) #alert-popup {
         display: grid;
         grid-template-rows: repeat(5, 1fr);
         grid-template-columns: repeat(2, minmax(100px, 250px));
-        
+        padding-bottom: 0.5rem;
     }
 
     .legend > h4 {
+        font-size: 1rem;
         grid-column: span 2;
         margin: 0;
     }
@@ -759,9 +760,11 @@ html:not(.disable-transitions) #alert-popup {
     }
 
     #alert-popup {
-        flex-direction: row !important;
         position: absolute !important;
         left: 12%;
+        bottom: 50%;
+        height: 3%;
         width: 60%;
+        margin-top: 0%
     }
 }

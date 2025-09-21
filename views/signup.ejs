@@ -62,6 +62,15 @@
                     <!-- User profile icon displayed above the form, based on the page's theme -->
                     <img alt="User Login Icon">
                     
+                    <% if (locals.loginFailed && loginFailed) { %>
+                        <div class="failed-login-div">
+                            <h4>Login failed.</h4>
+                            <p>User isn't registered in the ESSPIN app. 
+                                Please register in this page.</p>
+
+                            <button class="close-btn">Close</button>
+                        </div>
+                    <% } %>
 
                     <!-- Title and description/purpose of the form -->
                     <h3>Visitor Registration Page</h3>

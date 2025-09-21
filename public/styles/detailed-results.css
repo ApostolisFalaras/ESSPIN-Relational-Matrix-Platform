@@ -777,6 +777,8 @@ html:not(.disable-transitions) .export-buttons a {
         grid-template-rows: repeat(5, 1fr);
         grid-template-columns: repeat(2, minmax(100px, 250px));
         margin-bottom: 1rem;
+        padding-top: 1rem;
+        padding-bottom: 0;
     }
 
     .legend > h4 {
@@ -790,9 +792,13 @@ html:not(.disable-transitions) .export-buttons a {
         gap: 2rem;
     }
 
+    .color-label {
+        width: 50%;
+    }
+
     .export-buttons {
         position: absolute;
-        top: 24%;
+        top: 25%;
         left: 28%;
         display: flex;
         flex-direction: row !important;
