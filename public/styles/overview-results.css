@@ -667,7 +667,7 @@ html:not(.disable-transitions) #alert-popup {
         display: flex;
     }
 
-    .progress-values {
+    .progress-value {
         font-size: 1.2rem;
     }
 
