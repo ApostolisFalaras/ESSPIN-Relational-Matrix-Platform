@@ -18,7 +18,7 @@ const selectedOtherVariable = document.getElementById("selected-other-variable")
 const selectedCategory = document.getElementById("selected-category");
 
 // List of all Dropdown X icons after an option is selected
-const dropdownXIcons = document.querySelectorAll(".dropdown-icon");
+const dropdownIcons = document.querySelectorAll(".dropdown-icon");
 
 // Submission Form
 const submissionForm = document.getElementById("select-variable-form");
@@ -54,7 +54,7 @@ for (let i=0; i<dropDownButtons.length; i++) {
                     const hasDropdownOption = this.parentElement.querySelector("ul.options > li.has-dropdown");
                     const dropdownIcon = hasDropdownOption.querySelector(".dropdown-icon");
                     
-                    hasDropdownOption.style.backgroundColor = "rgb(255, 251, 234)";
+                    hasDropdownOption.classList.remove("selected");
                     dropdownIcon.innerHTML = "&#x25BC;";
                     dropdownIcon.classList.remove("selected");
                     otherDropdown.style.display = "none";
@@ -88,7 +88,7 @@ for (let i=0; i<dropDownButtons.length; i++) {
                     const hasDropdownOption = dropDownButtons[j].parentElement.querySelector("ul.options > li.has-dropdown");
                     const dropdownIcon = hasDropdownOption.querySelector(".dropdown-icon");
                     
-                    hasDropdownOption.style.backgroundColor = "rgb(255, 251, 234)";
+                    hasDropdownOption.classList.remove("selected");
                     dropdownIcon.innerHTML = "&#x25BC;";
                     dropdownIcon.classList.remove("selected");
                     otherDropdown.style.display = "none";
@@ -220,7 +220,7 @@ for (let i=0; i < dropDownOptions.length; i++) {
             const otherDropdownBtnIcon = otherDropdownBtn.querySelector("span");
             const otherDropdownList = this.parentElement;
 
-            otherDropdownBtn.style.backgroundColor = "rgb(255, 251, 234)";
+            otherDropdownBtn.classList.remove("selected");
             otherDropdownBtnIcon.innerHTML = "&#x25BC;";
             otherDropdownBtnIcon.classList.remove("selected");
             otherDropdownList.style.display = "none";
@@ -315,7 +315,7 @@ for (let i=0; i < dropDownOptions.length; i++) {
             }
             
             if (otherDropdownBtnIcon && otherDropdownBtnIcon.classList.contains("selected")) {
-                otherDropdownBtn.style.backgroundColor = "rgb(255, 251, 234)";
+                otherDropdownBtn.classList.remove("selected");
                 otherDropdownBtnIcon.innerHTML = "&#x25BC;";
                 otherDropdownBtnIcon.classList.remove("selected");
             }
@@ -334,8 +334,8 @@ for (let i=0; i < dropDownOptions.length; i++) {
 
 /* ========== Event Listener for "X" Dropdown Icons ========= */
 
-for (let i=0; i<dropdownXIcons.length; i++) {
-    dropdownXIcons[i].addEventListener("click", function (event) {
+for (let i=0; i<dropdownIcons.length; i++) {
+    dropdownIcons[i].addEventListener("click", function (event) {
 
         // Preventing the click event from propagating to the button 
         event.preventDefault();
@@ -343,63 +343,144 @@ for (let i=0; i<dropdownXIcons.length; i++) {
 
         const currentDropdownBtn = this.parentElement;
 
-        // If the X button belongs in one of the inner dropdowns 
-        if (currentDropdownBtn.classList.contains("has-dropdown")) {
-            
-            const innerDropdown = currentDropdownBtn.parentElement.parentElement.querySelector(".other-options");
-            
-            currentDropdownBtn.classList.remove("selected");
+        console.log(this.innerHTML);
+        // If the Icon is the ▼ down arrow
+        if (this.innerHTML == "▼") {
+            if (currentDropdownBtn.classList.contains("has-dropdown")) {
+                // And it also belongs in the inner dropdown list
+                const innerDropdown = currentDropdownBtn.parentElement.parentElement.querySelector(".other-options");
+                const outerDropdownbtn = currentDropdownBtn.parentElement.previousElementSibling;
 
-            this.innerHTML = "&#x25BC;";
-            this.classList.remove("selected");
+                currentDropdownBtn.classList.add("selected");
 
-            innerDropdown.style.display = "none";
+                this.innerHTML = "&#10005;";
+                this.classList.add("selected"); 
 
-            if (window.innerWidth <= 767) {
-                alertPopup.style.top = "70%";    
+                innerDropdown.style.display = "block";
+                innerDropdown.style.top = (outerDropdownbtn.offsetHeight + currentDropdownBtn.parentElement.offsetHeight) + "px";
+
+                if (window.innerWidth <= 767) {
+                    alertPopup.style.top = "74%";
+                }
+            }
+            else {
+                // Expand or hide the list of items of the corresponding dropdown button.
+                const expanded = currentDropdownBtn.getAttribute("aria-expanded") === "true";
+                currentDropdownBtn.setAttribute("aria-expanded", String(!expanded));
+                currentDropdownBtn.nextElementSibling.style.display = expanded ? "none" : "block";
+
+                if (currentDropdownBtn.nextElementSibling.style.display === "none") {
+                    const otherDropdown = currentDropdownBtn.parentElement.querySelector(".other-options");
+
+                    if (otherDropdown && otherDropdown.style.display !== "none") {
+                            const hasDropdownOption = currentDropdownBtn.parentElement.querySelector("ul.options > li.has-dropdown");
+                            const dropdownIcon = hasDropdownOption.querySelector(".dropdown-icon");
+                            
+                            hasDropdownOption.classList.remove("selected");
+                            dropdownIcon.innerHTML = "&#x25BC;";
+                            dropdownIcon.classList.remove("selected");
+                            otherDropdown.style.display = "none";
+                    }
+
+                    if (window.innerWidth <= 767) {
+                        alertPopup.style.top = "65%";    
+                    }
+                }
+                else {
+                    if (window.innerWidth <= 767) {
+                        alertPopup.style.top = "70%";
+                    }
+                }
+
+
+                // If any other dropdown list was open, we hide it, by checking the "aria-expanded" of the rest of the dropdown buttons
+                for (let j=0; j<dropDownButtons.length; j++) {
+                    if (dropDownButtons[j] != currentDropdownBtn && dropDownButtons[j].getAttribute("aria-expanded") === "true") {
+                        
+                        dropDownButtons[j].setAttribute("aria-expanded", "false");
+                        
+                        let dropdownList = dropDownButtons[j].nextElementSibling;
+                        dropdownList.style.display = "none";
+
+                        // For the same dropdown list, we check if the inner dropdown was also visible
+                        // We hide it by applying the appropriate styles.
+                        const otherDropdown = dropDownButtons[j].parentElement.querySelector(".other-options");
+
+                        if (otherDropdown.style.display !== "none") {
+                            const hasDropdownOption = dropDownButtons[j].parentElement.querySelector("ul.options > li.has-dropdown");
+                            const dropdownIcon = hasDropdownOption.querySelector(".dropdown-icon");
+                            
+                            hasDropdownOption.classList.remove("selected");
+                            dropdownIcon.innerHTML = "&#x25BC;";
+                            dropdownIcon.classList.remove("selected");
+                            otherDropdown.style.display = "none";
+                        }
+
+                        break;
+                    }
+                }
             }
         }
         else {
-            // If the X button belongs in one of the outer dropdowns
-            const currentDropdownBtn = this.parentElement;
-            const currentDropdownList = currentDropdownBtn.parentElement.children[1];
-            const innerDropdown = currentDropdownBtn.parentElement.querySelector(".other-options");
-            
-            // Closing the inner dropdown if it was open at the time of clicking the outer X icon
-            const otherDropdownBtn = currentDropdownList.querySelector(".has-dropdown");
-            const otherXDropdownIcon = currentDropdownList.querySelector(".dropdown-icon");
+            // If the dropdown icon is an X 
+            if (currentDropdownBtn.classList.contains("has-dropdown")) {
+                // And it also belongs in the inner dropdown list
+                
+                const innerDropdown = currentDropdownBtn.parentElement.parentElement.querySelector(".other-options");
+                
+                currentDropdownBtn.classList.remove("selected");
 
-            if (otherXDropdownIcon && otherXDropdownIcon.classList.contains("selected")) {
-                otherDropdownBtn.style.backgroundColor = "rgb(255, 251, 234)";
-                
-                otherXDropdownIcon.classList.remove("selected");
-                otherXDropdownIcon.innerHTML = "&#x25BC;";
-                
+                this.innerHTML = "&#x25BC;";
+                this.classList.remove("selected");
+
                 innerDropdown.style.display = "none";
+
+                if (window.innerWidth <= 767) {
+                    alertPopup.style.top = "70%";    
+                }
             }
-
-            // Removing all the styles the made the current dropdown button appear selected,
-            // and closing the outer dropdown, if it was open
-            
-            currentDropdownBtn.classList.remove("selected");
-            currentDropdownList.style.display = "none";
-            currentDropdownBtn.setAttribute("aria-expanded", "false");
-
-            let currentButtonTitle = currentDropdownBtn.querySelector(".dropdown-title");
-            currentButtonTitle.innerHTML =  currentButtonTitle.dataset.value;
-            currentButtonTitle.style.fontSize = "1rem";
-
-            this.innerHTML = "&#x25BC;";
-            this.classList.remove("selected");
-
-            selectedVariable.value = "";
-            selectedOtherVariable.value = "";
-            selectedCategory.value = "";
-
-            if (window.innerWidth <= 767) {
-                alertPopup.style.top = "65%";
-            }
+            else {
+                // If the X button belongs in one of the outer dropdowns
+                const currentDropdownBtn = this.parentElement;
+                const currentDropdownList = currentDropdownBtn.parentElement.children[1];
+                const innerDropdown = currentDropdownBtn.parentElement.querySelector(".other-options");
                 
+                // Closing the inner dropdown if it was open at the time of clicking the outer X icon
+                const otherDropdownBtn = currentDropdownList.querySelector(".has-dropdown");
+                const otherXDropdownIcon = currentDropdownList.querySelector(".dropdown-icon");
+
+                if (otherXDropdownIcon && otherXDropdownIcon.classList.contains("selected")) {
+                    otherDropdownBtn.style.backgroundColor = "rgb(255, 251, 234)";
+                    
+                    otherXDropdownIcon.classList.remove("selected");
+                    otherXDropdownIcon.innerHTML = "&#x25BC;";
+                    
+                    innerDropdown.style.display = "none";
+                }
+
+                // Removing all the styles the made the current dropdown button appear selected,
+                // and closing the outer dropdown, if it was open
+                
+                currentDropdownBtn.classList.remove("selected");
+                currentDropdownList.style.display = "none";
+                currentDropdownBtn.setAttribute("aria-expanded", "false");
+
+                let currentButtonTitle = currentDropdownBtn.querySelector(".dropdown-title");
+                currentButtonTitle.innerHTML =  currentButtonTitle.dataset.value;
+                currentButtonTitle.style.fontSize = "1rem";
+
+                this.innerHTML = "&#x25BC;";
+                this.classList.remove("selected");
+
+                selectedVariable.value = "";
+                selectedOtherVariable.value = "";
+                selectedCategory.value = "";
+
+                if (window.innerWidth <= 767) {
+                    alertPopup.style.top = "65%";
+                }
+                    
+            }
         }
     });
 }
