@@ -24,6 +24,49 @@
     flex: 1;
 }
 
+/* Styles for the logged-out message */
+.logged-out-div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    width: 420px;
+    height: 220px;
+    top: 20%;
+    left: 27%;
+    z-index: 10;
+    background-color: white;
+    border-width: 4px;
+    border-style: solid;
+    border-radius: 15px;
+    font-family: "Roboto Mono", monospace;
+    text-align: center;
+}
+
+.light-mode .logged-out-div {
+    background-color: white;
+    border-color: rgb(255,229,119);
+    box-shadow: 0px 0px 50px rgb(255,229,119);
+}
+
+.dark-mode .logged-out-div {
+    background-color: #2E2E3A;
+    color: #eaeaea;
+    border-color: #c7a600;
+    box-shadow: 0px 0px 50px #c7a600;
+}
+
+.logged-out-div > h4 {
+    font-size: 1.3rem;
+    margin-top: 1rem;
+    margin-bottom: 0;
+}
+
+.logged-out-div > p {
+    margin-top: 2rem;
+}
+
 .signup-prompt {
     font-size: 0.9rem;
     text-align: center;
@@ -70,35 +113,40 @@ html:not(.disable-transitions) .signup-link {
 /* ========== Enter Button inside the Main Content Frame ========== */
 
 /* Styles for the enter-in-the-application button */
-.enter-btn {
+.enter-btn, .close-btn {
     font-size: 1.2rem;
     font-family: 'Roboto Mono', monospace;
     border: 0;
     border-radius: 5px;
     padding: 10px 15px;
+    margin-top: 40px;
     margin-bottom: 150px;
     cursor: pointer;
 }
 
+.close-btn {
+    margin: 0;
+}
+
 /* Underline effect when hovering on top of the Enter button */
-.enter-btn:hover {
+.enter-btn:hover, .close-btn:hover {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); 
     transform: translateY(-1px);
     transition: all 0.2s ease-in-out;
 }
 
 /* Scaling effect when clicking the Enter button */
-.enter-btn:active {
+.enter-btn:active, .close-btn:active {
     transform: scale(0.9);
 }
 
 /* Light mode colors for Enter button */
-.light-mode .enter-btn {
+.light-mode .enter-btn, .light-mode .close-btn {
     background-color: rgb(252, 229, 26);
 }
 
 /* Dark mode colors for Enter button */
-.dark-mode .enter-btn {
+.dark-mode .enter-btn, .dark-mode .close-btn {
     background-color: #d7bd2b;
 }
 

@@ -11,6 +11,17 @@ const enterButton = document.querySelector(".enter-btn");
 // Theme Tooltip
 const themetoolTip = document.querySelector(".theme-tooltip");
 
+// Login Failed button
+const loggedOutbtn = document.querySelector(".close-btn");
+
+
+/* ========== Event Listener for button that closes the "Login Failed" Popup ========== */
+if (loggedOutbtn) {
+    loggedOutbtn.addEventListener("click", function() {
+        const popUp = this.parentElement;
+        popUp.style.display = "none";
+    });
+}
 
 
 /* ========== Event Listener when Page is Loaded ========== */

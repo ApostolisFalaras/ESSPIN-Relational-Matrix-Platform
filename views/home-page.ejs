@@ -55,8 +55,15 @@
 
                
                 <div class="main-content-frame">
-                    <!--<img src="/images/ESSPIN.svg" alt="ESSPIN Logo">-->
+                    
+                    <% if (locals.loggedOut && loggedOut) { %>
+                        <div class="logged-out-div">
+                            <h4>Logout Successful</h4>
+                            <p>You’ve logged out of your profile. If you want to continue exploring, log back in to your account.</p>
 
+                            <button class="close-btn">Close</button>
+                        </div>
+                    <% } %>
 
                     <h1>ESSPIN - Relational Matrix Platform</h1>
                     <p>
@@ -65,9 +72,11 @@
                     </p>
                     
                     <p class="signup-prompt">
-                        Not signed up yet? <a href="/signup" class="signup-link">Create an Account</a>
-                    </p>
-                    
+                        Not signed up yet? <a href="/signup" class="signup-link">Create an Account</a> <br>
+                        If you have a profile account,<br>
+                        proceed to the login page.
+                    </p>           
+
                     <!-- Login button redirecting users to the login page -->
                     <form action="/" method="POST">
 

@@ -13,10 +13,12 @@ const loginFailedbtn = document.querySelector(".close-btn");
 
 
 /* ========== Event Listener for button that closes the "Login Failed" Popup ========== */
-loginFailedbtn.addEventListener("click", function() {
-    const popUp = this.parentElement;
-    popUp.style.display = "none";
-});
+if (loginFailedbtn) {
+    loginFailedbtn.addEventListener("click", function() {
+        const popUp = this.parentElement;
+        popUp.style.display = "none";
+    });
+}
 
 /* ========== Event Listener when Page is Loaded ========== */
 

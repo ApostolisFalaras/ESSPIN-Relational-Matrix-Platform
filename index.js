@@ -112,11 +112,13 @@ app.get("/", (req, res) => {
     
     if (!req.session.user) {
         res.render("home-page.ejs", {
+            loggedOut: false,
             isMainAppFlow: true
         });
     }
     else {
         res.render("home-page.ejs", {
+            loggedOut: false,
             isMainAppFlow: true
         })
     }
@@ -133,7 +135,8 @@ app.post("/", (req, res) => {
 // GET Signup Page: Renders the User Registration Page
 app.get("/signup", (req, res) => {
     res.render("signup.ejs", {
-        isMainAppFlow: false
+        isMainAppFlow: false,
+        loginFailed: false,
     });
 });
 
@@ -154,8 +157,13 @@ app.get("/login", (req, res) => {
 
 // Utility function that checks if a user exists in the database, 
 // by verifying their (unique) email address
-function userExists(inputEmail, storedEmails) {
-    return storedEmails.some((row) => row.email === inputEmail);
+function userExists(inputUser, storedUsers) {
+    return storedUsers.some((row) =>
+        row.first_name === inputUser.firstName &&
+        row.last_name === inputUser.lastName &&
+        row.affiliation === inputUser.affiliation &&
+        row.email === inputUser.email
+    );
 }
 
 // POST Signup Page: A new User has been created in the database, 
@@ -166,14 +174,14 @@ app.post("/signup", async (req, res) => {
         res.redirect("/");
     }
     else {
-            // Storing the user's personal info in their current session 
+        // Storing the user's personal info in their current session 
         const { firstName, lastName, affiliation, email} = req.body;
 
         try {
             // Retrieving the set of emails in the users table
-            const {rows: emails} = await pool.query("SELECT email FROM users;");
+            const {rows: users} = await pool.query("SELECT * FROM users;");
             
-            if (!userExists(email, emails)) {
+            if (!userExists({ firstName, lastName, affiliation, email}, users)) {
                 try {
 
                     // Determining the new user's id, based on the current amount of stored users
@@ -205,12 +213,16 @@ app.post("/signup", async (req, res) => {
                         }
                     });
 
-                    console.log(`User ${req.session.user.userId} has been added to the database.`);
+                    console.log(`User (${req.session.user.userId},${req.session.user.firstName},${req.session.user.lastName},${req.session.user.affiliation},${req.session.user.emal}) has been added to the database.`);
 
                 } catch (err) {
                     // If the user already exists in the "users" table,
                     // we retrieve its Id and store it in the session.
                     const { rows } = await pool.query("SELECT id FROM users WHERE email = $1;", [email]);
+
+                    if (!req.session.user) {
+                        req.session.user = {};
+                    }
 
                     req.session.user.userId = rows[0].id;
                     req.session.save((err) => {
@@ -248,9 +260,9 @@ app.post("/login", async (req, res) => {
         
         try {
             // Retrieving the set of emails in the users table
-            const {rows: emails} = await pool.query("SELECT email FROM users;");
+            const {rows: users} = await pool.query("SELECT * FROM users;");
 
-            if (userExists(email, emails)) {
+            if (userExists({ firstName, lastName, affiliation, email}, users)) {
                 try {
 
                     // If the user already exists in the "users" table,
@@ -276,7 +288,7 @@ app.post("/login", async (req, res) => {
                         }
                     });
 
-                    console.log(`User ${req.session.user.userId} already exists.`);
+                    console.log(`User (${req.session.user.userId},${req.session.user.firstName},${req.session.user.lastName},${req.session.user.affiliation},${req.session.user.emal}) already exists.`);
 
                 } catch (err) {
                     console.error(err);
@@ -311,7 +323,10 @@ app.post("/logout", (req, res) => {
         }
 
         res.clearCookie('connect.sid');
-        res.redirect("/");
+        res.render("home-page.ejs", {
+            loggedOut: true,
+            isMainAppFlow: true
+        });
     });
 });
 
