@@ -117,6 +117,7 @@ app.get("/", (req, res) => {
         });
     }
     else {
+        req.session.user.lastMainPage = req.path;
         res.render("home-page.ejs", {
             loggedOut: false,
             isMainAppFlow: true
