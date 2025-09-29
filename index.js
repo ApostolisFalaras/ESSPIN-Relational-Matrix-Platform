@@ -100,7 +100,6 @@ app.get("/healthz", (_req, res) => res.status(200).send("ok"));
 (async () => {
   try {
     const { rows } = await pool.query("select 1 as ok");
-    console.log("DB ping:", rows[0]);
   } catch (err) {
     console.error("DB connection failed at startup:", err);
   }
@@ -111,17 +110,21 @@ app.get("/healthz", (_req, res) => res.status(200).send("ok"));
 app.get("/", (req, res) => {
     
     if (!req.session.user) {
+        console.log("EVENT: page_view | page='Intro Page' | session=none");
+
         res.render("home-page.ejs", {
             loggedOut: false,
             isMainAppFlow: true
         });
     }
     else {
+        console.log("EVENT: page_view | page='Intro Page' | session=active");
+
         req.session.user.lastMainPage = req.path;
         res.render("home-page.ejs", {
             loggedOut: false,
             isMainAppFlow: true
-        })
+        });
     }
     
 });
@@ -135,6 +138,8 @@ app.post("/", (req, res) => {
 
 // GET Signup Page: Renders the User Registration Page
 app.get("/signup", (req, res) => {
+    console.log("EVENT: page_view | page='Sign-up' | session=none");
+
     res.render("signup.ejs", {
         isMainAppFlow: false,
         loginFailed: false,
@@ -146,11 +151,16 @@ app.get("/signup", (req, res) => {
 app.get("/login", (req, res) => {
 
     if (!req.session.user) {
+        console.log("EVENT: page_view | page='Login' | session=none");
+
         res.render("login.ejs", {
             isMainAppFlow: true
         });
+
     }
     else {
+        console.log("EVENT: already_logged_in | redirect='Select Level of Analysis'");
+
         res.redirect("/login/select-level");
     }
 });
@@ -172,6 +182,8 @@ function userExists(inputUser, storedUsers) {
 app.post("/signup", async (req, res) => {
 
     if (req.body.action == "back") {
+        console.log("EVENT: back_navigation | from='Sign-up' | redirect='Intro Page'");
+
         res.redirect("/");
     }
     else {
@@ -214,7 +226,7 @@ app.post("/signup", async (req, res) => {
                         }
                     });
 
-                    console.log(`User (${req.session.user.userId},${req.session.user.firstName},${req.session.user.lastName},${req.session.user.affiliation},${req.session.user.emal}) has been added to the database.`);
+                    console.log("SIGNUP: status=created | redirect='Select Level of Analysis'");
 
                 } catch (err) {
                     // If the user already exists in the "users" table,
@@ -232,7 +244,7 @@ app.post("/signup", async (req, res) => {
                         }
                     });
 
-                    console.log(`User ${req.session.user.userId} already exists.`);
+                    console.log("SIGNUP: status=already_exists | redirect='Select Level of Analysis'");
 
                 }
             }
@@ -240,7 +252,6 @@ app.post("/signup", async (req, res) => {
             res.redirect("/login/select-level");
             
         } catch (err) {
-            console.log("Here");
             console.error(err);
         }
     }
@@ -252,11 +263,13 @@ app.post("/signup", async (req, res) => {
 app.post("/login", async (req, res) => {
 
     if (req.body.action == "back") {
+        console.log("EVENT: back_navigation | from='Login' | redirect='Intro Page'");
+
         res.redirect("/");
 
     }
     else {
-            // Storing the user's personal info in their current session 
+        // Storing the user's personal info in their current session 
         const { firstName, lastName, affiliation, email} = req.body;
         
         try {
@@ -289,7 +302,7 @@ app.post("/login", async (req, res) => {
                         }
                     });
 
-                    console.log(`User (${req.session.user.userId},${req.session.user.firstName},${req.session.user.lastName},${req.session.user.affiliation},${req.session.user.emal}) already exists.`);
+                    console.log("LOGIN: status=verified | redirect='Select Level of Analysis'");
 
                 } catch (err) {
                     console.error(err);
@@ -299,7 +312,8 @@ app.post("/login", async (req, res) => {
                 res.redirect("/login/select-level");
             }
             else {
-                console.log("User doesn't exist");
+                console.log("LOGIN: status=not_found | redirect='Sign-up'");
+
                 res.render(`signup.ejs`, {
                     loginFailed: true,
                     isMainAppFlow: false,
@@ -324,6 +338,9 @@ app.post("/logout", (req, res) => {
         }
 
         res.clearCookie('connect.sid');
+
+        console.log("LOGOUT: status=success | redirect='Intro Page'");
+
         res.render("home-page.ejs", {
             loggedOut: true,
             isMainAppFlow: true
@@ -337,7 +354,7 @@ app.get("/login/select-level", (req, res) => {
 
     // Checking if the user is logged in
     if (!req.session.user) {
-        console.log("User not logged in. Back to the login page.");
+        console.log("EVENT: unauthenticated_access | attempted='Select Level of Analysis' | redirect='Login'");
         res.redirect("/login");
     }
     else {
@@ -350,6 +367,8 @@ app.get("/login/select-level", (req, res) => {
             if (err) {
                 console.error(err);
             }
+
+            console.log("EVENT: page_view | page='Select Level of Analysis' | session=active");
 
             res.render("select-level.ejs", {
                 levelOfAnalysis: req.session.user.levelOfAnalysis || "",
@@ -366,7 +385,7 @@ app.post("/login/select-level", (req, res) => {
 
     // Checking if the user is logged in.
     if (!req.session.user) {
-        console.log("User not logged in. Back to the login page.");
+        console.log("EVENT: unauthenticated_access | attempted='Select Level of Analysis' | redirect='Login'");
         res.redirect("/login");
     }
     else {
@@ -389,9 +408,11 @@ app.post("/login/select-level", (req, res) => {
                 }
             });
 
+            console.log("EVENT: cancel_search | from='Select Level of Analysis' | redirect='Intro Page'");
             res.redirect("/");
         }
         else if (req.body.action === "back") {
+            console.log("EVENT: back_navigation | from='Select Level of Analysis' | redirect='Intro Page'");
             res.redirect("/");
         }
         else {
@@ -405,7 +426,7 @@ app.post("/login/select-level", (req, res) => {
                     console.error(err);
                 }
 
-                console.log(`User ${req.session.user.userId} selected ` + req.session.user.levelOfAnalysis);
+                console.log(`SELECTION: level_of_analysis='${req.session.user.levelOfAnalysis}' | redirect='Select Dependent Variable'`);
 
                 // Moving on to the next page.
                 res.redirect("/login/select-level/select-dependent-variable");
@@ -421,7 +442,7 @@ app.get("/login/select-level/select-dependent-variable", (req, res) => {
 
     // Checking if the user is logged in.
     if (!req.session.user) {
-        console.log("User not logged in. Back to the login page.");
+        console.log("EVENT: unauthenticated_access | attempted='Select Dependent Variable' | redirect='Login'");
         res.redirect("/login");
     }
     else {
@@ -436,6 +457,8 @@ app.get("/login/select-level/select-dependent-variable", (req, res) => {
             if (err) {
                 console.error(err);
             }
+
+            console.log("EVENT: page_view | page='Select Dependent Variable' | session=active");
 
             res.render("select-dependent.ejs", {
                 dependentVariable: Array.isArray(req.session.user.dependentVariable) ? req.session.user.dependentVariable.join(" - ") : req.session.user.dependentVariable,
@@ -454,7 +477,7 @@ app.post("/login/select-level/select-dependent-variable", (req, res) => {
 
     // Checking if the user is logged in.
     if (!req.session.user) {
-        console.log("User not logged in. Back to the login page.");
+        console.log("EVENT: unauthenticated_access | attempted='Select Dependent Variable' | redirect='Login'");
         res.redirect("/login");
     }
     else {
@@ -477,9 +500,13 @@ app.post("/login/select-level/select-dependent-variable", (req, res) => {
                 }
             });
 
+            console.log("EVENT: cancel_search | from='Select Dependent Variable' | redirect='Intro Page'");            
+
             res.redirect("/");
         }
         else if (req.body.action === "back") {
+            console.log("EVENT: back_navigation | from='Select Dependent Variable' | redirect='Select Level of Analysis'");
+
             res.redirect("/login/select-level");
         }
         else {
@@ -504,7 +531,7 @@ app.post("/login/select-level/select-dependent-variable", (req, res) => {
                     console.error(err);
                 }
 
-                console.log(`User ${req.session.user.userId} selected ` + req.session.user.dependentVariable);
+                console.log(`SELECTION: dependent_variable='${req.session.user.dependentVariable}'`);
             
                 // Moving on to the next page.
                 res.redirect("/login/select-level/select-dependent-variable/select-independent-variable");
@@ -519,7 +546,8 @@ app.get("/login/select-level/select-dependent-variable/select-independent-variab
 
     // Checking if the user is logged in.
     if (!req.session.user) {
-        console.log("User not logged in. Back to the login page.");
+        console.log(`EVENT: unauthenticated_access | attempted='Select Independent Variable' | redirect='Login'`);
+
         res.redirect("/login");
     }
     else {
@@ -534,6 +562,8 @@ app.get("/login/select-level/select-dependent-variable/select-independent-variab
             if (err) {
                 console.error(err);
             }
+
+            console.log("EVENT: page_view | page='Select Independent Variable' | session=active");
 
             res.render("select-independent.ejs", {
                 independentVariable: Array.isArray(req.session.user.independentVariable) ? req.session.user.independentVariable.join(" - ") : req.session.user.independentVariable,
@@ -551,7 +581,8 @@ app.get("/login/select-level/select-dependent-variable/select-independent-variab
 app.post("/login/select-level/select-dependent-variable/select-independent-variable", (req, res) => {
 
     if (!req.session.user) {
-        console.log("User not logged in. Back to the login page.");
+        console.log(`EVENT: unauthenticated_access | attempted='Select Independent Variable' | redirect='Login'`);
+
         res.redirect("/login");
     }
     else {
@@ -573,12 +604,15 @@ app.post("/login/select-level/select-dependent-variable/select-independent-varia
                     console.error(err);
                 }
 
+                console.log("EVENT: cancel_search | from='Select Independent Variable' | redirect='Intro Page'");
                 res.redirect("/");
             });
 
            
         }
         else if (req.body.action === "back") {
+            console.log("EVENT: back_navigation | from='Select Independent Variable' | redirect='Select Dependent Variable'");
+            
             res.redirect("/login/select-level/select-dependent-variable");
         }
         else {
@@ -605,9 +639,10 @@ app.post("/login/select-level/select-dependent-variable/select-independent-varia
 
                 // Finally, we update the history since the user performed a Query to the Database
                 // The function is provided towards the end of the server code.
-                console.log(`User ${req.session.user.userId} selected ` + req.session.user.independentVariable);
+                console.log(`SELECTION: independent_variable='${req.session.user.independentVariable}'`);
                 
                 updateSearchHistory(req.session.user);
+                console.log(`HISTORY: update | level='${req.session.user.levelOfAnalysis}' | dependent='${req.session.user.dependentVariable}' | independent='${req.session.user.independentVariable}'`);
 
                 // Moving on to the next page.
                 res.redirect("/login/select-level/select-dependent-variable/select-independent-variable/overview-results");
@@ -1029,7 +1064,6 @@ function estimateOverallImpact(userSession) {
         confidence = "Low";
     }  
     
-    console.log("Overall Impact: ", impact, percentage, confidence);
     
     return [impact, percentage, confidence];
 }
@@ -1040,7 +1074,7 @@ app.get("/login/select-level/select-dependent-variable/select-independent-variab
 
     // Checking if the user is logged in.
     if (!req.session.user) {
-        console.log("User not logged in. Back to the login page.");
+        console.log(`EVENT: unauthenticated_access | attempted='Overview Results' | redirect='Login'`);
         res.redirect("/login");
     }
     else {
@@ -1067,46 +1101,60 @@ app.get("/login/select-level/select-dependent-variable/select-independent-variab
         // 1) Query to the Estimated Inputs Table, storing the number of Estimated findings,
         // and their effects in an array 
         const estimatedResults = await queryInputSource("estimated", "effect_direction, type_of_condition_effect", req.session.user);
+        console.log(`QUERY: source='Estimated' | results=${estimatedResults.length}`);
 
         req.session.user.totalEstimatedFindings = calculateFindings("Estimated", estimatedResults, req.session.user);
+        console.log(`CLASSIFY: source='Estimated' | total=${req.session.user.totalEstimatedFindings}`);
 
         req.session.user.estimatedImpact = calculateImpact("Estimated", req.session.user);
+        console.log(`IMPACT: source='Estimated' | impact=${req.session.user.estimatedImpact}`);
 
         // 2) Query to the Literature Inputs Table, storing the number of Literature findings,
         // and their effects in an array
         const literatureResults = await queryInputSource("literature", "effect_direction, type_of_condition_effect", req.session.user);
+        console.log(`QUERY: source='Literature' | results=${literatureResults.length}`);
 
         req.session.user.totalLiteratureFindings = calculateFindings("Literature", literatureResults, req.session.user);
-        
+        console.log(`CLASSIFY: source='Literature' | total=${req.session.user.totalLiteratureFindings}`);
+
         req.session.user.literatureImpact = calculateImpact("Literature", req.session.user);
+        console.log(`IMPACT: source='Literature' | impact=${req.session.user.literatureImpact}`);
 
         // 3) Query to the Perceived Inputs Table, storing the number of Perceived findings,
         // and their effects in an array
         const perceivedResults = await queryInputSource("perceived", "effect_direction, type_of_condition_effect", req.session.user);
+        console.log(`QUERY: source='Perceived' | results=${perceivedResults.length}`);
 
         req.session.user.totalPerceivedFindings = calculateFindings("Perceived", perceivedResults, req.session.user);
+        console.log(`CLASSIFY: source='Perceived' | total=${req.session.user.totalPerceivedFindings}`);
 
         req.session.user.perceivedImpact = calculateImpact("Perceived", req.session.user);
+        console.log(`IMPACT: source='Perceived' | impact=${req.session.user.perceivedImpact}`);
 
         // 4) Query to the Correlations Table for all possible combinations (if required) of main variables,
         // and secondary variables describing the main variables, storing the number of correlation findings.
         req.session.user.totalCorrelationFindings = 0;
 
         let correlationResults = await queryInputSource("correlations", "*", req.session.user)
-        
+        console.log(`QUERY: source='Correlations' | results=${correlationResults.length}`);
+
         req.session.user.totalCorrelationFindings = calculateFindings("Correlations", correlationResults, req.session.user);
-        
+        console.log(`CLASSIFY: source='Correlations' | total='${req.session.user.totalCorrelationFindings}'`);
+
         req.session.user.correlationsImpact = calculateImpact("Correlations", req.session.user);
+        console.log(`IMPACT: source='Correlations' | impact=${req.session.user.correlationsImpact}`);
 
         // 5) Query to the Granger Causalities Table for all possible combinations (if required) of main variables,
         // and secondary variables describing the former, storing the number of causality findings.
         
         let causalityResults = await queryInputSource("granger_causalities", "*", req.session.user);
-                
-        req.session.user.totalGrangerFindings = calculateFindings("Granger Causalities", causalityResults, req.session.user);
-        
-        req.session.user.grangerImpact = calculateImpact("Granger Causalities", req.session.user);
+        console.log(`QUERY: source='Granger Causalities' | results=${causalityResults.length}`);
 
+        req.session.user.totalGrangerFindings = calculateFindings("Granger Causalities", causalityResults, req.session.user);
+        console.log(`CLASSIFY: source='Granger Causalities' | total=${req.session.user.totalGrangerFindings}`);
+
+        req.session.user.grangerImpact = calculateImpact("Granger Causalities", req.session.user);
+        console.log(`IMPACT: source='Granger Causalities' | impact=${req.session.user.grangerImpact}`);
         
         // 6) Query to the AI Research Inputes if the selected level is either National or Regional or All Levels
         // and the dependent variable is unequal income distribution
@@ -1119,16 +1167,21 @@ app.get("/login/select-level/select-dependent-variable/select-independent-variab
              req.session.user.dependentVariable[0] === "Unequal Income distribution (individuals or social groups)") {
 
                 let chatgptResults = await queryInputSource("ai_chatgpt_research", "*", req.session.user);
+                console.log(`QUERY: source='AI ChatGPT Research' | results=${chatgptResults.length}`);
 
                 req.session.user.totalAIFindings = calculateFindings("AI (ChatGPT) Research", chatgptResults, req.session.user);
+                console.log(`CLASSIFY: source='AI ChatGPT Research' | total=${req.session.user.totalAIFindings}`);
 
                 req.session.user.aiImpact = calculateImpact("AI (ChatGPT) Research", req.session.user);
+                console.log(`IMPACT: source='AI ChatGPT Research' | impact=${req.session.user.aiImpact}`);
         }
         
 
         // Calling the method that calculates the percentage of the most dominant impact category
         // overall, and the corresponding confidence level
         let overallImpact = estimateOverallImpact(req.session.user);
+
+        console.log(`OVERALL_IMPACT: impact=${overallImpact[0]} | percentage=${overallImpact[1]} | confidence=${overallImpact[2]}`);
 
         // Also, save the current page endpoint, so that users can come back (by clicking the Back buttons),
         // if they are in the bookmarks or search history page
@@ -1140,19 +1193,7 @@ app.get("/login/select-level/select-dependent-variable/select-independent-variab
                 console.error(err);
             }
 
-            console.log("Estimated:", req.session.user.totalEstimatedFindings, "( Positive -", req.session.user.positiveFindings[0], "Negative -", req.session.user.negativeFindings[0], "Inconclusive -", req.session.user.inconclusiveFindings[0], "no Effect -", req.session.user.noEffectFindings[0], ")");
-            console.log("Literature:", req.session.user.totalLiteratureFindings, "( Positive -", req.session.user.positiveFindings[1], "Negative -", req.session.user.negativeFindings[1], "Inconclusive -", req.session.user.inconclusiveFindings[1], "no Effect -", req.session.user.noEffectFindings[1], ")");
-            console.log("Perceived:", req.session.user.totalPerceivedFindings, "( Positive -", req.session.user.positiveFindings[2], "Negative -", req.session.user.negativeFindings[2], "Inconclusive -", req.session.user.inconclusiveFindings[2], "no Effect -", req.session.user.noEffectFindings[2], ")");
-            console.log("Correlations:", req.session.user.totalCorrelationFindings, "( Positive -", req.session.user.positiveFindings[3], "Negative -", req.session.user.negativeFindings[3], "Inconclusive -", req.session.user.inconclusiveFindings[3], "no Effect -", req.session.user.noEffectFindings[3], ")");
-            console.log("Granger Causalities:", req.session.user.totalGrangerFindings, "( Positive -", req.session.user.positiveFindings[4], "Negative -", req.session.user.negativeFindings[4], "Inconclusive -", req.session.user.inconclusiveFindings[4], "no Effect -", req.session.user.noEffectFindings[4], ")\n");
-            console.log("AI Research:", req.session.user.totalAIFindings, "( Positive -", req.session.user.positiveFindings[5], "Negative -", req.session.user.negativeFindings[5], "Inconclusive - ", req.session.user.inconclusiveFindings[5], "no Effect - ", req.session.user.noEffectFindings[5], ")");
-            
-            console.log("Estimated Impact: ", req.session.user.estimatedImpact);
-            console.log("Literature Impact: ", req.session.user.literatureImpact);
-            console.log("Perceived Impact: ", req.session.user.perceivedImpact);
-            console.log("Correlations Impact: ", req.session.user.correlationsImpact);
-            console.log("Granger Causalities Impact: ", req.session.user.grangerImpact);
-            console.log("AI Research Impact: ", req.session.user.aiImpact);
+            console.log("EVENT: page_view | page='Overview Results' | session=active");
 
             // Rendering the Summary Results Page 
             res.render("overview-results.ejs", {
@@ -1194,11 +1235,14 @@ app.get("/login/select-level/select-dependent-variable/select-independent-variab
 app.post("/login/select-level/select-dependent-variable/select-independent-variable/overview-results", async (req,res) => {
 
     if (!req.session.user) {
+        console.log("EVENT: unauthenticated_access | from='Overview Results' | redirect='Login'");
         res.redirect("/login");
     }
     else {
 
         if (req.body.action == "back") {
+            console.log("EVENT: back_navigation | from='Overview Results' | redirect='Independent Variable'");
+
             res.redirect("/login/select-level/select-dependent-variable/select-independent-variable");
 
         }
@@ -1210,6 +1254,8 @@ app.post("/login/select-level/select-dependent-variable/select-independent-varia
                 if (err) {
                     console.error(err);
                 }
+
+                console.log(`SELECTION: results_source=${req.session.user.sourceOfResults} | redirect='Source Overview Results'`);
 
                 res.redirect("/login/select-level/select-dependent-variable/select-independent-variable/overview-results/source-overview-results");
             });
@@ -1417,7 +1463,7 @@ app.get("/login/select-level/select-dependent-variable/select-independent-variab
 
     // Checking if the user is logged in.
     if (!req.session.user) {
-        console.log("User not logged in. Back to the login page.");
+        console.log(`EVENT: unauthenticated_access | attempted='Source Overview Results' | redirect='Login'`);
         res.redirect("/login");
     }
     else {
@@ -1440,7 +1486,6 @@ app.get("/login/select-level/select-dependent-variable/select-independent-variab
         // Temporary helper results list
         let results, table;
 
-        console.log(req.session.user.sourceOfResults);
         switch (req.session.user.sourceOfResults) {
 
             // 1) Query to the Estimated Inputs
@@ -1448,12 +1493,12 @@ app.get("/login/select-level/select-dependent-variable/select-independent-variab
                 table = "Estimated Inputs";
                 
                 let estimatedResults = await queryInputSource("estimated", "*", req.session.user);
+                console.log(`QUERY: source='Estimated' | results=${estimatedResults.length}`);
 
                 req.session.user.queryResults = estimatedResults;
                 
                 aggregateEffectDirections("Estimated", req.session.user.queryResults, req.session.user);
-                
-                console.log(req.session.user.queryResults);
+                console.log(`AGGREGATE: source='Estimated'`);
                 break;
 
             // 2) Query to the Literature Inputs
@@ -1461,6 +1506,7 @@ app.get("/login/select-level/select-dependent-variable/select-independent-variab
                 table = "Literature Inputs";
             
                 let literatureResults = await queryInputSource("literature", "*", req.session.user);
+                console.log(`QUERY: source='Literature' | results=${literatureResults.length}`);
 
                 // Checking for findings that span multiple year periods, 
                 // Querying the appropriate table to get those year spans, and integrating them with the finding
@@ -1480,8 +1526,7 @@ app.get("/login/select-level/select-dependent-variable/select-independent-variab
                 req.session.user.queryResults = literatureResults;
 
                 aggregateEffectDirections("Literature", req.session.user.queryResults, req.session.user);
-                
-                console.log(req.session.user.queryResults);
+                console.log(`AGGREGATE: source='Literature'`);
                 break;
 
             // 3) Query to the Perceived Inputs
@@ -1489,12 +1534,12 @@ app.get("/login/select-level/select-dependent-variable/select-independent-variab
                 table = "Perceived Inputs";
 
                 let perceivedResults = await queryInputSource("perceived", "*", req.session.user);
+                console.log(`QUERY: source='Perceived' | results=${perceivedResults.length}`);
 
                 req.session.user.queryResults = perceivedResults;
                 
                 aggregateEffectDirections("Perceived", req.session.user.queryResults, req.session.user);
-                
-                console.log(req.session.user.queryResults);
+                console.log(`AGGREGATE: source='Perceived'`);
                 break;
             
             // Query to the Correlations Table
@@ -1505,23 +1550,22 @@ app.get("/login/select-level/select-dependent-variable/select-independent-variab
                 let isOpposite;
 
                 let correlationResults = await queryInputSource("correlations", "*", req.session.user);
+                console.log(`QUERY: source='Correlations' | results=${correlationResults.length}`);
 
                 aggregateEffectDirections("Correlations", correlationResults, req.session.user);
-
+                console.log(`AGGREGATE: source='Correlations'`);
+                
                 correlationResults.forEach((res) => {
 
-                    console.log("In the loop:\n", res[0]);
                     isOpposite = false;
 
                     let depIndex = req.session.user.dependentVariable.indexOf(res[0].dependent_variable);
                     let indIndex = req.session.user.independentVariable.indexOf(res[0].independent_variable);
 
                     if (depIndex === -1 && indIndex === -1) {
-                        console.log("Inverse");
                         depIndex = req.session.user.independentVariable.indexOf(res[0].dependent_variable);
                         indIndex = req.session.user.dependentVariable.indexOf(res[0].independent_variable);
                         isOpposite = true;
-                        console.log("Inverse", depIndex, indIndex);
                     }
 
                     if (depIndex > 0 && indIndex > 0) {
@@ -1530,7 +1574,6 @@ app.get("/login/select-level/select-dependent-variable/select-independent-variab
                             res[0].independent_variable = req.session.user.independentVariable[0] + " (approximated by " + res[0].independent_variable + ")";
                         }
                         else if (isOpposite) {
-                            console.log("Inverse 2");
                             let temp = res[0].dependent_variable;
                             res[0].dependent_variable = req.session.user.dependentVariable[0] + " (approximated by " + res[0].independent_variable + ")";
                             res[0].independent_variable = req.session.user.independentVariable[0] + " (approximated by " + temp + ")";
@@ -1568,7 +1611,6 @@ app.get("/login/select-level/select-dependent-variable/select-independent-variab
 
                 req.session.user.queryResults = results;
 
-                console.log(req.session.user.queryResults);
                 break;
             
             // 5) Query to the Granger Causalities Table
@@ -1578,8 +1620,10 @@ app.get("/login/select-level/select-dependent-variable/select-independent-variab
                 results = [];
 
                 let causalityResults = await queryInputSource("granger_causalities", "*", req.session.user);
+                console.log(`QUERY: source='Granger Causalities' | results=${causalityResults.length}`);
 
                 aggregateEffectDirections("Granger Causalities", causalityResults, req.session.user);
+                console.log(`AGGREGATE: source='Granger Causalities'`);
 
                 causalityResults.forEach((res) => {
 
@@ -1599,18 +1643,19 @@ app.get("/login/select-level/select-dependent-variable/select-independent-variab
 
                 req.session.user.queryResults = results;
 
-                console.log(req.session.user.queryResults);
                 break;
 
             case "AI (ChatGPT) Research":
                 table = "AI (ChatGPT) Research";
 
                 let chatgptResults = await queryInputSource("ai_chatgpt_research", "*", req.session.user);
+                console.log(`QUERY: source='AI ChatGPT Research' | results=${chatgptResults.length}`);
 
                 req.session.user.queryResults = chatgptResults;
                 
                 aggregateEffectDirections("AI (ChatGPT) Research", req.session.user.queryResults, req.session.user);
-                
+                console.log(`AGGREGATE: source='AI ChatGPT Research'`);
+
                 chatgptResults.forEach((res) => {
                     res.references = [];
                     res.sources = [];
@@ -1628,7 +1673,6 @@ app.get("/login/select-level/select-dependent-variable/select-independent-variab
                     });
                 }
 
-                console.log(req.session.user.queryResults);
                 break;
         }
 
@@ -1640,6 +1684,8 @@ app.get("/login/select-level/select-dependent-variable/select-independent-variab
             if (err) {
                 console.error(err);
             }
+
+            console.log(`EVENT: page_view | page='Source Overview Results' | source=${req.session.user.sourceOfResults} | session=active`);
 
             // Rendering the results overview from a specific source
             res.render("source-overview-results.ejs", {
@@ -1658,12 +1704,14 @@ app.get("/login/select-level/select-dependent-variable/select-independent-variab
 app.post("/login/select-level/select-dependent-variable/select-independent-variable/overview-results/source-overview-results", (req,res) => {
 
     if (!req.session.user) {
-        console.log("User not logged in. Back to the login page.");
+        console.log(`EVENT: unauthenticated_access | attempted='Source Overview Results' | redirect='Login'`);
         res.redirect("/login");
     }
     else {
 
         if (req.body.action == "back") {
+            console.log("EVENT: back_navigation | from='Source Overview Results' | redirect='Overview Results'");
+
             res.redirect("/login/select-level/select-dependent-variable/select-independent-variable/overview-results");
 
         }
@@ -1713,15 +1761,12 @@ async function checkIfBookmarked(results, userId) {
 app.get("/login/select-level/select-dependent-variable/select-independent-variable/overview-results/source-overview-results/detailed-results", async (req,res) => {
 
     if (!req.session.user) {
-        console.log("User not logged in. Back to the login page");
+        console.log(`EVENT: unauthenticated_access | attempted='Detailed Results' | redirect='Login'`);
         res.redirect("/login");
     }
     else {
 
         await checkIfBookmarked(req.session.user.queryResults, req.session.user.userId);
-
-        console.log("Results:");
-        console.log(req.session.user.queryResults);
 
         // Also, save the current page endpoint, so that users can come back (by clicking the Back buttons),
         // if they are in the bookmarks or search history page
@@ -1731,6 +1776,8 @@ app.get("/login/select-level/select-dependent-variable/select-independent-variab
             if (err) {
                 console.error(err);
             }
+
+            console.log(`EVENT: page_view | page='Detailed Results' | source=${req.session.user.sourceOfResults} | session=active`);
 
             res.render("detailed-results.ejs", {
                 results: req.session.user.queryResults,
@@ -1746,11 +1793,13 @@ app.get("/login/select-level/select-dependent-variable/select-independent-variab
 app.post("/login/select-level/select-dependent-variable/select-independent-variable/overview-results/source-overview-results/detailed-results", (req,res) => {
 
     if (!req.session.user) {
-        console.log("User not logged in. Back to the login page.");
+        console.log(`EVENT: unauthenticated_access | attempted='Detailed Results' | redirect='Login'`);
         res.redirect("/login");
     }
     else {
         if (req.body.action === "back") {
+            console.log("EVENT: back_navigation | from='Detailed Results' | redirect='Source Overview Results'");
+
             // Redirecting users to the previous page
             res.redirect("/login/select-level/select-dependent-variable/select-independent-variable/overview-results/source-overview-results");
         }
@@ -1780,10 +1829,13 @@ app.post("/login/select-level/select-dependent-variable/select-independent-varia
                     console.error(err);
                 }
 
+                console.log("EVENT: end_search | from='Detailed Results' | redirect='Intro Page'");
                 res.redirect("/");
             });
         }
         else if (req.body.action === "new-search") {
+            console.log("EVENT: new_search | from='Detailed Results' | redirect='Select Level of Analysis'");
+
             // Redirecting users to the 1st selection page, that of the Level of Analysis
             res.redirect("/login/select-level");
         }
@@ -1793,8 +1845,13 @@ app.post("/login/select-level/select-dependent-variable/select-independent-varia
 // POST Bookmarks: Redirects the user to the Bookmarks page
 app.post("/bookmarked-result-cards", (req, res) => {
 
-    console.log("Last Main Page:", req.originalUrl);
-    res.redirect("/bookmarked-result-cards");
+    if (!req.session.user) {
+        console.log(`EVENT: unauthenticated_access | attempted=${req.path} | redirect='Login'`);
+        res.redirect("/login");
+    }
+    else {
+        res.redirect("/bookmarked-result-cards");
+    }
 });
 
 
@@ -1871,7 +1928,7 @@ function calculateResultCardColors(results, source) {
 app.get("/bookmarked-result-cards", async (req, res) => {
 
     if (!req.session.user) {
-        console.log("User not logged in. Back to the login page.");
+        console.log(`EVENT: unauthenticated_access | attempted='User Bookmarks' | redirect='Login'`);
         res.redirect("/login");
     }
     else {
@@ -1885,12 +1942,12 @@ app.get("/bookmarked-result-cards", async (req, res) => {
                 [req.session.user.userId]
             );
             bookmarks = rows;
+            console.log(`QUERY: source='User Bookmarks' | results=${rows.length}`);
 
         } catch (err) {
             console.error(err);
         }
 
-        console.log("Bookmarks:")
         bookmarks.forEach((bookmark) => {
             console.log(bookmark.source_table, ":", bookmark.source_id);
         });
@@ -1936,7 +1993,6 @@ app.get("/bookmarked-result-cards", async (req, res) => {
                     calculateResultCardColors(rows, "Literature Inputs");
                     rows[0].note = bookmark.note;
 
-                    console.log(rows[0]);
                     bookmarkResults.push(rows[0]);
                     break;
                 }
@@ -2014,13 +2070,15 @@ app.get("/bookmarked-result-cards", async (req, res) => {
 
                     if (!rows.length) break;
 
-                    calculateResultCardColors(rows, "Literature Inputs");
+                    calculateResultCardColors(rows, "AI (ChatGPT) Research");
                     rows[0].note = bookmark.note;
                     bookmarkResults.push(rows[0]);
 
             }
 
         }
+
+        console.log("EVENT: page_view | page='User bookmarks' | session=active");
 
         // Rendering the Bookmarks page, which is visually identical to the detailed Results page,
         // but displays only the bookmarked results card, from all data sources at once.
@@ -2036,7 +2094,7 @@ app.get("/bookmarked-result-cards", async (req, res) => {
 app.post("/bookmark-result-card", async (req, res) => {
 
     if (!req.session.user) {
-        console.log("User not logged in. Back to the login page");
+        console.log(`EVENT: unauthenticated_access | attempted=${req.path} | redirect='Login'`);
         res.redirect("/login");
     }
     else {
@@ -2044,14 +2102,14 @@ app.post("/bookmark-result-card", async (req, res) => {
         try {
             // Checking if the currently clicked bookmark exists in the bookmarks table in the database
             const {rows: currentBookmark} = await pool.query(
-                "SELECT * FROM  bookmarks WHERE user_id = ? AND source_table = $1 AND source_id = $2;",
+                "SELECT * FROM  bookmarks WHERE user_id = $1 AND source_table = $2 AND source_id = $3;",
                 [req.session.user.userId, req.body.resultCardTable, req.body.resultCardId]
             );
 
 
             if (currentBookmark.length > 0) {
                 // Bookmark already exists. It must be removed.
-                console.log("Deleting an existing Bookmark:\n (User Id:", req.session.user.userId, "Source Table:", req.body.resultCardTable, "Result Card Id:", req.body.resultCardId, ")");
+                console.log(`BOOKMARK: removed | table='${req.body.resultCardTable}' | card_id=${req.body.resultCardId}`);
 
                 try {
                     // Deleting an already existing Bookmark to the corresponding Database table
@@ -2067,7 +2125,7 @@ app.post("/bookmark-result-card", async (req, res) => {
             }
             else {
                 // Bookmark doesn't exist. It must be added.
-                console.log("Storing a new Bookmark:\n (User Id:", req.session.user.userId, "Source Table:", req.body.resultCardTable, "Result Card Id:", req.body.resultCardId, ")");
+                console.log(`BOOKMARK: added | table='${req.body.resultCardTable}' | card_id=${req.body.resultCardId}`);
 
                 try {
                     // Inserting a new Bookmark to the corresponding Database table
@@ -2089,57 +2147,90 @@ app.post("/bookmark-result-card", async (req, res) => {
 
 
 // POST Exit Bookmarks: Redirects the user back to the last page of the Main Application Flow
-app.post("/exit-boomarks", (req, res) => {
+app.post("/exit-bookmarks", (req, res) => {
 
-    console.log(req.session.user.lastMainPage);
-    res.redirect(req.session.user.lastMainPage);
+    if (!req.session.user) {
+        console.log(`EVENT: unauthenticated_access | attempted='Bookmarks' | redirect='Login'`);
+        res.redirect("/login");
+    }
+    else {
+        console.log(`EVENT: exit_bookmarks | redirect='${req.session.user.lastMainPage}'`);
+        res.redirect(req.session.user.lastMainPage);
+    }
 });
 
 
 // POST Search History: Redirects the user to the Search History page
 app.post("/search-history", (req, res) => {
-    res.redirect("/search-history");
+
+    if (!req.session.user) {
+        console.log(`EVENT: unauthenticated_access | attempted='Search History' | redirect='Login'`);
+        res.redirect("/login");
+    }
+    else {
+        res.redirect("/search-history");
+    }
 });
 
 
 // POST Save Note: Saves a user's note on a bookmark, so that when they load their saved bookmarks
 // the note remains available.
 app.post("/save-note", async (req, res) => {
-    const resultCardId = req.body.resultCardId;
-    const resultCardTable = req.body.resultsCardTable;
-    const noteText = req.body.noteText;
 
-    console.log(resultCardId, resultCardTable, noteText);
-    
-    try {
-        // Inserting a new Bookmark to the corresponding Database table
-        await pool.query(
-            "UPDATE bookmarks SET note = $1 WHERE user_id = $2 AND source_table = $3 AND source_id = $4;",
-            [noteText, req.session.user.userId, resultCardTable, resultCardId]
-        );
+    if (!req.session.user) {
+        console.log(`EVENT: unauthenticated_access | attempted=${req.path} | redirect='Login'`);
+        res.redirect("/login");
+    }
+    else {
 
-    } catch (err) {
-        console.error(err);
+        const resultCardId = req.body.resultCardId;
+        const resultCardTable = req.body.resultsCardTable;
+        const noteText = req.body.noteText;
+
+        console.log(resultCardId, resultCardTable, noteText);
+
+        try {
+            // Inserting a new Bookmark to the corresponding Database table
+            await pool.query(
+                "UPDATE bookmarks SET note = $1 WHERE user_id = $2 AND source_table = $3 AND source_id = $4;",
+                [noteText, req.session.user.userId, resultCardTable, resultCardId]
+            );
+
+            console.log(`EVENT: save_note | table='${resultCardTable}' | card_id=${resultCardId}`);
+
+        } catch (err) {
+            console.error(err);
+        }
     }
 });
 
 
 // POST Delete Note: Deletes a user's note on a bookmark
 app.post("/delete-note", async (req, res) => {
-    const resultCardId = req.body.resultCardId;
-    const resultCardTable = req.body.resultsCardTable;
 
-    console.log(resultCardId, resultCardTable);
+    if (!req.session.user) {
+        console.log(`EVENT: unauthenticated_access | attempted=${req.path} | redirect='Login'`);
+        res.redirect("/login");
+    }
+    else {
+    
+        const resultCardId = req.body.resultCardId;
+        const resultCardTable = req.body.resultsCardTable;
 
-    try {
-        // Inserting a new Bookmark to the corresponding Database table
-        await pool.query(
-            "UPDATE bookmarks SET note = '' WHERE user_id = $1 AND source_table = $2 AND source_id = $3;",
-            [req.session.user.userId, resultCardTable, resultCardId]
-        );
+        console.log(resultCardId, resultCardTable);
 
-    } catch (err) {
-        console.error(err);
+        try {
+            // Inserting a new Bookmark to the corresponding Database table
+            await pool.query(
+                "UPDATE bookmarks SET note = '' WHERE user_id = $1 AND source_table = $2 AND source_id = $3;",
+                [req.session.user.userId, resultCardTable, resultCardId]
+            );
+
+            console.log(`EVENT: delete_note | table='${resultCardTable}' | card_id=${resultCardId}`);
+
+        } catch (err) {
+            console.error(err);
+        }
     }
 });
 
@@ -2231,7 +2322,7 @@ async function updateSearchHistory(userSession) {
 app.get("/search-history", async (req, res) => {
 
     if (!req.session.user) {
-        console.log("User not logged in. Back to the login page.");
+        console.log(`EVENT: unauthenticated_access | attempted='Search History' | redirect='Login'`);
         res.redirect("/login");
     }
     else {
@@ -2240,19 +2331,18 @@ app.get("/search-history", async (req, res) => {
         const {rows: dependentHistory} = await pool.query(
             "SELECT * FROM dependent_count;"
         );
-        console.log(dependentHistory);
 
         // Query to the Independent Variables history count table
         const {rows: independentHistory} = await pool.query(
             "SELECT * FROM independent_count;"
         );
-        console.log(independentHistory);
 
         // Query to the Combined Variables history count table
         const {rows: queryHistory} = await pool.query(
             "SELECT * FROM query_count;"
         );
-        console.log(queryHistory);
+
+        console.log("EVENT: page_view | page='Search History' | session=active");
 
         res.render("search-history.ejs", {
             dependentHistory: dependentHistory,
@@ -2268,8 +2358,13 @@ app.get("/search-history", async (req, res) => {
 // POST Exit Bookmarks: Redirects the user back to the last page of the Main Application Flow
 app.post("/exit-search-history", (req, res) => {
 
-    console.log(req.session.user.lastMainPage);
-    res.redirect(req.session.user.lastMainPage);
+    if (!req.session.user) {
+        console.log(`EVENT: unauthenticated_access | attempted='Search History' | redirect='Login'`);
+        res.redirect("/login");
+    }
+    else {
+        res.redirect(req.session.user.lastMainPage);
+    }
 });
 
 
@@ -2302,6 +2397,12 @@ function getYears(resultsRow) {
 
 // Get Export PDF: Downloads the Results from the current source in a PDF file
 app.get("/export/pdf", (req, res) => {
+
+    if (!req.session.user) {
+        console.log(`EVENT: unauthenticated_access | attempted='Detailed Results' | redirect='Login'`);
+        res.redirect("/login");
+    }
+
     const rawResults = req.session?.user?.queryResults;
     if (!rawResults || !rawResults.length) {
         return res.status(400).send("No results to export.");
@@ -2388,11 +2489,19 @@ app.get("/export/pdf", (req, res) => {
     });
 
     doc.end();
+
+    console.log("EXPORT: PDF | status=success | results=" + rawResults.length);
 });
 
 
 // Get Export Excel: Downloads the Results from the current source in an Excel file
 app.get("/export/excel", async (req, res) => {
+
+    if (!req.session.user) {
+        console.log(`EVENT: unauthenticated_access | attempted='Detailed Results' | redirect='Login'`);
+        res.redirect("/login");
+    }
+
     const rawResults = req.session?.user?.queryResults;
     if (!rawResults || !rawResults.length) {
         return res.status(400).send("No results to export.");
@@ -2429,7 +2538,7 @@ app.get("/export/excel", async (req, res) => {
     worksheet.getCell('N2').border = {
         bottom: { style: 'thin', color: { argb: 'FF000000' } },
         right: { style: 'thin', color: { argb: 'FF000000' } }
-};
+    };
 
     // Headers (row 3)
     const headers = [
@@ -2486,7 +2595,7 @@ app.get("/export/excel", async (req, res) => {
         }
     }
 
-    // ✅ REPLACE the old "Add data rows" with this:
+    // REPLACE the old "Add data rows" with this:
     rawResults.forEach((row, index) => addResultRows(worksheet, row, index));
 
     // Column widths
@@ -2550,6 +2659,8 @@ app.get("/export/excel", async (req, res) => {
 
     await workbook.xlsx.write(res);
     res.end();
+
+    console.log("EXPORT: Excel | status=success | results=" + rawResults.length);
 });
 
 

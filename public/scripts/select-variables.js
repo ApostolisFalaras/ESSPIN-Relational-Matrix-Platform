@@ -542,6 +542,7 @@ window.addEventListener("pageshow", function () {
         bookmarkIcon.src = "/images/bookmark-simple-dark.svg";
         historyIcon.src = "/images/folder-star-dark.svg";
         logoutIcon.src = "/images/sign-out-dark.svg";
+        cookieIcon.src = "/images/cookie-fill-dark-mode.svg";
 
         if (selectedVariable.getAttribute("name") === "dependentVariable") {
             image.src = "/images/chart-line-up-dark-mode.svg";
@@ -557,6 +558,7 @@ window.addEventListener("pageshow", function () {
         bookmarkIcon.src = "/images/bookmark-simple.svg";
         historyIcon.src = "/images/folder-star.svg";
         logoutIcon.src = "/images/sign-out.svg";
+        cookieIcon.src = "/images/cookie-fill.svg";
 
         if (selectedVariable.getAttribute("name") === "dependentVariable") {
             image.src = "/images/chart-line-up.svg";
@@ -676,6 +678,7 @@ lightDarkButton.addEventListener("click", function () {
         bookmarkIcon.src = "/images/bookmark-simple.svg";
         historyIcon.src = "/images/folder-star.svg";
         logoutIcon.src = "/images/sign-out.svg";
+        cookieIcon.src = "/images/cookie-fill.svg";
 
 
         if (selectedVariable.getAttribute("name") === "dependentVariable") {
@@ -698,6 +701,7 @@ lightDarkButton.addEventListener("click", function () {
         bookmarkIcon.src = "/images/bookmark-simple-dark.svg";
         historyIcon.src = "/images/folder-star-dark.svg";
         logoutIcon.src = "/images/sign-out-dark.svg";
+        cookieIcon.src = "/images/cookie-fill-dark-mode.svg";
 
         
         if (selectedVariable.getAttribute("name") === "dependentVariable") {

@@ -55,6 +55,7 @@ window.addEventListener("pageshow", function () {
         historyIcon.src = "/images/folder-star-dark.svg";
         logoutIcon.src = "/images/sign-out-dark.svg";
         image.src = "/images/check-circle-dark-mode.svg";
+        cookieIcon.src = "/images/cookie-fill-dark-mode.svg";
     }
     else {
         toggleIcon.src = "/images/list.svg";
@@ -64,6 +65,7 @@ window.addEventListener("pageshow", function () {
         historyIcon.src = "/images/folder-star.svg";
         logoutIcon.src = "/images/sign-out.svg";
         image.src = "/images/check-circle.svg";
+        cookieIcon.src = "/images/cookie-fill.svg";
     }
 
     // Adding the active class to denote the current step in the application flow.
@@ -98,6 +100,7 @@ lightDarkButton.addEventListener("click", function () {
         historyIcon.src = "/images/folder-star.svg";
         logoutIcon.src = "/images/sign-out.svg";
         image.src = "/images/check-circle.svg";
+        cookieIcon.src = "/images/cookie-fill.svg";
 
         
         localStorage.setItem("theme", "light");
@@ -114,6 +117,7 @@ lightDarkButton.addEventListener("click", function () {
         historyIcon.src = "/images/folder-star-dark.svg";
         logoutIcon.src = "/images/sign-out-dark.svg";
         image.src = "/images/check-circle-dark-mode.svg";
+        cookieIcon.src = "/images/cookie-fill-dark-mode.svg";
 
         localStorage.setItem("theme", "dark");
     }

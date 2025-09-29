@@ -471,6 +471,90 @@ footer .social-media-logo {
     height: 25px;
 }
 
+
+/* ========= Cookie Declaration ========= */
+
+.cookie-declaration {
+    position: fixed;
+    top: 52%;
+    left: 27.5%;
+    z-index: 100;
+    width: 400px;
+    height: 300px;
+    font-family: 'Roboto Mono', monospace;
+    display: none;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    border-radius: 7px;
+}
+
+html:not(.disable-transitions) .cookie-declaration {
+    transition: all 0.3s ease;
+}
+
+.light-mode .cookie-declaration {
+    background-color: white;
+    border: 2px solid rgb(255,229,119);
+    box-shadow: 0px 0px 50px rgb(255,229,119);
+}
+
+.dark-mode .cookie-declaration {
+    background-color: #2E2E3A; 
+    color: #EAEAEA;
+    border: 2px solid #c7a600;
+    box-shadow: 0px 0px 50px #c7a600;
+}
+
+.cookie-button {
+    position: fixed;
+    top: 86%;
+    left: 21%;
+    z-index: 100;
+    width: 90px;
+    height: 85px;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Roboto Mono', monospace;
+    cursor: pointer;
+}
+
+html:not(.disable-transitions) .cookie-button {
+    transition: all 0.3s ease;
+}
+
+.light-mode .cookie-button {
+    background-color: white;
+    border: 2px solid rgb(255,229,119);
+}
+
+.dark-mode .cookie-button {
+    background-color: #2E2E3A; 
+    color: #EAEAEA;
+    border: 2px solid #c7a600;
+}
+
+.light-mode .cookie-button:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); 
+    transform: translateY(-1px);
+    transition: all 0.2s ease-in-out;
+}
+
+.dark-mode .cookie-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 0 5px #FFD700;
+    transition: all 0.2s ease-in-out;
+}
+
+.cookie-button > p {
+    margin: 0;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
 /* ========= Web Responsive Design for Tablet and Mobile Phone Screen Sizes ========= */
 
 /* Mobile Phone Screen */
@@ -580,55 +664,79 @@ footer .social-media-logo {
             display: none !important;
     }
 
-  /* ESSPIN Logo on top */
-  .esspin-logo {
-        order: 1;
+    /* ESSPIN Logo on top */
+    .esspin-logo {
+            order: 1;
+            display: block;
+            margin: 1rem auto 0 auto;
+            max-width: 120px;
+            text-align: center;
+    }
+
+    /* Show only active step in stepper */
+    .stepper {
+        order: 2;
+        display: flex;
+        justify-content: center;
+        margin: 0;
+        padding: 0 0.5rem;
+        padding-left: 2rem;
+    }
+
+    .stepper-step {
+        display: none;
+    }
+
+    .stepper-step.active {
         display: block;
-        margin: 1rem auto 0 auto;
-        max-width: 120px;
+        font-weight: bold;
+        font-size: 1rem;
         text-align: center;
-  }
+    }
 
-  /* Show only active step in stepper */
-  .stepper {
-      order: 2;
-      display: flex;
-      justify-content: center;
-      margin: 0;
-      padding: 0 0.5rem;
-      padding-left: 2rem;
-  }
+    /* Main content container (without gray shell) */
+    .main-content-container {
+        order: 3;
+        padding: 1rem;
+        width: 100vw;
+    }
 
-  .stepper-step {
-    display: none;
-  }
-
-  .stepper-step.active {
-      display: block;
-      font-weight: bold;
-      font-size: 1rem;
-      text-align: center;
-  }
-
-  /* Main content container (without gray shell) */
-  .main-content-container {
-    order: 3;
-    padding: 1rem;
-    width: 100vw;
-  }
-
-  .main-content-frame {
+    .main-content-frame {
         border: 1px solid #ffe566;
         background: white;
         border-radius: 10px;
         padding: 1rem;
-  }
+    }
 
-  /* All nested flex layouts become column */
-  .main-content-frame * {
-    display: flex;
-    flex-direction: column !important;
-  }
+    /* All nested flex layouts become column */
+    .main-content-frame * {
+        display: flex;
+        flex-direction: column !important;
+    }
+
+    /* Cookie Button styles for mobile phone screen */
+    .cookie-button {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        top: 90%;
+        left: 2%;
+    }
+
+    .light-mode .cookie-button, .dark-mode .cookie-button {
+        border-width: 4px;
+    }
+
+    .cookie-button > p {
+        display: none;
+    }    
+
+    .cookie-declaration {
+        width: 90%;
+        height: 350px;
+        top: 37%;
+        left: 4%;
+    }
 
 }
 

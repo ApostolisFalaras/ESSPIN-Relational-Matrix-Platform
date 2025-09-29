@@ -40,6 +40,10 @@ const navbarThemeInputs = document.querySelectorAll(".navbar-is-dark-theme");
 // Array of Hidden Input elements about the Light/Dark Theme of the Navbar's Bookmarks & Search History Buttons
 const navbarSidebarInputs = document.querySelectorAll(".navbar-is-sidebar-collapsed");
 
+// Cookie Icon
+const cookieButton = document.querySelector(".cookie-button")
+const cookieIcon = cookieButton.querySelector("img");
+
 
 /* ========== Event Listeners for Navigation Bar Elements ========= */
 
@@ -50,11 +54,17 @@ toggleButton.addEventListener("click", function () {
     // and to all the scoped elements by extension
     document.documentElement.classList.toggle("collapsed");
 
+    const cookieDeclaration = document.querySelector(".cookie-declaration");
+
     if (document.documentElement.classList.contains("collapsed")) {
         localStorage.setItem("sidebar", "collapsed");
+        cookieButton.style.left = "1%";
+        cookieDeclaration.style.left = "7.5%";
     }
     else {
         localStorage.setItem("sidebar", "not-collapsed");
+        cookieButton.style.left = "21%";
+        cookieDeclaration.style.left = "27.5%";
     }
 });
 
@@ -148,5 +158,18 @@ logoutButton.addEventListener("mouseleave", function () {
         const logoutTooltip = document.querySelector(".logout-tooltip");
 
         logoutTooltip.style.display = "none";
+    }
+});
+
+/* ========== Event Listener for Cookie Button ========= */
+
+cookieButton.addEventListener("click", function () {
+    const cookieDeclaration = document.querySelector(".cookie-declaration");
+
+    if (cookieDeclaration.style.display == "" || cookieDeclaration.style.display == "none") {
+        cookieDeclaration.style.display = "flex";
+    }
+    else {
+        cookieDeclaration.style.display = "none";
     }
 });

@@ -116,6 +116,7 @@ window.addEventListener("pageshow", function () {
         historyIcon.src = "/images/folder-star-dark.svg";
         logoutIcon.src = "/images/sign-out-dark.svg";
         image.src = "/images/globe-hemisphere-west-dark-mode.svg";
+        cookieIcon.src = "/images/cookie-fill-dark-mode.svg";
     }
     else {
         toggleIcon.src = "/images/list.svg";
@@ -125,6 +126,7 @@ window.addEventListener("pageshow", function () {
         historyIcon.src = "/images/folder-star.svg";
         logoutIcon.src = "/images/sign-out.svg";
         image.src = "/images/globe-hemisphere-west.svg";
+        cookieIcon.src = "/images/cookie-fill.svg";
     }
 
     const currentStep = document.getElementById("step-3");
@@ -189,6 +191,7 @@ lightDarkButton.addEventListener("click", function () {
         historyIcon.src = "/images/folder-star.svg";
         logoutIcon.src = "/images/sign-out.svg";
         image.src = "/images/globe-hemisphere-west.svg";
+        cookieIcon.src = "/images/cookie-fill.svg";
 
         localStorage.setItem("theme", "light");
     }
@@ -204,6 +207,7 @@ lightDarkButton.addEventListener("click", function () {
         historyIcon.src = "/images/folder-star-dark.svg";
         logoutIcon.src = "/images/sign-out-dark.svg";
         image.src = "/images/globe-hemisphere-west-dark-mode.svg";
+        cookieIcon.src = "/images/cookie-fill-dark-mode.svg";
 
 
         localStorage.setItem("theme", "dark");

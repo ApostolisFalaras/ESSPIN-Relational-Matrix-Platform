@@ -61,6 +61,7 @@ window.addEventListener("pageshow", function () {
         bookmarkIcon.src = "/images/bookmark-simple-dark.svg";
         historyIcon.src = "/images/folder-star-dark.svg";
         logoutIcon.src = "/images/sign-out-dark.svg";
+        cookieIcon.src = "/images/cookie-fill-dark-mode.svg";
     }
     else {
         toggleIcon.src = "/images/list.svg";
@@ -69,7 +70,9 @@ window.addEventListener("pageshow", function () {
         bookmarkIcon.src = "/images/bookmark-simple.svg";
         historyIcon.src = "/images/folder-star.svg";
         logoutIcon.src = "/images/sign-out.svg";
+        cookieIcon.src = "/images/cookie-fill.svg";
     }
+
 
     const currentStep = document.getElementById("step-1");
     currentStep.classList.add("active");
@@ -102,6 +105,7 @@ lightDarkButton.addEventListener("click", function () {
         bookmarkIcon.src = "/images/bookmark-simple.svg";
         historyIcon.src = "/images/folder-star.svg";
         logoutIcon.src = "/images/sign-out.svg";
+        cookieIcon.src = "/images/cookie-fill.svg";
 
         localStorage.setItem("theme", "light");
     }
@@ -116,6 +120,7 @@ lightDarkButton.addEventListener("click", function () {
         bookmarkIcon.src = "/images/bookmark-simple-dark.svg";
         historyIcon.src = "/images/folder-star-dark.svg";
         logoutIcon.src = "/images/sign-out-dark.svg";
+        cookieIcon.src = "/images/cookie-fill-dark-mode.svg";
 
         localStorage.setItem("theme", "dark");
     }
