@@ -2402,95 +2402,97 @@ app.get("/export/pdf", (req, res) => {
         console.log(`EVENT: unauthenticated_access | attempted='Detailed Results' | redirect='Login'`);
         res.redirect("/login");
     }
+    else {
 
-    const rawResults = req.session?.user?.queryResults;
-    if (!rawResults || !rawResults.length) {
-        return res.status(400).send("No results to export.");
-    }
-
-    res.setHeader("Content-Type", "application/pdf");
-    res.setHeader("Content-Disposition", 'attachment; filename="results.pdf"');
-
-    const doc = new PDFDocument({ margin: 40 });
-    doc.pipe(res);
-
-    const tableName = rawResults[0].table || "Results";
-
-    // ==== TITLE ====
-    doc.font("Helvetica-Bold")
-       .fontSize(18)
-       .fillColor('black')
-       .text(tableName, { align: "center" });
-    doc.moveDown(1);
-
-    const addField = (label, value) => {
-        doc.font("Helvetica-Bold").fontSize(10).fillColor('#000000')
-           .text(`${label}: `, { continued: true });
-        doc.font("Helvetica").fontSize(10).fillColor('#000000')
-           .text(value || "-");
-        doc.moveDown(0.2);
-    };
-
-    rawResults.forEach((row, index) => {
-        // Entry number
-        doc.font("Helvetica-Bold").fontSize(14).fillColor('#333333')
-           .text(`#${index + 1}`);
-        doc.moveDown(0.3);
-
-        // Fields
-        addField("Years", getYears(row));
-        addField("Level of Analysis", row.level_of_analysis || "-");
-        addField("Other Level", row.level_of_analysis_other || "-");
-        addField("Dependent Variable", row.selection_dependent || "-");
-        addField("Other Dependent", row.other_dependent || "-");
-        addField("Independent Variable", row.selection_independent || "-");
-        addField("Other Independent", row.other_independent || "-");
-        addField("Impact", row.effect_direction || "-"); // Always black now
-        addField("Variable Condition", row.variable_condition || "-");
-        addField("Other Condition", row.other_condition || "-");
-        addField("Type of Condition Effect", row.type_of_condition_effect || "-");
-
-        if (Array.isArray(row.references) && row.references.length > 0) {
-            // ---- Case 1: multiple references + sources (NO notes) ----
-            doc.font("Helvetica-Bold").text("References:");
-            row.references.forEach((ref, i) => {
-            const src = row.sources[i] || null;
-
-            // reference line (numbered)
-            doc.font("Helvetica").fillColor('#000000')
-                .text(`${i + 1}. ${ref}`, { indent: 20, width: 500 });
-
-            // source on next line (clickable)
-            if (src) {
-                doc.font("Helvetica")
-                .fillColor('#0000EE')
-                .text(src, { indent: 32, width: 500, link: src, underline: true });
-                doc.fillColor('#000000');
-            }
-            doc.moveDown(0.15);
-
-            // optional: avoid splitting awkwardly at page end
-            if (doc.y > doc.page.height - doc.page.margins.bottom - 60) doc.addPage();
-            });
-            doc.moveDown(0.2);
-
-        } else {
-            // ---- Case 2: single reference + note ----
-            doc.font("Helvetica-Bold").text("Reference:");
-            doc.font("Helvetica").fillColor('#000000')
-            .text(row.reference || "-", { indent: 20, width: 500 });
-            doc.moveDown(0.2);
-
-            doc.font("Helvetica-Bold").text("Notes:");
-            doc.font("Helvetica").fillColor('#000000')
-            .text(row.notes || "-", { indent: 20, width: 500 });
-            doc.moveDown(0.2);
+        const rawResults = req.session?.user?.queryResults;
+        if (!rawResults || !rawResults.length) {
+            return res.status(400).send("No results to export.");
         }
-    });
 
-    doc.end();
+        res.setHeader("Content-Type", "application/pdf");
+        res.setHeader("Content-Disposition", 'attachment; filename="results.pdf"');
 
-    console.log("EXPORT: PDF | status=success | results=" + rawResults.length);
+        const doc = new PDFDocument({ margin: 40 });
+        doc.pipe(res);
+
+        const tableName = rawResults[0].table || "Results";
+
+        // ==== TITLE ====
+        doc.font("Helvetica-Bold")
+        .fontSize(18)
+        .fillColor('black')
+        .text(tableName, { align: "center" });
+        doc.moveDown(1);
+
+        const addField = (label, value) => {
+            doc.font("Helvetica-Bold").fontSize(10).fillColor('#000000')
+            .text(`${label}: `, { continued: true });
+            doc.font("Helvetica").fontSize(10).fillColor('#000000')
+            .text(value || "-");
+            doc.moveDown(0.2);
+        };
+
+        rawResults.forEach((row, index) => {
+            // Entry number
+            doc.font("Helvetica-Bold").fontSize(14).fillColor('#333333')
+            .text(`#${index + 1}`);
+            doc.moveDown(0.3);
+
+            // Fields
+            addField("Years", getYears(row));
+            addField("Level of Analysis", row.level_of_analysis || "-");
+            addField("Other Level", row.level_of_analysis_other || "-");
+            addField("Dependent Variable", row.selection_dependent || "-");
+            addField("Other Dependent", row.other_dependent || "-");
+            addField("Independent Variable", row.selection_independent || "-");
+            addField("Other Independent", row.other_independent || "-");
+            addField("Impact", row.effect_direction || "-"); // Always black now
+            addField("Variable Condition", row.variable_condition || "-");
+            addField("Other Condition", row.other_condition || "-");
+            addField("Type of Condition Effect", row.type_of_condition_effect || "-");
+
+            if (Array.isArray(row.references) && row.references.length > 0) {
+                // ---- Case 1: multiple references + sources (NO notes) ----
+                doc.font("Helvetica-Bold").text("References:");
+                row.references.forEach((ref, i) => {
+                const src = row.sources[i] || null;
+
+                // reference line (numbered)
+                doc.font("Helvetica").fillColor('#000000')
+                    .text(`${i + 1}. ${ref}`, { indent: 20, width: 500 });
+
+                // source on next line (clickable)
+                if (src) {
+                    doc.font("Helvetica")
+                    .fillColor('#0000EE')
+                    .text(src, { indent: 32, width: 500, link: src, underline: true });
+                    doc.fillColor('#000000');
+                }
+                doc.moveDown(0.15);
+
+                // optional: avoid splitting awkwardly at page end
+                if (doc.y > doc.page.height - doc.page.margins.bottom - 60) doc.addPage();
+                });
+                doc.moveDown(0.2);
+
+            } else {
+                // ---- Case 2: single reference + note ----
+                doc.font("Helvetica-Bold").text("Reference:");
+                doc.font("Helvetica").fillColor('#000000')
+                .text(row.reference || "-", { indent: 20, width: 500 });
+                doc.moveDown(0.2);
+
+                doc.font("Helvetica-Bold").text("Notes:");
+                doc.font("Helvetica").fillColor('#000000')
+                .text(row.notes || "-", { indent: 20, width: 500 });
+                doc.moveDown(0.2);
+            }
+        });
+
+        doc.end();
+
+        console.log("EXPORT: PDF | status=success | results=" + rawResults.length);
+    }
 });
 
 
@@ -2501,166 +2503,168 @@ app.get("/export/excel", async (req, res) => {
         console.log(`EVENT: unauthenticated_access | attempted='Detailed Results' | redirect='Login'`);
         res.redirect("/login");
     }
+    else {
 
-    const rawResults = req.session?.user?.queryResults;
-    if (!rawResults || !rawResults.length) {
-        return res.status(400).send("No results to export.");
-    }
+        const rawResults = req.session?.user?.queryResults;
+        if (!rawResults || !rawResults.length) {
+            return res.status(400).send("No results to export.");
+        }
 
-    const workbook = new ExcelJS.Workbook();
-    const worksheet = workbook.addWorksheet('Results');
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet('Results');
 
-    // Title (merged row 1 & 2)
-    const tableName = rawResults[0].table || 'Results';
-    worksheet.mergeCells(`A1:N2`);
-    const titleCell = worksheet.getCell('A1');
-    titleCell.value = tableName; // your input source name
-    titleCell.font = { bold: true, size: 16 };
-    titleCell.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
-    titleCell.fill = {
-        type: 'pattern',
-        pattern: 'solid',
-        fgColor: { argb: 'FFB9E585' } // green
-    };
+        // Title (merged row 1 & 2)
+        const tableName = rawResults[0].table || 'Results';
+        worksheet.mergeCells(`A1:N2`);
+        const titleCell = worksheet.getCell('A1');
+        titleCell.value = tableName; // your input source name
+        titleCell.font = { bold: true, size: 16 };
+        titleCell.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
+        titleCell.fill = {
+            type: 'pattern',
+            pattern: 'solid',
+            fgColor: { argb: 'FFB9E585' } // green
+        };
 
-    worksheet.getCell('A1').border = {
-        top: { style: 'thin', color: { argb: 'FF000000' } },
-        left: { style: 'thin', color: { argb: 'FF000000' } }
-    };
-    worksheet.getCell('N1').border = {
-        top: { style: 'thin', color: { argb: 'FF000000' } },
-        right: { style: 'thin', color: { argb: 'FF000000' } }
-    };
-    worksheet.getCell('A2').border = {
-        bottom: { style: 'thin', color: { argb: 'FF000000' } },
-        left: { style: 'thin', color: { argb: 'FF000000' } }
-    };
-    worksheet.getCell('N2').border = {
-        bottom: { style: 'thin', color: { argb: 'FF000000' } },
-        right: { style: 'thin', color: { argb: 'FF000000' } }
-    };
+        worksheet.getCell('A1').border = {
+            top: { style: 'thin', color: { argb: 'FF000000' } },
+            left: { style: 'thin', color: { argb: 'FF000000' } }
+        };
+        worksheet.getCell('N1').border = {
+            top: { style: 'thin', color: { argb: 'FF000000' } },
+            right: { style: 'thin', color: { argb: 'FF000000' } }
+        };
+        worksheet.getCell('A2').border = {
+            bottom: { style: 'thin', color: { argb: 'FF000000' } },
+            left: { style: 'thin', color: { argb: 'FF000000' } }
+        };
+        worksheet.getCell('N2').border = {
+            bottom: { style: 'thin', color: { argb: 'FF000000' } },
+            right: { style: 'thin', color: { argb: 'FF000000' } }
+        };
 
-    // Headers (row 3)
-    const headers = [
-        'No.', 'Years', 'Level of Analysis', 'Other Level',
-        'Dependent Variable', 'Other Dependent',
-        'Independent Variable', 'Other Independent',
-        'Impact', 'Variable Condition', 'Other Condition',
-        'Type of Condition Effect', 'Reference', 'Sources/Notes'
-    ];
-
-    const headerRow = worksheet.addRow(headers);
-    headerRow.font = { bold: true, size: 12 };
-    headerRow.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
-
-    function addResultRows(ws, row, index) {
-        const no = index + 1;
-        const common = [
-        no,
-        getYears(row),
-        row.level_of_analysis || '-',
-        row.level_of_analysis_other || '-',
-        row.selection_dependent || '-',
-        row.other_dependent || '-',
-        row.selection_independent || '-',
-        row.other_independent || '-',
-        row.effect_direction || '-',
-        row.variable_condition || '-',
-        row.other_condition || '-',
-        row.type_of_condition_effect || '-'
+        // Headers (row 3)
+        const headers = [
+            'No.', 'Years', 'Level of Analysis', 'Other Level',
+            'Dependent Variable', 'Other Dependent',
+            'Independent Variable', 'Other Independent',
+            'Impact', 'Variable Condition', 'Other Condition',
+            'Type of Condition Effect', 'Reference', 'Sources/Notes'
         ];
 
-        const hasArrayRefs =
-        Array.isArray(row.references) && row.references.length > 0 &&
-        Array.isArray(row.sources)    && row.sources.length > 0;
+        const headerRow = worksheet.addRow(headers);
+        headerRow.font = { bold: true, size: 12 };
+        headerRow.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
 
-        if (hasArrayRefs) {
-        row.references.forEach((ref, i) => {
-            const src = row.sources[i] || '';
-            const values = (i === 0)
-            ? [...common, ref || '-', src || '-']                     // first line: all fields
-            : [no, '', '', '', '', '', '', '', '', '', '', '', ref || '-', src || '-']; // extra lines: only No.+Ref+Src
+        function addResultRows(ws, row, index) {
+            const no = index + 1;
+            const common = [
+            no,
+            getYears(row),
+            row.level_of_analysis || '-',
+            row.level_of_analysis_other || '-',
+            row.selection_dependent || '-',
+            row.other_dependent || '-',
+            row.selection_independent || '-',
+            row.other_independent || '-',
+            row.effect_direction || '-',
+            row.variable_condition || '-',
+            row.other_condition || '-',
+            row.type_of_condition_effect || '-'
+            ];
 
-            const r = ws.addRow(values);
+            const hasArrayRefs =
+            Array.isArray(row.references) && row.references.length > 0 &&
+            Array.isArray(row.sources)    && row.sources.length > 0;
+
+            if (hasArrayRefs) {
+            row.references.forEach((ref, i) => {
+                const src = row.sources[i] || '';
+                const values = (i === 0)
+                ? [...common, ref || '-', src || '-']                     // first line: all fields
+                : [no, '', '', '', '', '', '', '', '', '', '', '', ref || '-', src || '-']; // extra lines: only No.+Ref+Src
+
+                const r = ws.addRow(values);
+                r.height = 60;
+
+                // make source clickable if it's a URL
+                if (src && /^https?:\/\//i.test(src)) {
+                r.getCell(14).value = { text: src, hyperlink: src };
+                }
+            });
+            } else {
+            const r = ws.addRow([...common, row.reference || '-', row.notes || '-']);
             r.height = 60;
-
-            // make source clickable if it's a URL
-            if (src && /^https?:\/\//i.test(src)) {
-            r.getCell(14).value = { text: src, hyperlink: src };
             }
-        });
-        } else {
-        const r = ws.addRow([...common, row.reference || '-', row.notes || '-']);
-        r.height = 60;
         }
-    }
 
-    // REPLACE the old "Add data rows" with this:
-    rawResults.forEach((row, index) => addResultRows(worksheet, row, index));
+        // REPLACE the old "Add data rows" with this:
+        rawResults.forEach((row, index) => addResultRows(worksheet, row, index));
 
-    // Column widths
-    worksheet.columns = [
-        { width: 6 }, { width: 15 }, { width: 25 }, { width: 20 },
-        { width: 25 }, { width: 20 }, { width: 25 }, { width: 20 },
-        { width: 20 }, { width: 25 }, { width: 25 }, { width: 35 },
-        { width: 60 }, { width: 60 }
-    ];
+        // Column widths
+        worksheet.columns = [
+            { width: 6 }, { width: 15 }, { width: 25 }, { width: 20 },
+            { width: 25 }, { width: 20 }, { width: 25 }, { width: 20 },
+            { width: 20 }, { width: 25 }, { width: 25 }, { width: 35 },
+            { width: 60 }, { width: 60 }
+        ];
 
-    // Column colors (white for Reference & Notes)
-    const colColors = {
-        1: 'FFFFE699', // No.
-        2: 'FFFFE699', // Years
-        3: 'FFFDE9D9', // Level of Analysis
-        4: 'FFFDE9D9',
-        5: 'FFF4B084', // Dependent
-        6: 'FFF4B084',
-        7: 'FFF4B084',
-        8: 'FFF4B084',
-        9: 'FFD9E1F2', // Impact
-        10: 'FFD9E1F2',
-        11: 'FFD9E1F2',
-        12: 'FFD9E1F2',
-        13: 'FFFFFFFF', // Reference (white)
-        14: 'FFFFFFFF'  // Notes (white)
-    };
+        // Column colors (white for Reference & Notes)
+        const colColors = {
+            1: 'FFFFE699', // No.
+            2: 'FFFFE699', // Years
+            3: 'FFFDE9D9', // Level of Analysis
+            4: 'FFFDE9D9',
+            5: 'FFF4B084', // Dependent
+            6: 'FFF4B084',
+            7: 'FFF4B084',
+            8: 'FFF4B084',
+            9: 'FFD9E1F2', // Impact
+            10: 'FFD9E1F2',
+            11: 'FFD9E1F2',
+            12: 'FFD9E1F2',
+            13: 'FFFFFFFF', // Reference (white)
+            14: 'FFFFFFFF'  // Notes (white)
+        };
 
-    // Apply styling to all cells
-    worksheet.eachRow({ includeEmpty: false }, (row, rowNumber) => {
-        if (rowNumber <= 2) return;
-        row.eachCell((cell, colNumber) => {
-            // Background color
-            if (colColors[colNumber]) {
-                cell.fill = {
-                    type: 'pattern',
-                    pattern: 'solid',
-                    fgColor: { argb: colColors[colNumber] }
+        // Apply styling to all cells
+        worksheet.eachRow({ includeEmpty: false }, (row, rowNumber) => {
+            if (rowNumber <= 2) return;
+            row.eachCell((cell, colNumber) => {
+                // Background color
+                if (colColors[colNumber]) {
+                    cell.fill = {
+                        type: 'pattern',
+                        pattern: 'solid',
+                        fgColor: { argb: colColors[colNumber] }
+                    };
+                }
+
+                // Borders
+                cell.border = {
+                    top: { style: 'thin', color: { argb: 'FF000000' } },
+                    left: { style: 'thin', color: { argb: 'FF000000' } },
+                    bottom: { style: 'thin', color: { argb: 'FF000000' } },
+                    right: { style: 'thin', color: { argb: 'FF000000' } }
                 };
-            }
 
-            // Borders
-            cell.border = {
-                top: { style: 'thin', color: { argb: 'FF000000' } },
-                left: { style: 'thin', color: { argb: 'FF000000' } },
-                bottom: { style: 'thin', color: { argb: 'FF000000' } },
-                right: { style: 'thin', color: { argb: 'FF000000' } }
-            };
-
-            // Center + wrap
-            cell.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
+                // Center + wrap
+                cell.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
+            });
         });
-    });
 
-    // Send file
-    res.setHeader(
-        'Content-Type',
-        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    );
-    res.setHeader('Content-Disposition', 'attachment; filename="results.xlsx"');
+        // Send file
+        res.setHeader(
+            'Content-Type',
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        );
+        res.setHeader('Content-Disposition', 'attachment; filename="results.xlsx"');
 
-    await workbook.xlsx.write(res);
-    res.end();
+        await workbook.xlsx.write(res);
+        res.end();
 
-    console.log("EXPORT: Excel | status=success | results=" + rawResults.length);
+        console.log("EXPORT: Excel | status=success | results=" + rawResults.length);
+    }
 });
 
 
