@@ -228,7 +228,7 @@ html:not(.disable-transitions) .dropdown-btn {
 .has-dropdown {
     position: relative;
     display: flex;
-    text-align: center;
+    justify-content: space-between;
 }
 
 .light-mode .has-dropdown {
@@ -486,5 +486,31 @@ html:not(.disable-transitions) #alert-popup {
         top: 65%;
         left: 12%;
         width: 60%;
+    }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+
+    .main-content-frame {
+        width: 70vw;
+        height: 65%;
+    }
+
+    .main-content-frame > img {
+        margin-top: 50px;
+    }
+
+    .dropdown-btn {
+        min-height: 80px;
+    }
+
+    .options {
+        min-height: 150px;
+        max-height: 1000px;
+        height: 300px;
+    }
+
+    .last-options-list {
+        height: 170px;
     }
 }

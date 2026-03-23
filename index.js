@@ -62,20 +62,17 @@ app.use(session({
         pool,
         tableName: "session",
         createTableIfMissing: true,
-        pruneSessionInterval: 3600, // Expired sessions will be cleaned up from the DB once per hour
+        //pruneSessionInterval: 3600, // Expired sessions will be cleaned up from the DB once per hour
     }),
     name: process.env.SESSION_COOKIE_NAME || "sid",
     secret: process.env.SESSION_SECRET,
     resave: false, // Don't save sessions if nothing changed
     saveUninitialized: false, // Don't save empty sessions
-    rolling: true, // Reset cookie expiration time, so active users don't get logged out
+    rolling: false, // Making cookie not persistent
     cookie: {
-        maxAge: sessionMaxAge,
         httpOnly: true, // Cookie cannot be read by JS in the browser
         secure: secure,
-        sameSite: sameSite,
-        //domain: process.env.SESSION_DOMAIN || undefined
-
+        sameSite: sameSite
     }
 }));
 
@@ -2667,7 +2664,7 @@ app.get("/export/excel", async (req, res) => {
     }
 });
 
-
+ 
 
 // Starting the server, which is listening on the specified port 
 const port = process.env.PORT ? Number(process.env.PORT) : 3000;

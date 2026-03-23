@@ -14,6 +14,7 @@
     font-size: 2rem;
     margin-bottom: 30px;
     padding-top: 100px;
+    text-align: center;
 }
 
 /* Styles for the paragraph-description of the main content frame */
@@ -171,18 +172,29 @@ html:not(.disable-transitions) .signup-link {
     .enter-btn {
         margin: 25px 0 50px 0;
     }
+
+    .logged-out-div {
+        top: 40%;
+        left: 0%;
+        width: 87.5vw;
+    }
 }
 
 
 /* ========== Tablet Screen ========== */
 
 @media screen and (min-width: 768px) and (max-width: 1024px) {
+
     body {
         font-size: 0.95rem;
     }
 
     .sidebar {
-        width: 220px;
+        width: 22vw;
+    }
+
+    .main-contents {
+        width: 78vw;
     }
 
     .main-content-frame {
@@ -190,6 +202,13 @@ html:not(.disable-transitions) .signup-link {
         margin: 1rem auto;
         max-width: 800px;
         border-radius: 12px;
+        width: 65vw;
+        height: 65%;
     }
-}
 
+    .logged-out-div {
+        top: 40%;
+        left: 16%;
+    }
+
+}

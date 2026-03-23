@@ -528,3 +528,32 @@ html:not(.disable-transitions) .history-row {
         margin-top: 0;
     }
 }
+
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+
+    
+
+    .main-content-frame {
+        width: 70vw;
+        height: 85%;
+    }
+
+    .main-content-frame > img {
+        margin-top: 50px;
+    }
+
+    #search-history-input {
+        width: 30vw;
+    }
+
+    .history-results-list {
+        min-width: 65vw;
+        min-height: 42vh;
+        width: 65vw;
+        height: 42vh;
+    }
+
+    .history-header, .history-row {
+        width: 60vw;
+    }
+}

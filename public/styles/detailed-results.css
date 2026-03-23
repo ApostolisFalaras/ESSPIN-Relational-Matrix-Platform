@@ -720,6 +720,9 @@ html:not(.disable-transitions) .export-buttons a {
 
 .dark-mode .export-excel:hover {background-color: #27b864;}
 
+.cookie-button {
+    visibility: hidden;
+}
 
 /* ========= Web Responsive Design for Tablet and Mobile Phone Screen Sizes ========= */
 
@@ -813,4 +816,80 @@ html:not(.disable-transitions) .export-buttons a {
         flex-direction: row !important;
         margin-top: 0.25rem;
     }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+
+    .main-contents {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        gap: 0;
+    }
+
+    .main-content-frame {
+        width: 70vw;
+        height: 72%;
+    }
+
+    .main-content-frame > img {
+        margin-top: 50px;
+    }
+
+    .results-flex {
+        width: 93%;
+        max-height: 510px;
+        height: 100%;
+        padding-left: 0.5rem;
+        margin-top: 1rem;
+    }
+
+    .buttons-div {
+        left: 20%;
+        margin-top: 1rem;
+    }
+
+    .export-buttons {
+        left: 84%;
+    }
+
+    .cookie-button {
+        visibility: hidden;
+    }
+
+    .legend-graphs {
+        display: flex;
+        flex-direction: row;
+        height: 20vh;
+    }
+
+    .legend {
+        width: 50vw;
+        height: 20vh;
+    }
+
+    .legend {
+        display: grid;
+        grid-template-rows: repeat(5, 1fr);
+        grid-template-columns: repeat(2, minmax(100px, 250px));
+        padding-bottom: 0.5rem;
+    }
+
+    .legend > h4 {
+        font-size: 1rem;
+        grid-column: span 2;
+        margin: 0;
+    }
+
+    .color-case {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+    }
+
+    .impact-legend {
+        height: 80%;
+    }
+    
+
 }

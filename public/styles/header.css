@@ -84,15 +84,15 @@ span {
     padding: 0 40px 0 65px;
 }
 
-.signup-stepper {
+/*.signup-stepper {
     width: 150px;
     margin-bottom: 260px;
     padding-top: 5px;
     padding-left: 7px;
-}
+}*/
   
 /* The single vertical line for the whole stepper */
-.stepper::before {
+.stepper::before, .signup-stepper::before {
     content: '';
     position: absolute;
     top: 5px;
@@ -104,13 +104,13 @@ span {
     margin-left: 5px;
 }
 
-.signup-stepper::before {
+/*.signup-stepper::before {
     position: absolute;
     top: 1.5rem;
     bottom: 40px;
     left: -1.5rem;
     width: 2px;
-}
+}*/
  
 /* Styles for each Step in the Navigation Steps List */
 .step {
@@ -747,12 +747,48 @@ html:not(.disable-transitions) .cookie-button {
     }
 
     .sidebar {
-        width: 18vw;
+        width: 22%;
+    }
+
+    .stepper, .signup-stepper {
+        margin-top: 50px;
+        margin-bottom: 200px;
+    }
+
+    .signup-stepper {
+        margin-bottom: 505px;
+    }
+
+    .stepper::before, .signup-stepper::before {
+        top: 8px;
+        bottom: 35px;
+    }
+
+    .signup-stepper::before {
+        top: 12px;
+    }
+
+    .cookie-button {
+        top: 92%;
+        left: 23%;
+    }
+
+    .cookie-declaration {
+        top: 68%;
+        left: 34%;
     }
 
     h1 > img {
         width: 180px;
+        margin-top: 50px;
     }
 
+    .nav-bar {
+        width: 78%;
+    }
+
+    .main-contents {
+        width: 78%;
+    }
     
 }

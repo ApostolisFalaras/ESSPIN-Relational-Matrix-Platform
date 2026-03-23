@@ -627,6 +627,9 @@ html:not(.disable-transitions) #alert-popup {
     border: 2px solid #c4aa22;
 }
 
+.cookie-button {
+    visibility: hidden;
+}
 
 /* ========= Web Responsive Design for Tablet and Mobile Phone Screen Sizes ========= */
 
@@ -770,4 +773,79 @@ html:not(.disable-transitions) #alert-popup {
         width: 60%;
         margin-top: 0%
     }
+}
+
+
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+
+    .main-contents {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 0;
+    }
+
+    .main-content-frame {
+        width: 70vw;
+        height: 62%;
+    }
+
+    .main-content-frame > img {
+        margin-top: 50px;
+    }
+
+    .source-choices {
+        padding-left: 1rem;
+    }
+
+    .source-btn {
+        width: 90%;
+        font-size: 0.9em;
+    }
+
+    .buttons-div {
+        left: 28%;
+        margin-top: 1rem;
+    }
+
+    .cookie-button {
+        visibility: hidden;
+    }
+
+    .legend-graphs {
+        display: flex;
+        flex-direction: row;
+        height: 30vh;
+    }
+
+    .legend {
+        width: 12vw;
+        height: 80%;
+    }
+
+    .legend {
+        width: 95%;
+        display: grid;
+        grid-template-rows: repeat(5, 1fr);
+        grid-template-columns: repeat(2, minmax(100px, 250px));
+        padding-bottom: 0.5rem;
+    }
+
+    .legend > h4 {
+        font-size: 1rem;
+        grid-column: span 2;
+        margin: 0;
+    }
+
+    .color-case {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+    }
+
+    .impact-legend {
+        height: 80%;
+    }
+    
+
 }
