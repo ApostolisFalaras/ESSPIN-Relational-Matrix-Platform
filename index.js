@@ -5,6 +5,8 @@ import dotenv from "dotenv";
 import ExcelJS from "exceljs";
 import PDFDocument from "pdfkit";
 import { Pool } from "pg";
+import path from "path";
+import { fileURLToPath } from "url";
 
 dotenv.config();
 
@@ -62,7 +64,8 @@ app.use(session({
         pool,
         tableName: "session",
         createTableIfMissing: true,
-        //pruneSessionInterval: 3600, // Expired sessions will be cleaned up from the DB once per hour
+        ttl: 60 * 30, // Sessions exist for 30min in the session table
+        pruneSessionInterval: 3600, // Expired sessions will be cleaned up from the DB once per hour
     }),
     name: process.env.SESSION_COOKIE_NAME || "sid",
     secret: process.env.SESSION_SECRET,
@@ -76,10 +79,32 @@ app.use(session({
     }
 }));
 
-// Specifying the (relative, based on where the app starts) directory and serving static files
-import path from "path";
-import { fileURLToPath } from "url";
+// Using a max idle time limit, which will force the user to 
+const MAX_IDLE_TIME = 30 * 60 * 3600; 
+app.use((req, res, next) => {
+    if (!req.session || !req.session.user) {
+        return next();
+    }
 
+    const now = Date.now();
+    const last = req.session.lastActivity || now;
+
+    if (now - last > MAX_IDLE_TIME) {
+        return req.session.destroy((err) => {
+            if (err) return next(err);
+
+            // After clearing the cookie, the user is redirected to the login page
+            res.clearCookie(process.env.SESSION_COOKIE_NAME || "sid");
+            return res.redirect("/login");
+        });
+    }
+
+    // Mark the last activity time for future user session validation
+    req.session.lastActivity = now;
+    next();
+});
+
+// Specifying the (relative, based on where the app starts) directory and serving static files
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
