@@ -506,6 +506,12 @@ html:not(.disable-transitions) .cookie-declaration {
     box-shadow: 0px 0px 50px #c7a600;
 }
 
+.cookie-declaration p {
+    font-size: 1rem;
+    padding: 0 1rem;
+    text-align: center;
+}
+
 .cookie-button {
     position: fixed;
     top: 86%;

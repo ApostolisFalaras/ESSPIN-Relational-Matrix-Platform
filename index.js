@@ -80,7 +80,7 @@ app.use(session({
 }));
 
 // Using a max idle time limit, which will force the user to 
-const MAX_IDLE_TIME = 30 * 60 * 3600; 
+const MAX_IDLE_TIME = 30 * 60; 
 app.use((req, res, next) => {
     if (!req.session || !req.session.user) {
         return next();
