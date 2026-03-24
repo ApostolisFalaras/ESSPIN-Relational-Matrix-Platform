@@ -82,7 +82,17 @@
                     <form action="/signup" method="POST" class="login-form">
                     
                         <!-- Grid layout for form fields (two columns) -->
-                        <div class="field-grid">
+                        <div class="field-grid signup-field-grid">
+                            <!-- Username input field -->
+                            <div class="info-field left-field">
+                                <label for="username" class="form-label">Username</label>
+                                <input type="text" class="form-input" name="username" placeholder="Enter your username" required>
+                            </div>
+                            <!-- Password input field -->
+                            <div class="info-field left-field">
+                                <label for="password" class="form-label">Password</label>
+                                <input type="text" class="form-input" name="password" placeholder="Enter your password" required>
+                            </div>
                             <!-- First name input field -->
                             <div class="info-field left-field">
                                 <label for="firstName" class="form-label">First Name</label>
@@ -110,7 +120,7 @@
                         <input type="hidden" name="isMainAppFlow" value="<%= isMainAppFlow %>" id="app-flow">
 
                         <!-- "Next" button that submits the user's input information, and moves to the next page -->
-                        <div class="buttons-div">
+                        <div class="buttons-div signup-buttons-div">
                             <!-- "Back" button that redirects users to previous page of the multi-step from -->
                             <button type="submit" name="action" value="back" class="back-btn" formnovalidate>Back</button>
 

@@ -7,6 +7,9 @@ import PDFDocument from "pdfkit";
 import { Pool } from "pg";
 import path from "path";
 import { fileURLToPath } from "url";
+import bcrypt from "bcryptjs";
+
+const saltRounds = 10;
 
 dotenv.config();
 
@@ -64,7 +67,7 @@ app.use(session({
         pool,
         tableName: "session",
         createTableIfMissing: true,
-        ttl: 60 * 30, // Sessions exist for 30min in the session table
+        ttl: 30 * 60,
         pruneSessionInterval: 3600, // Expired sessions will be cleaned up from the DB once per hour
     }),
     name: process.env.SESSION_COOKIE_NAME || "sid",
@@ -80,7 +83,7 @@ app.use(session({
 }));
 
 // Using a max idle time limit, which will force the user to 
-const MAX_IDLE_TIME = 30 * 60; 
+const MAX_IDLE_TIME = 30 * 60 * 1000; 
 app.use((req, res, next) => {
     if (!req.session || !req.session.user) {
         return next();
@@ -188,15 +191,26 @@ app.get("/login", (req, res) => {
 });
 
 
-// Utility function that checks if a user exists in the database, 
-// by verifying their (unique) email address
-function userExists(inputUser, storedUsers) {
-    return storedUsers.some((row) =>
-        row.first_name === inputUser.firstName &&
-        row.last_name === inputUser.lastName &&
-        row.affiliation === inputUser.affiliation &&
-        row.email === inputUser.email
-    );
+// Utility function that checks if a user exists in the database,
+async function userExists(inputUser, storedUsers) {
+    for (const user of storedUsers) {
+        if (inputUser.username === user.username) {
+            try {
+                
+                const isMatch = await bcrypt.compare(inputUser.password, user.password);
+                
+                if (isMatch) {
+                    console.log(`Found user: ${user.username}`);
+                    return true; e
+                }
+            } catch (err) {
+                console.error("Bcrypt error:", err);
+            }
+        }
+    }
+
+    // No password matches, user doesn't exists
+    return false;
 }
 
 // POST Signup Page: A new User has been created in the database, 
@@ -210,24 +224,31 @@ app.post("/signup", async (req, res) => {
     }
     else {
         // Storing the user's personal info in their current session 
-        const { firstName, lastName, affiliation, email} = req.body;
+        const { username, password, firstName, lastName, affiliation, email} = req.body;
 
+        
         try {
+
             // Retrieving the set of emails in the users table
             const {rows: users} = await pool.query("SELECT * FROM users;");
             
-            if (!userExists({ firstName, lastName, affiliation, email}, users)) {
+            // Waiting until a user is verified/rejected
+            const exists = await userExists({ username, password }, users);
+            
+            if (!exists) {
                 try {
-
+                    console.log("Here");
                     // Determining the new user's id, based on the current amount of stored users
                     const {rows: countRows } = await pool.query("SELECT COUNT(*)::int AS count FROM users;");
 
                     let newUserId = countRows[0].count + 1;
 
+                    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
                     // Inserting the new user in the users table
                     await pool.query(
-                        "INSERT INTO users (first_name, last_name, affiliation, email) VALUES ($1, $2, $3, $4);",
-                        [firstName, lastName, affiliation, email]
+                        "INSERT INTO users (username, password, first_name, last_name, affiliation, email) VALUES ($1, $2, $3, $4, $5, $6);",
+                        [username, hashedPassword, firstName, lastName, affiliation, email]
                     );
 
                     // Initializing the session and its data fields,
@@ -236,11 +257,6 @@ app.post("/signup", async (req, res) => {
                         req.session.user = {};
                     }
                     req.session.user.userId = newUserId;
-                    
-                    req.session.user.firstName = firstName;
-                    req.session.user.lastName = lastName;
-                    req.session.user.affiliation = affiliation;
-                    req.session.user.email = email;
                     
                     req.session.save((err) => {
                         if (err) {
@@ -251,28 +267,43 @@ app.post("/signup", async (req, res) => {
                     console.log("SIGNUP: status=created | redirect='Select Level of Analysis'");
 
                 } catch (err) {
-                    // If the user already exists in the "users" table,
-                    // we retrieve its Id and store it in the session.
-                    const { rows } = await pool.query("SELECT id FROM users WHERE email = $1;", [email]);
-
-                    if (!req.session.user) {
-                        req.session.user = {};
-                    }
-
-                    req.session.user.userId = rows[0].id;
-                    req.session.save((err) => {
-                        if (err) {
-                            console.log("Error saving session:", err);
-                        }
-                    });
-
-                    console.log("SIGNUP: status=already_exists | redirect='Select Level of Analysis'");
-
+                    console.log(err);
                 }
             }
 
+            // If the user already exists in the "users" table,
+            // we retrieve its Id and store it in the session.
+            let id;
+            for (const user of users) {
+                if (username === user.username) {
+                    try {
+                        
+                        const isMatch = await bcrypt.compare(password, user.password);
+                        
+                        if (isMatch) {
+                            id = user.id;
+                        }
+                    } catch (err) {
+                        console.error("Bcrypt error:", err);
+                    }
+                }
+            }
+
+            if (!req.session.user) {
+                req.session.user = {};
+            }
+            req.session.user.userId = id;
+
+            req.session.save((err) => {
+                if (err) {
+                    console.log("Error saving session:", err);
+                }
+            });
+
+            console.log("SIGNUP: status=already_exists | redirect='Select Level of Analysis'");
+
             res.redirect("/login/select-level");
-            
+
         } catch (err) {
             console.error(err);
         }
@@ -292,32 +323,43 @@ app.post("/login", async (req, res) => {
     }
     else {
         // Storing the user's personal info in their current session 
-        const { firstName, lastName, affiliation, email} = req.body;
+        const { username, password } = req.body;
         
         try {
+
             // Retrieving the set of emails in the users table
             const {rows: users} = await pool.query("SELECT * FROM users;");
 
-            if (userExists({ firstName, lastName, affiliation, email}, users)) {
+            // Waiting until a user is verified/rejected
+            const exists = await userExists({ username, password }, users); 
+            
+            if (exists) {
                 try {
-
-                    // If the user already exists in the "users" table,
-                    // we retrieve its Id and store it in the session.
-                    const {rows} = await pool.query("SELECT id FROM users WHERE email = $1;", [email]);
-
-                    // Since the user has been verified, we initialize their session object and 
-                    // we store the request's additional info to the user's session object
+                    // User already exists in the "users" table, so we extract its data
                     if (!req.session.user) {
                         req.session.user = {};
                     }
 
-                    req.session.user.userId = rows[0].id;
+                    // If the user already exists in the "users" table,
+                    // we retrieve its Id and store it in the session.
+                    let id;
+                    for (const user of users) {
+                        if (username === user.username) {
+                            try {
+                                
+                                const isMatch = await bcrypt.compare(password, user.password);
+                                
+                                if (isMatch) {
+                                    console.log("User logged in.");
+                                    id = user.id;
+                                }
+                            } catch (err) {
+                                console.error("Bcrypt error:", err);
+                            }
+                        }
+                    }
                     
-                    req.session.user.firstName = firstName;
-                    req.session.user.lastName = lastName;
-                    req.session.user.affiliation = affiliation;
-                    req.session.user.email = email;
-                    
+                    req.session.user.userId = id;
                     req.session.save((err) => {
                         if (err) {
                             console.log("Error saving session:", err);
